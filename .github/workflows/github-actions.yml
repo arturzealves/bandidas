@@ -1,2 +1,0 @@
-- name: Laravel PHPUnit
-  uses: nathanheffley/laravel-phpunit-action@v0.1.0
