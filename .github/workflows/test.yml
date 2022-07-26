@@ -12,7 +12,6 @@ jobs:
         composer install --prefer-dist
         cp .env.example .env
         php artisan key:generate
-        php artisan migrate
     - name: Run PHPUnit
       run: |
-        php vendor/bin/phpunit
+        php vendor/bin/phpunit tests/Unit/*
