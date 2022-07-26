@@ -7,4 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - uses: nathanheffley/laravel-phpunit-action@master
+    - name: Build project
+      run: |
+        composer install --prefer-dist
+        cp .env.example .env
+        php artisan key:generate
+        php artisan migrate
+    - name: Run PHPUnit
+      run: |
+        php vendor/bin/phpunit
