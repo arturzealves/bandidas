@@ -10,6 +10,8 @@ return new class extends Migration
     const TABLE_SPOTIFY_ARTISTS = 'spotify_artists';
     const TABLE_GENRES = 'genres';
     const TABLE_ARTIST_HAS_GENRES = 'artist_has_genres';
+    const TABLE_USER_FOLLOWS_ARTISTS = 'user_follows_artists';
+    const TABLE_USERS = 'users';
 
     /**
      * Run the migrations.
@@ -61,6 +63,17 @@ return new class extends Migration
                 $table->foreign('genre_id')->references('id')->on(self::TABLE_GENRES);
             });
         }
+
+        if (!Schema::hasTable(self::TABLE_USER_FOLLOWS_ARTISTS)) {
+            Schema::create(self::TABLE_USER_FOLLOWS_ARTISTS, function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->unsignedBigInteger('user_id');
+                $table->unsignedBigInteger('artist_id');
+
+                $table->foreign('user_id')->references('id')->on(self::TABLE_USERS);
+                $table->foreign('artist_id')->references('id')->on(self::TABLE_ARTISTS);
+            });
+        }
     }
 
     /**
@@ -70,6 +83,9 @@ return new class extends Migration
      */
     public function down()
     {
+        if (Schema::hasTable(self::TABLE_USER_FOLLOWS_ARTISTS)) {
+            Schema::dropIfExists(self::TABLE_USER_FOLLOWS_ARTISTS);
+        }
         if (Schema::hasTable(self::TABLE_ARTIST_HAS_GENRES)) {
             Schema::dropIfExists(self::TABLE_ARTIST_HAS_GENRES);
         }

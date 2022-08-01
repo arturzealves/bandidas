@@ -36,7 +36,7 @@ class SpotifyService
                 'user-read-email',
                 'user-follow-read',
             ],
-            // 'show_dialog' => true,
+            'show_dialog' => true,
             'state' => $state,
         ];
 

@@ -8,6 +8,7 @@ use App\Models\ArtistHasGenre;
 use App\Models\Genre;
 use App\Models\SpotifyArtist;
 use App\Models\User;
+use App\Models\UserFollowsArtist;
 use App\Services\SpotifyService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -45,6 +46,11 @@ class ImportSpotifyUserFollowedArtists implements ShouldQueue
             $artists = $this->spotifyService->getUserFollowedArtists($this->user);
             foreach ($artists as $artistData) {
                 $artist = Artist::firstOrCreate(['name' => $artistData->name]);
+
+                UserFollowsArtist::firstOrCreate([
+                    'user_id' => $this->user->id,
+                    'artist_id' => $artist->id,
+                ]);
 
                 SpotifyArtist::firstOrCreate(
                     [
