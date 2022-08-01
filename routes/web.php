@@ -23,4 +23,8 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@dashboard')->name('dashboard');
+    
+    Route::get('/spotify/auth', 'App\Http\Controllers\SpotifyController@auth')->name('spotify.auth');
+    Route::get('/spotify/callback', 'App\Http\Controllers\SpotifyController@callback')->name('spotify.callback');
+    Route::get('/spotify', 'App\Http\Controllers\SpotifyController@spotify')->name('spotify');
 });
