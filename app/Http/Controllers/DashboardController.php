@@ -11,7 +11,7 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        return view(sprintf('dashboard/%s', $user->userType->name))
+        return view(sprintf('dashboard/%s', $user->type->name))
             ->with([
                 'user' => $user,
             ]

@@ -59,8 +59,13 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function userType()
+    public function type()
     {
         return $this->hasOne(UserType::class, 'id', 'user_type_id');
+    }
+
+    public function userAccessTokens()
+    {
+        return $this->hasMany(UserAccessToken::class, 'user_id', 'id');
     }
 }
