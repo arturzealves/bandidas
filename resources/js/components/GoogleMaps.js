@@ -1,4 +1,4 @@
-import userLocationIcon from '@/resources/images/icons/map_user_location.png';
+import userLocationIcon from '@/../images/icons/map_user_location.png';
 
 window.initMap = function() {
   // Create the map.
