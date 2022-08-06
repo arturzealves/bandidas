@@ -15,6 +15,11 @@
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-jet-nav-link>
+
+                    <x-jet-nav-link href="{{ route('artists.index') }}" :active="request()->routeIs('artists.index')">
+                        {{ __('Artists') }}
+                    </x-jet-nav-link>
+
                     <x-jet-nav-link href="{{ route('spotify.auth') }}">
                         Log in with Spotify
                     </x-jet-nav-link>

@@ -12,4 +12,9 @@ class Artist extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function spotify()
+    {
+        return $this->hasOne(SpotifyArtist::class);
+    }
 }
