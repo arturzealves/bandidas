@@ -9,8 +9,11 @@ class UserType extends Model
 {
     use HasFactory;
 
+    const TYPE_USER_ID = 1;
     const TYPE_USER = 'user';
+    const TYPE_PROMOTER_ID = 2;
     const TYPE_PROMOTER = 'promoter';
+    const TYPE_ARTIST_ID = 3;
     const TYPE_ARTIST = 'artist';
 
     /**

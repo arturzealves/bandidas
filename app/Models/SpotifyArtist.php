@@ -20,4 +20,24 @@ class SpotifyArtist extends Model
         'popularity',
         'external_urls',
     ];
+
+    public function artist()
+    {
+        return $this->hasOne(Artist::class);
+    }
+
+    public function getBiggerImage()
+    {
+        return json_decode($this->images)[0];
+    }
+
+    public function getMediumImage()
+    {
+        return json_decode($this->images)[1];
+    }
+    
+    public function getSmallerImage()
+    {
+        return json_decode($this->images)[2];
+    }
 }
