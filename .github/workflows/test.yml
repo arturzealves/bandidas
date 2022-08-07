@@ -27,6 +27,7 @@ jobs:
     - run: php artisan migrate:install
     - run: php artisan migrate -n --force --env=testing
 
+    - run: npm install
     - run: npm run build
 
     - name: Run PHPUnit
