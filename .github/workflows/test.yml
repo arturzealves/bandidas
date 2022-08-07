@@ -22,8 +22,9 @@ jobs:
         pass: 'secret'
 
     - run: mysql -uroot -h127.0.0.1 -e 'SELECT version()'
-    
-    - run: php artisan migrate
+    - run: mysql -uroot -h127.0.0.1 -e 'CREATE DATABASE laravel'
+
+    - run: php artisan migrate -n
 
     - name: Run PHPUnit
       run: |
