@@ -14,14 +14,7 @@ class BrowserSessionsTest extends TestCase
 
     public function test_other_browser_sessions_can_be_logged_out()
     {
-        // $this->seed();
-
-        try {
-            $this->actingAs($user = User::factory()->create());
-        } catch (\Exception $e) {
-            dd($e->getMessage());
-        }
-        var_dump($user);
+        $this->actingAs($user = User::factory()->create());
 
         Livewire::test(LogoutOtherBrowserSessionsForm::class)
                 ->set('password', 'password')
