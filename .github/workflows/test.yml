@@ -31,4 +31,4 @@ jobs:
 
     - name: Run PHPUnit
       run: |
-        php vendor/bin/phpunit tests/Unit/*
+        php vendor/bin/phpunit --env=test
