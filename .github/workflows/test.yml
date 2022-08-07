@@ -6,12 +6,31 @@ jobs:
     name: PHPUnit
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
+
     - name: Build project
       run: |
         composer install --prefer-dist
-        cp .env.example .env
-        php artisan key:generate
+        export APP_ENV=testing
+        cp .env.example .env.testing
+        php artisan key:generate --env=testing
+        php artisan config:cache
+
+    - uses: shogo82148/actions-setup-mysql@v1
+      with:
+        mysql-version: '8.0'
+        user: 'sail'
+        password: 'password'
+
+    - run: mysql -uroot -h127.0.0.1 -e 'SELECT version()'
+    - run: mysql -uroot -h127.0.0.1 -e 'CREATE DATABASE laravel'
+
+    - run: php artisan migrate:install
+    - run: php artisan migrate -n --force --env=testing
+
+    - run: npm install
+    - run: npm run build
+
     - name: Run PHPUnit
       run: |
-        php vendor/bin/phpunit tests/Unit/*
+        php vendor/bin/phpunit
