@@ -24,7 +24,7 @@ jobs:
 
     - run: mysql -uroot -h127.0.0.1 -e 'SELECT version()'
     - run: mysql -uroot -h127.0.0.1 -e 'CREATE DATABASE laravel'
-    - run: mysql -uroot -h127.0.0.1 -e 'GRANT ALL PRIVILEGES ON laravel.* TO \'github\'@\'localhost\';'
+    - run: mysql -uroot -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON laravel.* TO 'github'@'localhost';"
 
     - run: php artisan migrate:install
     - run: php artisan migrate -n --force --env=test
