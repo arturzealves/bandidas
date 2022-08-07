@@ -26,6 +26,7 @@ jobs:
     - run: mysql -uroot -h127.0.0.1 -e 'CREATE DATABASE laravel'
     - run: mysql -ugithub -h127.0.0.1 -e 'SELECT version()'
 
+    - run: php artisan migrate:install --env=test
     - run: php artisan migrate -n --force --env=test
 
     - name: Run PHPUnit
