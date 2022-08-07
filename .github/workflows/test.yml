@@ -6,12 +6,17 @@ jobs:
     name: PHPUnit
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    # - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: Build project
       run: |
         composer install --prefer-dist
         cp .env.example .env
         php artisan key:generate
+    - uses: shogo82148/actions-setup-mysql@v1
+      with:
+        mysql-version: '8.0'
+    - run: mysql -uroot -h127.0.0.1 -e 'SELECT version()'
     - name: Run PHPUnit
       run: |
         php vendor/bin/phpunit tests/Unit/*
