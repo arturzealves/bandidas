@@ -15,6 +15,7 @@ jobs:
         php artisan key:generate --env=test
         env
         cat .env.test
+        php artisan config:cache
 
     - uses: shogo82148/actions-setup-mysql@v1
       with:
