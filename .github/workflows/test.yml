@@ -12,7 +12,6 @@ jobs:
       run: |
         composer install --prefer-dist
         export APP_ENV=testing
-        export APP_REAL_ENV=github
         cp .env.example .env.testing
         php artisan key:generate --env=testing
         php artisan config:cache
@@ -34,4 +33,5 @@ jobs:
 
     - name: Run PHPUnit
       run: |
+        export APP_REAL_ENV=github
         php vendor/bin/phpunit
