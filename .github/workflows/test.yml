@@ -12,19 +12,19 @@ jobs:
       run: |
         composer install --prefer-dist
         export APP_ENV=testing
+        export APP_REAL_ENV=github
         cp .env.example .env.testing
         php artisan key:generate --env=testing
         php artisan config:cache
-        ./vendor/bin/sail up -d
 
-    # - uses: shogo82148/actions-setup-mysql@v1
-    #   with:
-    #     mysql-version: '8.0'
-    #     user: 'sail'
-    #     password: 'password'
+    - uses: shogo82148/actions-setup-mysql@v1
+      with:
+        mysql-version: '8.0'
+        user: 'sail'
+        password: 'password'
 
-    # - run: mysql -uroot -h127.0.0.1 -e 'SELECT version()'
-    # - run: mysql -uroot -h127.0.0.1 -e 'CREATE DATABASE laravel'
+    - run: mysql -uroot -h127.0.0.1 -e 'SELECT version()'
+    - run: mysql -uroot -h127.0.0.1 -e 'CREATE DATABASE laravel'
 
     - run: php artisan migrate:install
     - run: php artisan migrate -n --force --env=testing
