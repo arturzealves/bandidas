@@ -1,18 +1,12 @@
 <?php
 
+use Database\Mappers\DatabaseConstants;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    const TABLE_ARTISTS = 'artists';
-    const TABLE_SPOTIFY_ARTISTS = 'spotify_artists';
-    const TABLE_GENRES = 'genres';
-    const TABLE_ARTIST_HAS_GENRES = 'artist_has_genres';
-    const TABLE_USER_FOLLOWS_ARTISTS = 'user_follows_artists';
-    const TABLE_USERS = 'users';
-
     /**
      * Run the migrations.
      *
@@ -20,16 +14,16 @@ return new class extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable(self::TABLE_ARTISTS)) {
-            Schema::create(self::TABLE_ARTISTS, function (Blueprint $table) {
+        if (!Schema::hasTable(DatabaseConstants::TABLE_ARTISTS)) {
+            Schema::create(DatabaseConstants::TABLE_ARTISTS, function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->string('name');
                 $table->timestamps();
             });
         }
 
-        if (!Schema::hasTable(self::TABLE_SPOTIFY_ARTISTS)) {
-            Schema::create(self::TABLE_SPOTIFY_ARTISTS, function (Blueprint $table) {
+        if (!Schema::hasTable(DatabaseConstants::TABLE_SPOTIFY_ARTISTS)) {
+            Schema::create(DatabaseConstants::TABLE_SPOTIFY_ARTISTS, function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->unsignedBigInteger('artist_id');
                 $table->string('spotify_id');
@@ -42,36 +36,36 @@ return new class extends Migration
                 $table->json('external_urls');
                 $table->timestamps();
 
-                $table->foreign('artist_id')->references('id')->on(self::TABLE_ARTISTS);
+                $table->foreign('artist_id')->references('id')->on(DatabaseConstants::TABLE_ARTISTS);
             });
         }
 
-        if (!Schema::hasTable(self::TABLE_GENRES)) {
-            Schema::create(self::TABLE_GENRES, function (Blueprint $table) {
+        if (!Schema::hasTable(DatabaseConstants::TABLE_GENRES)) {
+            Schema::create(DatabaseConstants::TABLE_GENRES, function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->string('name');
             });
         }
 
-        if (!Schema::hasTable(self::TABLE_ARTIST_HAS_GENRES)) {
-            Schema::create(self::TABLE_ARTIST_HAS_GENRES, function (Blueprint $table) {
+        if (!Schema::hasTable(DatabaseConstants::TABLE_ARTIST_HAS_GENRES)) {
+            Schema::create(DatabaseConstants::TABLE_ARTIST_HAS_GENRES, function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->unsignedBigInteger('artist_id');
                 $table->unsignedBigInteger('genre_id');
 
-                $table->foreign('artist_id')->references('id')->on(self::TABLE_ARTISTS);
-                $table->foreign('genre_id')->references('id')->on(self::TABLE_GENRES);
+                $table->foreign('artist_id')->references('id')->on(DatabaseConstants::TABLE_ARTISTS);
+                $table->foreign('genre_id')->references('id')->on(DatabaseConstants::TABLE_GENRES);
             });
         }
 
-        if (!Schema::hasTable(self::TABLE_USER_FOLLOWS_ARTISTS)) {
-            Schema::create(self::TABLE_USER_FOLLOWS_ARTISTS, function (Blueprint $table) {
+        if (!Schema::hasTable(DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS)) {
+            Schema::create(DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS, function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->unsignedBigInteger('user_id');
                 $table->unsignedBigInteger('artist_id');
 
-                $table->foreign('user_id')->references('id')->on(self::TABLE_USERS);
-                $table->foreign('artist_id')->references('id')->on(self::TABLE_ARTISTS);
+                $table->foreign('user_id')->references('id')->on(DatabaseConstants::TABLE_USERS);
+                $table->foreign('artist_id')->references('id')->on(DatabaseConstants::TABLE_ARTISTS);
             });
         }
     }
@@ -83,20 +77,20 @@ return new class extends Migration
      */
     public function down()
     {
-        if (Schema::hasTable(self::TABLE_USER_FOLLOWS_ARTISTS)) {
-            Schema::dropIfExists(self::TABLE_USER_FOLLOWS_ARTISTS);
+        if (Schema::hasTable(DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS)) {
+            Schema::dropIfExists(DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS);
         }
-        if (Schema::hasTable(self::TABLE_ARTIST_HAS_GENRES)) {
-            Schema::dropIfExists(self::TABLE_ARTIST_HAS_GENRES);
+        if (Schema::hasTable(DatabaseConstants::TABLE_ARTIST_HAS_GENRES)) {
+            Schema::dropIfExists(DatabaseConstants::TABLE_ARTIST_HAS_GENRES);
         }
-        if (Schema::hasTable(self::TABLE_GENRES)) {
-            Schema::dropIfExists(self::TABLE_GENRES);
+        if (Schema::hasTable(DatabaseConstants::TABLE_GENRES)) {
+            Schema::dropIfExists(DatabaseConstants::TABLE_GENRES);
         }
-        if (Schema::hasTable(self::TABLE_SPOTIFY_ARTISTS)) {
-            Schema::dropIfExists(self::TABLE_SPOTIFY_ARTISTS);
+        if (Schema::hasTable(DatabaseConstants::TABLE_SPOTIFY_ARTISTS)) {
+            Schema::dropIfExists(DatabaseConstants::TABLE_SPOTIFY_ARTISTS);
         }
-        if (Schema::hasTable(self::TABLE_ARTISTS)) {
-            Schema::dropIfExists(self::TABLE_ARTISTS);
+        if (Schema::hasTable(DatabaseConstants::TABLE_ARTISTS)) {
+            Schema::dropIfExists(DatabaseConstants::TABLE_ARTISTS);
         }
     }
 };

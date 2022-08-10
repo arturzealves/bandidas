@@ -1,5 +1,6 @@
 <?php
 
+use Database\Mappers\DatabaseConstants;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,8 +14,8 @@ return new class extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('user_access_tokens')) {
-            Schema::create('user_access_tokens', function (Blueprint $table) {
+        if (!Schema::hasTable(DatabaseConstants::TABLE_USER_ACCESS_TOKENS)) {
+            Schema::create(DatabaseConstants::TABLE_USER_ACCESS_TOKENS, function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->unsignedBigInteger('user_id');
                 $table->morphs('tokenable');
@@ -26,7 +27,7 @@ return new class extends Migration
                 $table->timestamp('last_used_at')->nullable();
                 $table->timestamps();
 
-                $table->foreign('user_id')->references('id')->on('users');
+                $table->foreign('user_id')->references('id')->on(DatabaseConstants::TABLE_USERS);
             });
         }
     }
@@ -38,8 +39,8 @@ return new class extends Migration
      */
     public function down()
     {
-        if (Schema::hasTable('user_access_tokens')) {
-            Schema::dropIfExists('user_access_tokens');
+        if (Schema::hasTable(DatabaseConstants::TABLE_USER_ACCESS_TOKENS)) {
+            Schema::dropIfExists(DatabaseConstants::TABLE_USER_ACCESS_TOKENS);
         }
     }
 };
