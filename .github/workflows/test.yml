@@ -2,17 +2,6 @@ name: Tests
 on: [push]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build the stack
-        run: |
-          composer install --prefer-dist
-          export APP_ENV=testing
-          cp .env.example .env.testing
-          docker-compose up -d
-
   phpunit:
     name: PHPUnit
     runs-on: ubuntu-latest
@@ -26,6 +15,7 @@ jobs:
         cp .env.example .env.testing
         php artisan key:generate --env=testing
         php artisan config:cache
+        sail up -d
 
     - uses: shogo82148/actions-setup-mysql@v1
       with:
