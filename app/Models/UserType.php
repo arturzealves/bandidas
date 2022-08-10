@@ -16,6 +16,8 @@ class UserType extends Model
     const TYPE_ARTIST_ID = 3;
     const TYPE_ARTIST = 'artist';
 
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *

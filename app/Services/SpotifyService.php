@@ -17,15 +17,17 @@ use SpotifyWebAPI\Session;
 class SpotifyService
 {
     private $userAccessTokenRepository;
+    private $api;
     
-    public function __construct(UserAccessTokenRepository $userAccessTokenRepository)
+    public function __construct(UserAccessTokenRepository $userAccessTokenRepository, SpotifyWebAPI $api)
     {
         $this->userAccessTokenRepository = $userAccessTokenRepository;
+        $this->api = $api;
     }
 
-    public function authenticate(): string
+    public function authenticate(Session $session): string
     {
-        $session = $this->getSpotifySession();
+        $session = $this->initSpotifySession($session);
         $state = $session->generateState();
 
         Cache::put('spotifyState', $state);
@@ -43,9 +45,9 @@ class SpotifyService
         return $session->getAuthorizeUrl($options);
     }
 
-    public function callback(User $user, $code, $state): void
+    public function callback(Session $session, User $user, $code, $state): void
     {
-        $session = $this->getSpotifySession();
+        $session = $this->initSpotifySession($session);
 
         // Fetch the stored state value from somewhere. A session for example
         if ($state !== Cache::get('spotifyState')) {
@@ -75,10 +77,8 @@ class SpotifyService
         );
     }
 
-    public function getUserFollowedArtists(User $user)
+    public function getUserFollowedArtists(User $user): array
     {
-        $api = new SpotifyWebAPI();
-
         $userAccessToken = $this->userAccessTokenRepository->getOneByUserIdAndTokenableId(
             $user->id,
             UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN
@@ -102,13 +102,13 @@ class SpotifyService
                 $user->id,
                 hash('sha256', json_encode($options))
             );
-    
+
             if (Cache::has($key)) {
                 $response = Cache::get($key);
             } else {
-                $api->setAccessToken($userAccessToken->token);
+                $this->api->setAccessToken($userAccessToken->token);
         
-                $response = $api->getUserFollowedArtists($options);
+                $response = $this->api->getUserFollowedArtists($options);
 
                 $userAccessToken->last_used_at = Carbon::now();
                 $userAccessToken->save();
@@ -130,12 +130,12 @@ class SpotifyService
         return $artists;
     }
 
-    private function getSpotifySession(): Session
+    private function initSpotifySession(Session $session)
     {
-        return new Session(
-            Config::get('services.spotify.id'),
-            Config::get('services.spotify.secret'),
-            Config::get('services.spotify.redirect')
-        );
+        $session->setClientId(Config::get('services.spotify.id'));
+        $session->setClientSecret(Config::get('services.spotify.secret'));
+        $session->setRedirectUri(Config::get('services.spotify.redirect'));
+
+        return $session;
     }
 }
