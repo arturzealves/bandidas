@@ -33,4 +33,5 @@ jobs:
 
     - name: Run PHPUnit
       run: |
+        export APP_REAL_ENV=github
         php vendor/bin/phpunit
