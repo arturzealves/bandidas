@@ -2,6 +2,13 @@ name: Tests
 on: [push]
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the stack
+        run: docker-compose up -d
+
   phpunit:
     name: PHPUnit
     runs-on: ubuntu-latest
