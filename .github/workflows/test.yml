@@ -15,6 +15,7 @@ jobs:
         cp .env.example .env.testing
         php artisan key:generate --env=testing
         php artisan config:cache
+        alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
         sail up -d
 
     - uses: shogo82148/actions-setup-mysql@v1
