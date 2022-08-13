@@ -231,25 +231,22 @@ class SpotifyServiceTest extends TestCase
     protected function mockGetSpotifySession()
     {
         Config::shouldReceive('get')
-            ->once()
             ->with('services.spotify.id')
             ->andReturn(self::SPOTIFY_ID);
         
         Config::shouldReceive('get')
-            ->once()
             ->with('services.spotify.secret')
             ->andReturn(self::SPOTIFY_SECRET);
         
         Config::shouldReceive('get')
-            ->once()
             ->with('services.spotify.redirect')
             ->andReturn(self::SPOTIFY_REDIRECT);
 
         $session = $this->prophesize(Session::class);
 
-        $session->setClientId(self::SPOTIFY_ID)->shouldBeCalled();
-        $session->setClientSecret(self::SPOTIFY_SECRET)->shouldBeCalled();
-        $session->setRedirectUri(self::SPOTIFY_REDIRECT)->shouldBeCalled();
+        $session->setClientId(self::SPOTIFY_ID);
+        $session->setClientSecret(self::SPOTIFY_SECRET);
+        $session->setRedirectUri(self::SPOTIFY_REDIRECT);
         
         return $session;
     }
