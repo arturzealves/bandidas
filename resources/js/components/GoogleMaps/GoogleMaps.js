@@ -1,14 +1,14 @@
-import userLocationIcon from '@/../images/icons/map_user_location.png'
-import {OverlayViewService} from './OverlayViewService'
+// import userLocationIcon from '@/../images/icons/map_user_location.png'
+// import {OverlayViewService} from './OverlayViewService'
 
 window.initMap = function () {
-    window.GoogleMaps.initMap()
-}
+    window.GoogleMaps.initMap();
+};
 class GoogleMaps {
     constructor() {
         this.mapProperties = {
-            zoom: 6,
-            center: { lat: 38.72, lng: -9.139 },
+            zoom: 7,
+            // center: { lat: 38.72, lng: -9.139 },
             mapTypeId: 'terrain',
             mapTypeControl: false,
             streetViewControl: false,
@@ -16,7 +16,7 @@ class GoogleMaps {
             rotateControl: false,
             scaleControl: false,
             zoomControl: true,
-        }
+        };
 
         this.defaultCircleOptions = {
             fillColor: '#FF0000',
@@ -25,28 +25,29 @@ class GoogleMaps {
             fillOpacity: 0.45,
             strokeWeight: 2,
             clickable: true,
-            editable: true,
+            editable: false,
             zIndex: 1,
-        }
+        };
 
         this.selectedCircleOptions = {
             fillOpacity: 0.2,
             editable: true,
-        }
+        };
 
-        this.circles = []
-        this.googleMapsUserCircles = []
-        this.map = {}
-        this.self = this
-        this.selectedIndex = null
-        this.selectedCircle = null
+        this.circles = [];
+        this.googleMapsUserCircles = [];
+        this.map = {};
+        this.self = this;
+        this.selectedIndex = null;
+        this.selectedCircle = null;
+        this.user = null;
     }
 
     addCircle(circle) {
-        this.circles.push(circle)
+        this.circles.push(circle);
 
         if (typeof circle.index == 'undefined') {
-            circle.index = this.circles.length - 1
+            circle.index = this.circles.length - 1;
         }
         // console.log('addCircle', circle, ' total ', this.circles.length)
 
@@ -54,55 +55,58 @@ class GoogleMaps {
     }
 
     bindEventListeners(circle) {
-        let scope = this
+        let scope = this;
 
         google.maps.event.addListener(circle, 'click', function () {
-            console.log('click ', circle)
-            scope.selectCircleAtIndex(circle.index)
-        })
+            // console.log('click ', circle);
+            scope.selectCircleAtIndex(circle.index);
+        });
 
         google.maps.event.addListener(circle, 'contextmenu', function () {
-            console.log('contextmenu ', circle)
-            scope.deleteCircle(circle)
-        })
+            // console.log('contextmenu ', circle);
+            scope.deleteCircle(circle);
+        });
 
         google.maps.event.addListener(circle, 'mouseover', function () {
-            console.log('mouseover ', circle)
-            scope.focus(circle)
-        })
+            // console.log('mouseover ', circle);
+            scope.focus(circle);
+        });
 
         google.maps.event.addListener(circle, 'mouseout', function () {
-            console.log('mouseout ', circle)
-            scope.unfocus(circle)
-        })
+            // console.log('mouseout ', circle);
+            scope.unfocus(circle);
+        });
 
         google.maps.event.addListener(circle, 'radius_changed', function () {
-            console.log('radius_changed ', circle)
-            scope.saveCircle(circle)
-        })
+            // console.log('radius_changed ', circle);
+            scope.saveCircle(circle);
+        });
 
         google.maps.event.addListener(circle, 'center_changed', function () {
-            console.log('center_changed ', circle)
-            scope.saveCircle(circle)
-        })
+            // console.log('center_changed ', circle);
+            scope.saveCircle(circle);
+        });
     }
 
     deleteCircle(circle) {
-        this.circles[circle.index].setMap(null)
-        
-        Livewire.emit('destroy', circle.id)
+        this.circles[circle.index].setMap(null);
+
+        Livewire.emit('destroy', circle.id);
     }
 
     deselectCircle() {
+        if (this.selectedCircle == null) {
+            return;
+        }
         console.log('deselecting circle');
-        this.selectedCircle.setOptions(this.defaultCircleOptions)
+        this.selectedCircle.setOptions(this.defaultCircleOptions);
         this.selectedCircle = null;
         this.selectedIndex = null;
-        document.getElementById('sideDrawer').classList.remove('active');
+        // document.getElementById('sideDrawer').classList.remove('active');
     }
 
     drawCircle(circle, index) {
-        let scope = this
+        let scope = this;
 
         let mapCircle = new google.maps.Circle({
             id: circle.id,
@@ -118,11 +122,11 @@ class GoogleMaps {
                 lng: parseFloat(circle.longitude),
             },
             radius: circle.radius,
-        })
+        });
 
         console.log(mapCircle, circle);
 
-        this.bindEventListeners(mapCircle)
+        this.bindEventListeners(mapCircle);
 
         // // Temporary delete button
         // const deleteButton = document.createElement('button')
@@ -136,12 +140,11 @@ class GoogleMaps {
         //     deleteButton
         // )
 
-
         // // const bounds = new google.maps.LatLngBounds(
         // //     new google.maps.LatLng(35.907052, -10.347496),
         // //     new google.maps.LatLng(37.282994, -2.327476)
         // // )
-        
+
         // let image =
         //     'https://cdn-icons.flaticon.com/png/512/2961/premium/2961937.png?token=exp=1660331458~hmac=d17bb56ce196deb9a83c34781060aac6'
 
@@ -174,7 +177,7 @@ class GoogleMaps {
         //     toggleButton
         // )
 
-        return mapCircle
+        return mapCircle;
     }
 
     drawCircles(circles) {
@@ -182,38 +185,40 @@ class GoogleMaps {
         // console.log('drawnCircles', circles)
 
         for (const index in circles) {
-            this.addCircle(this.drawCircle(circles[index], index))
+            this.addCircle(this.drawCircle(circles[index], index));
         }
+
+        return this;
     }
 
     // Center on location
-    centerOnUserLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                    }
+    centerOnUserLocation(latitude, longitude) {
+        // const pos = {
+        //     lat: position.coords.latitude,
+        //     lng: position.coords.longitude,
+        // };
+        const pos = {
+            lat: latitude,
+            lng: longitude,
+        };
 
-                    this.map.setCenter(pos)
-                    this.map.setZoom(14)
+        this.map.setCenter(pos);
+        // this.map.setZoom(14);
 
-                    let cursorSizeLatitudeOffset = -0.0008
-                    new google.maps.Marker({
-                        position: new google.maps.LatLng(
-                            position.coords.latitude + cursorSizeLatitudeOffset,
-                            position.coords.longitude
-                        ),
-                        icon: userLocationIcon,
-                        map: this.map,
-                    })
-                },
-                () => {
-                    // handleLocationError(true, infoWindow, map.getCenter());
-                }
-            )
-        }
+        let cursorSizeLatitudeOffset = -0.0008;
+        new google.maps.Marker({
+            position: new google.maps.LatLng(
+                latitude + cursorSizeLatitudeOffset,
+                longitude
+            ),
+            icon: {
+                url: this.user.profile_photo_url,
+                scaledSize: new google.maps.Size(40, 40),
+            },
+            map: this.map,
+        });
+
+        this.saveUserLocation(pos.lat, pos.lng);
     }
 
     initMap() {
@@ -221,19 +226,25 @@ class GoogleMaps {
         this.map = new google.maps.Map(
             document.getElementById('map'),
             this.mapProperties
-        )
+        );
 
         // Init custom map buttons
-        const locationButton = document.createElement('button')
+        const locationButton = document.createElement('button');
 
-        locationButton.classList.add('map-user-location-button')
+        locationButton.classList.add('map-user-location-button');
         locationButton.addEventListener('click', () => {
-            this.centerOnUserLocation()
-        })
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        this.centerOnUserLocation(position.coords.latitude, position.coords.longitude);
+                    }
+                );
+            }
+        });
 
         this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(
             locationButton
-        )
+        );
 
         // Drawing mode
         const drawingManager = new google.maps.drawing.DrawingManager({
@@ -244,15 +255,15 @@ class GoogleMaps {
                 drawingModes: [google.maps.drawing.OverlayType.CIRCLE],
             },
             circleOptions: this.defaultCircleOptions,
-        })
+        });
 
-        drawingManager.setMap(this.map)
+        drawingManager.setMap(this.map);
 
-        let scope = this
-        google.maps.event.addListener(this.map, 'click', function() {
+        let scope = this;
+        google.maps.event.addListener(this.map, 'click', function () {
             console.log('click on map');
             if (scope.selectedCircle != null || scope.selectedIndex != null) {
-                scope.deselectCircle()
+                scope.deselectCircle();
             }
         });
 
@@ -261,14 +272,14 @@ class GoogleMaps {
             'circlecomplete',
             function (circle) {
                 // Exit circle drawing mode after finishing a circle
-                drawingManager.setDrawingMode(null)
+                drawingManager.setDrawingMode(null);
 
-                
-                scope.saveCircle(circle)
-                scope.addCircle(circle)
-                scope.bindEventListeners(circle)
-                
-                Livewire.emit('mount', circle.id)
+                scope.saveCircle(circle);
+                scope.addCircle(circle);
+                scope.bindEventListeners(circle);
+                scope.selectCircleAtIndex(circle.index);
+
+                // Livewire.emit('mount', circle.id);
 
                 //   this.circleOptions.fillColor = "#FFFFFF";
                 //   console.log('nice', this, element);
@@ -279,55 +290,90 @@ class GoogleMaps {
                 //   scope.selectCircleAtIndex(scope.circles.length - 1);
                 // });
             }
-        )
+        );
     }
 
     focus(circle) {
         if (circle.index != this.selectedIndex) {
-            let options = this.defaultCircleOptions
-            options.editable = true
-            circle.setOptions(options)
+            let options = this.defaultCircleOptions;
+            options.editable = true;
+            circle.setOptions(options);
         }
     }
 
     saveCircle(circle) {
         // Update the DOM elements and trigger the model properties update
-        document.getElementById('latitude').value = circle.center.lat()
-        document.getElementById('latitude').dispatchEvent(new Event('change'))
-        document.getElementById('longitude').value = circle.center.lng()
-        document.getElementById('longitude').dispatchEvent(new Event('change'))
-        document.getElementById('radius').value = circle.radius
-        document.getElementById('radius').dispatchEvent(new Event('change'))
+        document.getElementById('latitude').value = circle.center.lat();
+        document.getElementById('latitude').dispatchEvent(new Event('change'));
+        document.getElementById('longitude').value = circle.center.lng();
+        document.getElementById('longitude').dispatchEvent(new Event('change'));
+        document.getElementById('radius').value = circle.radius;
+        document.getElementById('radius').dispatchEvent(new Event('change'));
 
         if (circle.id) {
-            document.getElementById('circle_id').value = circle.id
+            document.getElementById('circle_id').value = circle.id;
             document
                 .getElementById('circle_id')
-                .dispatchEvent(new Event('change'))
+                .dispatchEvent(new Event('change'));
 
             // trigger the form update
             document
                 .getElementById('google-maps-user-circle-form-update')
-                .click()
+                .click();
         } else {
             // trigger the form save
             document
                 .getElementById('google-maps-user-circle-form-submit')
-                .click()
+                .click();
         }
+    }
+
+    saveUserLocation(latitude, longitude) {
+        let form = document.getElementById('userLocationForm');
+        
+        form.elements["latitude"].value = latitude;
+        form.elements["latitude"].dispatchEvent(new Event('change'))
+        form.elements["longitude"].value = longitude;
+        form.elements["longitude"].dispatchEvent(new Event('change'))
+
+        Livewire.emit('submit');
+
+        console.log(form);
+    }
+
+    setUser(user) {
+        this.user = user;
+
+        console.log(this.user);
+
+        // this.map.setCenter(this.user.center); 
+        // this.map.setZoom(10);
+
+        return this;
+    }
+
+    setUserLocation(location) {
+        console.log(location);
+
+        this.centerOnUserLocation(parseFloat(location.latitude), parseFloat(location.longitude));
+        // this.map.setCenter({
+        //     lat: parseFloat(location.latitude),
+        //     lng: parseFloat(location.longitude)
+        // });
+
+        return this;
     }
 
     selectCircleAtIndex(index) {
         // console.log('selectCircle: total circles', this.circles.length);
 
-        if (this.selectedCircle) {
-            let options = this.defaultCircleOptions
-            options.editable = false
-            this.selectedCircle.setOptions(options)
-        }
+        this.deselectCircle();
 
-        this.selectedCircle = this.circles[index]
-        this.selectedIndex = index
+        this.selectedCircle = this.circles[index];
+        this.selectedIndex = index;
+
+        console.log('clicked on circle', this.selectedCircle, index);
+        this.selectedCircle.setOptions(this.selectedCircleOptions);
 
         // var overlay = new google.maps.OverlayView()
         // overlay.draw = function () {}
@@ -343,13 +389,10 @@ class GoogleMaps {
 
         // https://developers.google.com/maps/documentation/javascript/reference/polygon?authuser=1#Circle
 
-        // console.log('clicked on circle', selectedCircle, index);
-        this.selectedCircle.setOptions(this.selectedCircleOptions)
-
-        document.getElementById('sideDrawer').classList.add('active');
-        
         // Fill inputs
-        Livewire.emit('mount', this.selectedCircle.id)
+        // Livewire.emit('mount', this.selectedCircle.id);
+
+        // document.getElementById('sideDrawer').classList.add('active');
 
         // alternative to previous call
         // var selectedUserCircle = this.googleMapsUserCircles[index]
@@ -367,14 +410,14 @@ class GoogleMaps {
     }
 
     unfocus(circle) {
-        let options = this.defaultCircleOptions
-        options.editable = false
+        let options = this.defaultCircleOptions;
+        options.editable = false;
         if (this.selectedIndex == circle.index) {
-            circle.setOptions(this.selectedCircleOptions)
+            circle.setOptions(this.selectedCircleOptions);
         } else {
-            circle.setOptions(this.defaultCircleOptions)
+            circle.setOptions(this.defaultCircleOptions);
         }
     }
 }
 
-window.GoogleMaps = new GoogleMaps()
+window.GoogleMaps = new GoogleMaps();

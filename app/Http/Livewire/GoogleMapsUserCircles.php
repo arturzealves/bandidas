@@ -8,14 +8,14 @@ use Illuminate\Support\Facades\Auth;
 
 class GoogleMapsUserCircles extends Component
 {
-    public $name;
+    public $name = 'default name';
     public $circle_id;
     public $latitude;
     public $longitude;
     public $radius;
 
     protected $rules = [
-        'name' => 'optional|string',
+        // 'name' => 'optional|string',
         'latitude' => 'required|numeric|min:-90|max:90',
         'longitude' => 'required|numeric|min:-180|max:180',
         'radius' => 'required|numeric|max:16777215',
@@ -54,7 +54,11 @@ class GoogleMapsUserCircles extends Component
         $locations = GoogleMapsUserCircle::where('user_id', $user->id)->get();
 
         return view('livewire.google-maps-user-circles')
-            ->with(['locations' => $locations]);
+            ->with([
+                'user' => $user,
+                'userLocation' => $user->location,
+                'locations' => $locations
+            ]);
     }
 
     public function submit()

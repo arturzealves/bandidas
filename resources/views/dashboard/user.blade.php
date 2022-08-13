@@ -12,6 +12,7 @@
         ></div>
 
         @livewire('google-maps-user-circles')
+        @livewire('user-location-form')
 
         @push('scripts')
             <script
