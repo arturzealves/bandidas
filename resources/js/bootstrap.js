@@ -33,4 +33,4 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     enabledTransports: ['ws', 'wss'],
 // });
 
-import './components/GoogleMaps';
+import './components/GoogleMaps/GoogleMaps';
