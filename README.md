@@ -21,4 +21,4 @@ Posteriormente, no longo prazo, igualar as funcionalidades atuais do site Bandsi
  ## Concorrentes
  - https://gigadvisor.eu/
  - https://www.bandsintown.com/pt
- 
+ - https://feverup.com/
