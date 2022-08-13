@@ -27,7 +27,6 @@ class SpotifyService
 
     public function authenticate(Session $session): string
     {
-        $session = $this->initSpotifySession($session);
         $state = $session->generateState();
 
         Cache::put('spotifyState', $state);
@@ -47,8 +46,6 @@ class SpotifyService
 
     public function callback(Session $session, User $user, $code, $state): void
     {
-        $session = $this->initSpotifySession($session);
-
         // Fetch the stored state value from somewhere. A session for example
         if ($state !== Cache::get('spotifyState')) {
             // The state returned isn't the same as the one we've stored, we shouldn't continue
@@ -128,14 +125,5 @@ class SpotifyService
         } while ($shouldContinue);
 
         return $artists;
-    }
-
-    private function initSpotifySession(Session $session)
-    {
-        $session->setClientId(Config::get('services.spotify.id'));
-        $session->setClientSecret(Config::get('services.spotify.secret'));
-        $session->setRedirectUri(Config::get('services.spotify.redirect'));
-
-        return $session;
     }
 }
