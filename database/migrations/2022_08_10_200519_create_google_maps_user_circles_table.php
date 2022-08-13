@@ -21,7 +21,7 @@ return new class extends Migration
                 $table->string('name', 100);
                 $table->decimal('latitude', 8, 6);
                 $table->decimal('longitude', 9, 6);
-                $table->smallInteger('radius');
+                $table->mediumInteger('radius');
                 $table->char('strokeColor')->nullable();
                 $table->decimal('strokeOpacity', 3, 2)->nullable();
                 $table->tinyInteger('strokeWeight')->nullable();

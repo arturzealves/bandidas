@@ -1,0 +1,19 @@
+#sideDrawer {
+    width: 300px;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -300px;
+    background-color: rgba(255, 0, 0, 0.8);
+    transition: right 0.5s;
+    padding: 25px;
+}
+
+#sideDrawer.active {
+    right: 0px;
+}
+
+#sideDrawer input {
+    margin-bottom: 10px;
+}
