@@ -4,7 +4,7 @@
 window.initMap = function () {
     window.GoogleMaps.initMap();
 };
-class GoogleMaps {
+export default class GoogleMaps {
     constructor() {
         this.mapProperties = {
             zoom: 7,
