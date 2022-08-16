@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\SpotifyService;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use SpotifyWebAPI\Session;

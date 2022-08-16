@@ -7,6 +7,9 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+
+            @livewire('spotify.spotify-get-user-followed-artists')
+
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="grid grid-cols-7 gap-4 place-content-center">
                 @foreach ($artists as $artist)
