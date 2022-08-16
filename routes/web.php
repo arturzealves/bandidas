@@ -32,4 +32,7 @@ Route::middleware([
 });
 
 Route::get('/spotify/callback', 'App\Http\Controllers\SpotifyController@callback')->name('spotify.callback');
-Route::get('/spotify/register', SpotifyRegisterCallbackForm::class)->name('spotify.register');
+
+Route::middleware('guest')->group(function () {
+    Route::get('/spotify/register', SpotifyRegisterCallbackForm::class)->name('spotify.register');
+});

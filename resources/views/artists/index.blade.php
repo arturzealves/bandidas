@@ -15,13 +15,15 @@
                 @foreach ($artists as $artist)
                     <div class="mx-auto text-center">
                         <a href="{{ route('artists.show', ['artist' => $artist]) }}">
-                            <img 
-                                class="mx-auto"
-                                alt="{{ $artist->name }}"
-                                src="{{ $artist->smallImage->url }}" 
-                                width="{{ $artist->smallImage->width }}" 
-                                height="{{ $artist->smallImage->height }}"
-                            />
+                            @if ($artist->smallImage)
+                                <img 
+                                    class="mx-auto"
+                                    alt="{{ $artist->name }}"
+                                    src="{{ $artist->smallImage->url }}" 
+                                    width="{{ $artist->smallImage->width }}" 
+                                    height="{{ $artist->smallImage->height }}"
+                                />
+                            @endif
                             <span>{{ $artist->name }}</span>
                         </a>
                     </div>

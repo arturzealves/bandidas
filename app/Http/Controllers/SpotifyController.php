@@ -15,12 +15,12 @@ class SpotifyController extends Controller
     public function auth(SpotifyService $spotifyService)
     {
         $url = $spotifyService->authenticate();
-        
+
         return Redirect::to($url);
     }
 
     public function callback(
-        Request $request, 
+        Request $request,
         SpotifyService $spotifyService
     ) {
         try {
