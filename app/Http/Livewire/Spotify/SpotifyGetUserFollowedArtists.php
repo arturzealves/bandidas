@@ -10,7 +10,7 @@ use SpotifyWebAPI\Session;
 
 class SpotifyGetUserFollowedArtists extends Component
 {
-    public function getUserFollowedArtists(SpotifyService $service, Session $session)
+    public function getUserFollowedArtists(SpotifyService $service)
     {
         ImportSpotifyUserFollowedArtists::dispatch($service, Auth::user());
     }

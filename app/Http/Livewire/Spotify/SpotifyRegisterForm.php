@@ -8,11 +8,13 @@ use Livewire\Component;
 
 class SpotifyRegisterForm extends Component
 {
+    public $url;
+
     public function authenticate(SpotifyService $spotifyService)
     {
-        $url = $spotifyService->authenticate();
+        $this->url = $spotifyService->authenticate();
         
-        return Redirect::to($url);
+        return Redirect::to($this->url);
     }
 
     public function render()
