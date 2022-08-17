@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArtistController;
+use App\Http\Livewire\Spotify\SpotifyRegisterCallbackForm;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,8 +27,12 @@ Route::middleware([
     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@dashboard')->name('dashboard');
     
     Route::get('/spotify/auth', 'App\Http\Controllers\SpotifyController@auth')->name('spotify.auth');
-    Route::get('/spotify/callback', 'App\Http\Controllers\SpotifyController@callback')->name('spotify.callback');
-    Route::get('/spotify', 'App\Http\Controllers\SpotifyController@spotify')->name('spotify');
 
     Route::resource('artists', ArtistController::class)->only(['index', 'show']);
+});
+
+Route::get('/spotify/callback', 'App\Http\Controllers\SpotifyController@callback')->name('spotify.callback');
+
+Route::middleware('guest')->group(function () {
+    Route::get('/spotify/register', SpotifyRegisterCallbackForm::class)->name('spotify.register');
 });

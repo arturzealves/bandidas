@@ -355,7 +355,12 @@ class GoogleMaps {
     setUserLocation(location) {
         console.log(location);
 
+        if (location == null) {
+            return this;
+        }
+        
         this.centerOnUserLocation(parseFloat(location.latitude), parseFloat(location.longitude));
+
         // this.map.setCenter({
         //     lat: parseFloat(location.latitude),
         //     lng: parseFloat(location.longitude)

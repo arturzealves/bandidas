@@ -11,21 +11,25 @@
                 <h1 class="text-2xl mb-5">{{ $artist->name }}</h1>
                 
                 <div class="">
-                    <img 
-                        class="float-left inline-block mr-10"
-                        alt="{{ $artist->name }}"
-                        src="{{ $artist->mediumImage->url }}" 
-                        width="{{ $artist->mediumImage->width }}" 
-                        height="{{ $artist->mediumImage->height }}"
-                    />
+                    @if ($artist->mediumImage)
+                        <img 
+                            class="float-left inline-block mr-10"
+                            alt="{{ $artist->name }}"
+                            src="{{ $artist->mediumImage->url }}" 
+                            width="{{ $artist->mediumImage->width }}" 
+                            height="{{ $artist->mediumImage->height }}"
+                        />
+                    @endif
 
-                    Followers: {{ $artist->spotify->followers }}<br>
-                    Popularity: {{ $artist->spotify->popularity }}<br>
+                    @if ($artist->spotify)
+                        Followers: {{ $artist->spotify->followers }}<br>
+                        Popularity: {{ $artist->spotify->popularity }}<br>
 
-                    <br>
-                    <a href="{{ $artist->spotify->url }}">Open on Spotify</a>
-                    <br>
-                    <a href="{{ $artist->spotify->uri }}">Play on Spotify</a>
+                        <br>
+                        <a href="{{ $artist->spotify->url }}">Open on Spotify</a>
+                        <br>
+                        <a href="{{ $artist->spotify->uri }}">Play on Spotify</a>
+                    @endif
                 </div>
 
             </div>

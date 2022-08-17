@@ -12,6 +12,9 @@ class ArtistController extends Controller
         $artists = Artist::with('spotify')
             ->get()
             ->map(function($artist) {
+                if (!$artist->spotify) {
+                    return $artist;
+                }
                 $artist->smallImage = $artist->spotify->getSmallerImage();
 
                 return $artist;
@@ -25,8 +28,10 @@ class ArtistController extends Controller
 
     public function show(Artist $artist)
     {
-        $artist->mediumImage = $artist->spotify->getMediumImage();
-        $artist->spotify->url = json_decode($artist->spotify->external_urls)->spotify;
+        if ($artist->spotify) {
+            $artist->mediumImage = $artist->spotify->getMediumImage();
+            $artist->spotify->url = json_decode($artist->spotify->external_urls)->spotify;
+        }
 
         return view('artists.show')->with(['artist' => $artist]);
     }

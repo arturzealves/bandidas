@@ -7,26 +7,39 @@ use App\Services\SpotifyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use SpotifyWebAPI\Session;
+use Illuminate\Support\Facades\Session;
+use SpotifyWebAPI\SpotifyWebAPIAuthException;
 
 class SpotifyController extends Controller
 {
-    public function auth(SpotifyService $spotifyService, Session $session)
+    public function auth(SpotifyService $spotifyService)
     {
-        $url = $spotifyService->authenticate($session);
-        
+        $url = $spotifyService->authenticate();
+
         return Redirect::to($url);
     }
 
-    public function callback(Request $request, SpotifyService $spotifyService, Session $session)
-    {
-        $spotifyService->callback($session, Auth::user(), $request->code, $request->state);
+    public function callback(
+        Request $request,
+        SpotifyService $spotifyService
+    ) {
+        try {
+            $spotifyService->validateCallback($request->code, $request->state);
+        } catch (SpotifyWebAPIAuthException $e) {
+            return Redirect::to('dashboard');
+        }
+        
+        $user = Auth::user();
+        if ($user) {
+            $spotifyService->saveUserAccessToken(Auth::user());
+            
+            return Redirect::to('dashboard');
+        }
 
-        return Redirect::to('spotify');
-    }
+        $response = $spotifyService->getUserProfile();
+        Session::put('spotify-register-name', $response->display_name);
+        Session::put('spotify-register-email', $response->email);
 
-    public function spotify(SpotifyService $spotifyService)
-    {
-        ImportSpotifyUserFollowedArtists::dispatch($spotifyService, Auth::user());
+        return Redirect::to('/spotify/register');
     }
 }
