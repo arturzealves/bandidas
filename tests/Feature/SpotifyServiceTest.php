@@ -38,15 +38,15 @@ class SpotifyServiceTest extends TestCase
         parent::setUp();
 
         Config::shouldReceive('get')
-            ->with('services.spotify.id')
+            ->withArgs(['services.spotify.id'])
             ->andReturn(self::SPOTIFY_ID);
         
         Config::shouldReceive('get')
-            ->with('services.spotify.secret')
+            ->withArgs(['services.spotify.secret'])
             ->andReturn(self::SPOTIFY_SECRET);
         
         Config::shouldReceive('get')
-            ->with('services.spotify.redirect')
+            ->withArgs(['services.spotify.redirect'])
             ->andReturn(self::SPOTIFY_REDIRECT);
 
         $this->session = $this->prophesize(Session::class);
@@ -103,7 +103,7 @@ class SpotifyServiceTest extends TestCase
 
         Cache::shouldReceive('get')
             ->once()
-            ->with('spotifyState')
+            ->withArgs(['spotifyState'])
             ->andReturn(self::SPOTIFY_STATE);
 
         $this->expectException(SpotifyInvalidStateException::class);
@@ -115,7 +115,7 @@ class SpotifyServiceTest extends TestCase
     {
         Cache::shouldReceive('get')
             ->once()
-            ->with('spotifyState')
+            ->withArgs(['spotifyState'])
             ->andReturn(self::SPOTIFY_STATE);
 
         $this->session->requestAccessToken(self::SPOTIFY_CODE)
@@ -129,13 +129,38 @@ class SpotifyServiceTest extends TestCase
         $this->service->validateCallback(self::SPOTIFY_CODE, self::SPOTIFY_STATE);
     }
 
+    public function test_get_session()
+    {
+        $this->assertEquals($this->session->reveal(), $this->service->getSession());
+    }
+
+    public function test_get_user_profile()
+    {
+        $expected = '';
+        $accessToken = 'test access token';
+
+        $this->session->getAccessToken()
+            ->shouldBeCalledTimes(1)
+            ->willReturn($accessToken);
+
+        $this->api->setAccessToken($accessToken)
+            ->shouldBeCalledTimes(1);
+        
+        $this->api->me()
+            ->shouldBeCalledTimes(1)
+            ->willReturn($expected);
+        
+        $result = $this->service->getUserProfile();
+        $this->assertEquals($expected, $result);
+    }
+
     // // public function test_saveUserAccessToken_is_successful()
     // // {
     // //     $session = $this->mockGetSpotifySession();
 
     // //     Cache::shouldReceive('get')
     // //         ->once()
-    // //         ->with('spotifyState')
+    // //         ->withArgs(['spotifyState'])
     // //         ->andReturn(self::SPOTIFY_STATE);
 
     // //     $session->requestAccessToken(self::SPOTIFY_CODE)
@@ -187,7 +212,7 @@ class SpotifyServiceTest extends TestCase
 
     //     Cache::shouldReceive('has')
     //         ->once()
-    //         ->with($key)
+    //         ->withArgs([$key])
     //         ->andReturn(true);
 
     //     $artistOne = [
@@ -202,7 +227,7 @@ class SpotifyServiceTest extends TestCase
 
     //     Cache::shouldReceive('get')
     //         ->once()
-    //         ->with($key)
+    //         ->withArgs([$key])
     //         ->andReturn($response);
 
     //     // Seconds loop iteration, requesting from API
@@ -215,7 +240,7 @@ class SpotifyServiceTest extends TestCase
 
     //     Cache::shouldReceive('has')
     //         ->once()
-    //         ->with($key)
+    //         ->withArgs([$key])
     //         ->andReturn(false);
         
     //     // $this->api->setAccessToken($userAccessToken->token)
@@ -239,7 +264,7 @@ class SpotifyServiceTest extends TestCase
 
     //     Cache::shouldReceive('put')
     //         ->once()
-    //         ->with($key, $response, 604800)
+    //         ->withArgs([$key, $response, 604800])
     //         ->andReturn(true);
 
     //     $this->assertEquals(

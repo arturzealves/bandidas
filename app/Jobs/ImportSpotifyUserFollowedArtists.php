@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Exceptions\SpotifyAccessTokenException;
 use App\Models\Artist;
 use App\Models\ArtistHasGenre;
 use App\Models\Genre;
@@ -10,6 +9,7 @@ use App\Models\SpotifyArtist;
 use App\Models\User;
 use App\Models\UserFollowsArtist;
 use App\Services\SpotifyService;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -77,7 +77,7 @@ class ImportSpotifyUserFollowedArtists implements ShouldQueue
                     ]);
                 }
             }
-        } catch (SpotifyAccessTokenException $exception) {
+        } catch (Exception $exception) {
             var_dump($exception->getMessage());
         }
     }
