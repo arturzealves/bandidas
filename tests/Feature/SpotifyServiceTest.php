@@ -21,12 +21,15 @@ use Tests\TestCase;
 class SpotifyServiceTest extends TestCase
 {
     use ProphecyTrait;
+    use RefreshDatabase;
 
     const SPOTIFY_ID = 'id';
     const SPOTIFY_SECRET = 'secret';
     const SPOTIFY_REDIRECT = '<-back<-';
     const SPOTIFY_STATE = 'state';
     const SPOTIFY_CODE = 'code';
+    const SPOTIFY_ACCESS_TOKEN = 'testAccessToken';
+    const SPOTIFY_REFRESH_TOKEN = 'testRefreshToken';
 
     private $service;
     private $api;
@@ -36,18 +39,6 @@ class SpotifyServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        Config::shouldReceive('get')
-            ->withArgs(['services.spotify.id'])
-            ->andReturn(self::SPOTIFY_ID);
-        
-        Config::shouldReceive('get')
-            ->withArgs(['services.spotify.secret'])
-            ->andReturn(self::SPOTIFY_SECRET);
-        
-        Config::shouldReceive('get')
-            ->withArgs(['services.spotify.redirect'])
-            ->andReturn(self::SPOTIFY_REDIRECT);
 
         $this->session = $this->prophesize(Session::class);
         $this->session->setClientId(self::SPOTIFY_ID);
@@ -154,25 +145,30 @@ class SpotifyServiceTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    // // public function test_saveUserAccessToken_is_successful()
-    // // {
-    // //     $session = $this->mockGetSpotifySession();
+    public function test_saveUserAccessToken_is_successful()
+    {
+        $this->session->getAccessToken()
+            ->shouldBeCalledTimes(1)
+            ->willReturn(self::SPOTIFY_ACCESS_TOKEN);
 
-    // //     Cache::shouldReceive('get')
-    // //         ->once()
-    // //         ->withArgs(['spotifyState'])
-    // //         ->andReturn(self::SPOTIFY_STATE);
+        $this->session->getRefreshToken()
+            ->shouldBeCalledTimes(1)
+            ->willReturn(self::SPOTIFY_REFRESH_TOKEN);
 
-    // //     $session->requestAccessToken(self::SPOTIFY_CODE)
-    // //         ->shouldBeCalledTimes(1)
-    // //         ->willReturn(true);
+        $this->session->getScope()
+            ->shouldBeCalledTimes(1)
+            ->willReturn(['testScope']);
 
-    // //     $user = User::factory()->create();
+        $this->session->getTokenExpiration()
+            ->shouldBeCalledTimes(1)
+            ->willReturn(123);
 
-    // //     $this->assertDatabaseCount('user_access_token', 1);
-        
-    // //     $this->service->saveUserAccessToken($session->reveal(), $user, self::SPOTIFY_CODE, self::SPOTIFY_STATE);
-    // // }
+        $user = User::factory()->create();
+
+        $this->assertDatabaseCount('user_access_tokens', 0);
+        $this->service->saveUserAccessToken($user);
+        $this->assertDatabaseCount('user_access_tokens', 1);
+    }
 
     public function test_get_user_followed_artists_throws_invalid_access_token_exception()
     {
@@ -190,86 +186,86 @@ class SpotifyServiceTest extends TestCase
         $this->service->getUserFollowedArtists($user->reveal());
     }
 
-    // public function test_get_user_followed_artists_is_successful()
-    // {
-    //     $userAccessToken = UserAccessToken::factory()->create();
-    //     $user = $userAccessToken->user;
+    public function test_get_user_followed_artists_is_successful()
+    {
+        $userAccessToken = UserAccessToken::factory()->create();
+        $user = $userAccessToken->user;
 
-    //     $this->repository->getOneByUserIdAndTokenableId(
-    //         $user->id,
-    //         UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN
-    //     )
-    //         ->shouldBeCalledTimes(1)
-    //         ->willReturn($userAccessToken);
+        $this->repository->getOneByUserIdAndTokenableId(
+            $user->id,
+            UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN
+        )
+            ->shouldBeCalledTimes(1)
+            ->willReturn($userAccessToken);
         
-    //     // First loop iteration, getting from Cache
-    //     $options = ['limit' => 50];
-    //     $key = sprintf(
-    //         'spotify_user_%s_following_%s',
-    //         $user->id,
-    //         hash('sha256', json_encode($options))
-    //     );
+        // First loop iteration, getting from Cache
+        $options = ['limit' => 50];
+        $key = sprintf(
+            'spotify_user_%s_following_%s',
+            $user->id,
+            hash('sha256', json_encode($options))
+        );
 
-    //     Cache::shouldReceive('has')
-    //         ->once()
-    //         ->withArgs([$key])
-    //         ->andReturn(true);
+        Cache::shouldReceive('has')
+            ->once()
+            ->withArgs([$key])
+            ->andReturn(true);
 
-    //     $artistOne = [
-    //         'artist' => fake()->name(),
-    //     ];
-    //     $response = new \stdClass();
-    //     $response->artists = new \stdClass();
-    //     $response->artists->items = [ $artistOne ];
-    //     $response->artists->next = 'not empty';
-    //     $response->artists->cursors = new \stdClass();
-    //     $response->artists->cursors->after = 'test';
+        $artistOne = [
+            'artist' => fake()->name(),
+        ];
+        $response = new \stdClass();
+        $response->artists = new \stdClass();
+        $response->artists->items = [ $artistOne ];
+        $response->artists->next = 'not empty';
+        $response->artists->cursors = new \stdClass();
+        $response->artists->cursors->after = 'test';
 
-    //     Cache::shouldReceive('get')
-    //         ->once()
-    //         ->withArgs([$key])
-    //         ->andReturn($response);
+        Cache::shouldReceive('get')
+            ->once()
+            ->withArgs([$key])
+            ->andReturn($response);
 
-    //     // Seconds loop iteration, requesting from API
-    //     $options = ['limit' => 50, 'after' => 'test'];
-    //     $key = sprintf(
-    //         'spotify_user_%s_following_%s',
-    //         $user->id,
-    //         hash('sha256', json_encode($options))
-    //     );
+        // Seconds loop iteration, requesting from API
+        $options = ['limit' => 50, 'after' => 'test'];
+        $key = sprintf(
+            'spotify_user_%s_following_%s',
+            $user->id,
+            hash('sha256', json_encode($options))
+        );
 
-    //     Cache::shouldReceive('has')
-    //         ->once()
-    //         ->withArgs([$key])
-    //         ->andReturn(false);
+        Cache::shouldReceive('has')
+            ->once()
+            ->withArgs([$key])
+            ->andReturn(false);
         
-    //     // $this->api->setAccessToken($userAccessToken->token)
-    //     //     ->shouldBeCalledTimes(1);
-    //     $this->api->refreshAccessToken($userAccessToken->refresh_token)
-    //         ->shouldBeCalledTimes(1);
+        // $this->api->setAccessToken($userAccessToken->token)
+        //     ->shouldBeCalledTimes(1);
+        $this->session->refreshAccessToken($userAccessToken->refresh_token)
+            ->shouldBeCalledTimes(1);
         
-    //     $artistTwo = [
-    //         'artist' => fake()->name(),
-    //     ];
-    //     $response = new \stdClass();
-    //     $response->artists = new \stdClass();
-    //     $response->artists->items = [ $artistTwo ];
-    //     $response->artists->next = '';
-    //     $response->artists->cursors = new \stdClass();
-    //     $response->artists->cursors->after = '';
+        $artistTwo = [
+            'artist' => fake()->name(),
+        ];
+        $response = new \stdClass();
+        $response->artists = new \stdClass();
+        $response->artists->items = [ $artistTwo ];
+        $response->artists->next = '';
+        $response->artists->cursors = new \stdClass();
+        $response->artists->cursors->after = '';
 
-    //     $this->api->getUserFollowedArtists($options)
-    //         ->shouldBeCalledTimes(1)
-    //         ->willReturn($response);
+        $this->api->getUserFollowedArtists($options)
+            ->shouldBeCalledTimes(1)
+            ->willReturn($response);
 
-    //     Cache::shouldReceive('put')
-    //         ->once()
-    //         ->withArgs([$key, $response, 604800])
-    //         ->andReturn(true);
+        Cache::shouldReceive('put')
+            ->once()
+            ->withArgs([$key, $response, 604800])
+            ->andReturn(true);
 
-    //     $this->assertEquals(
-    //         [ $artistOne, $artistTwo ],
-    //         $this->service->getUserFollowedArtists($user)
-    //     );
-    // }
+        $this->assertEquals(
+            [ $artistOne, $artistTwo ],
+            $this->service->getUserFollowedArtists($user)
+        );
+    }
 }

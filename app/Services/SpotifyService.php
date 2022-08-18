@@ -137,9 +137,6 @@ class SpotifyService
 
                 $this->session->refreshAccessToken($userAccessToken->refresh_token);
 
-                $this->api->setSession($this->session);
-
-                // dd($this->api, $userAccessToken->token);
                 $response = $this->api->getUserFollowedArtists($options);
 
                 $userAccessToken->last_used_at = Carbon::now();

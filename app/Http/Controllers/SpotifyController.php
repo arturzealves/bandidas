@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use SpotifyWebAPI\SpotifyWebAPIAuthException;
+use SpotifyWebAPI\SpotifyWebAPIException;
 
 class SpotifyController extends Controller
 {
@@ -25,6 +26,8 @@ class SpotifyController extends Controller
     ) {
         try {
             $spotifyService->validateCallback($request->code, $request->state);
+        } catch (SpotifyWebAPIException $e) {
+            return Redirect::to('dashboard');
         } catch (SpotifyWebAPIAuthException $e) {
             return Redirect::to('dashboard');
         }
