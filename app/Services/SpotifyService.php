@@ -50,7 +50,7 @@ class SpotifyService
                 self::SCOPE_USER_READ_EMAIL,
                 self::SCOPE_USER_FOLLOW_READ,
             ],
-            'show_dialog' => false,
+            'show_dialog' => true,
             'state' => $state,
         ];
 

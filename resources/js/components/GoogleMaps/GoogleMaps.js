@@ -8,7 +8,7 @@ class GoogleMaps {
     constructor() {
         this.mapProperties = {
             zoom: 7,
-            // center: { lat: 38.72, lng: -9.139 },
+            center: { lat: 38.72, lng: -9.139 },
             mapTypeId: 'terrain',
             mapTypeControl: false,
             streetViewControl: false,
@@ -338,13 +338,13 @@ class GoogleMaps {
 
         Livewire.emit('submit');
 
-        console.log(form);
+        console.log('saveUserLocation', form);
     }
 
     setUser(user) {
         this.user = user;
 
-        console.log(this.user);
+        console.log('setUser', this.user);
 
         // this.map.setCenter(this.user.center); 
         // this.map.setZoom(10);
@@ -353,7 +353,7 @@ class GoogleMaps {
     }
 
     setUserLocation(location) {
-        console.log(location);
+        console.log('setUserLocation', location);
 
         if (location == null) {
             return this;

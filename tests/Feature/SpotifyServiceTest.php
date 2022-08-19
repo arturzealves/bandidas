@@ -75,7 +75,7 @@ class SpotifyServiceTest extends TestCase
                 SpotifyService::SCOPE_USER_READ_EMAIL,
                 SpotifyService::SCOPE_USER_FOLLOW_READ,
             ],
-            'show_dialog' => false,
+            'show_dialog' => true,
             'state' => self::SPOTIFY_STATE,
         ];
     
