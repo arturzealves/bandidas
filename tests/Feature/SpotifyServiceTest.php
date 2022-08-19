@@ -165,9 +165,19 @@ class SpotifyServiceTest extends TestCase
 
         $user = User::factory()->create();
 
-        $this->assertDatabaseCount('user_access_tokens', 0);
+        $this->repository->firstOrCreate(
+            $user->id,
+            UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN,
+            UserAccessToken::TOKENABLE_TYPE_SPOTIFY_ACCESS_TOKEN,
+            UserAccessToken::NAME_SPOTIFY_ACCESS_TOKEN,
+            self::SPOTIFY_ACCESS_TOKEN,
+            self::SPOTIFY_REFRESH_TOKEN,
+            ['testScope'],
+            123
+        )
+            ->shouldBeCalledTimes(1);
+
         $this->service->saveUserAccessToken($user);
-        $this->assertDatabaseCount('user_access_tokens', 1);
     }
 
     public function test_get_user_followed_artists_throws_invalid_access_token_exception()
