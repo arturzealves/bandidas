@@ -9,6 +9,7 @@ use App\Models\UserExternalAccount;
 use App\Models\UserType;
 use App\Repositories\UserAccessTokenRepository;
 use App\Services\SpotifyService;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Contracts\User as ContractsUser;
@@ -77,6 +78,8 @@ class SpotifyController extends Controller
             'password' => '',
             'user_type_id' => UserType::TYPE_USER_ID
         ]);
+
+        event(new Registered($user));
 
         UserExternalAccount::create([
             'external_id' => $spotifyUser->id,
