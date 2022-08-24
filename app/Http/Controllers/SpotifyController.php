@@ -2,43 +2,88 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\UserNotFoundException;
+use App\Models\User;
+use App\Models\UserAccessToken;
+use App\Models\UserExternalAccount;
+use App\Models\UserType;
+use App\Repositories\UserAccessTokenRepository;
 use App\Services\SpotifyService;
-use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Laravel\Socialite\Contracts\User as ContractsUser;
+use Laravel\Socialite\Facades\Socialite;
 
 class SpotifyController extends Controller
 {
-    public function auth(SpotifyService $spotifyService)
-    {
-        $url = $spotifyService->authenticate();
+    const REDIRECT_ACTION = 'redirect_action';
+    const REDIRECT_ACTION_REGISTER = 'register';
 
-        return Redirect::to($url);
+    public function redirect($action)
+    {
+        Session::put(self::REDIRECT_ACTION, $action);
+
+        return Socialite::driver('spotify')
+            ->scopes([
+                SpotifyService::SCOPE_USER_READ_EMAIL,
+                SpotifyService::SCOPE_USER_FOLLOW_READ,
+            ])
+            ->redirect();
     }
 
-    public function callback(
-        Request $request,
-        SpotifyService $spotifyService
-    ) {
+    public function callback(UserAccessTokenRepository $userAccessTokenRepository)
+    {
         try {
-            $spotifyService->validateCallback($request->code, $request->state);
-            
-            $user = Auth::user();
-            if ($user) {
-                $spotifyService->saveUserAccessToken(Auth::user());
-                
-                return Redirect::to('dashboard');
-            }
+            $spotifyUser = Socialite::driver('spotify')->user();
+    
+            $user = $this->getUser($spotifyUser, Session::get(self::REDIRECT_ACTION));
 
-            $response = $spotifyService->getUserProfile();
-            Session::put('spotify-register-name', $response->display_name);
-            Session::put('spotify-register-email', $response->email);
+            Auth::login($user);
 
-            return Redirect::to('/spotify/register');
-        } catch (Exception $e) {
-            return Redirect::to('dashboard');
+            $userAccessTokenRepository->updateOrCreate(
+                $user->id,
+                UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN,
+                UserAccessToken::TOKENABLE_TYPE_SPOTIFY_ACCESS_TOKEN,
+                UserAccessToken::NAME_SPOTIFY_ACCESS_TOKEN,
+                $spotifyUser->accessTokenResponseBody['access_token'],
+                $spotifyUser->accessTokenResponseBody['refresh_token'],
+                explode(' ', $spotifyUser->accessTokenResponseBody['scope']),
+                $spotifyUser->accessTokenResponseBody['expires_in'],
+            );
+        } catch (UserNotFoundException $e) {
+            return redirect('/register')->withErrors(['msg' => $e->getMessage()]);
         }
+    
+        return redirect('/dashboard');
+    }
+
+    protected function getUser(ContractsUser $spotifyUser, $redirectAction): User
+    {
+        $userExternalAccount = UserExternalAccount::where('external_id', $spotifyUser->id)
+            ->where('provider_name', UserExternalAccount::PROVIDER_SPOTIFY)
+            ->first();
+
+        if ($userExternalAccount !== null) {
+            return $userExternalAccount->user;
+        }
+
+        if ($redirectAction !== self::REDIRECT_ACTION_REGISTER) {
+            throw new UserNotFoundException(__('It seems you are not registered yet'));
+        }
+
+        $user = User::updateOrCreate([
+            'name' => $spotifyUser->name,
+            'email' => $spotifyUser->email,
+            'password' => '',
+            'user_type_id' => UserType::TYPE_USER_ID
+        ]);
+
+        UserExternalAccount::create([
+            'external_id' => $spotifyUser->id,
+            'user_id' => $user->id,
+            'provider_name' => UserExternalAccount::PROVIDER_SPOTIFY,
+        ]);
+        
+        return $user;
     }
 }

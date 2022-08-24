@@ -38,13 +38,13 @@ class UserAccessTokenRepositoryTest extends TestCase
         $this->assertNotEquals($wrongUserAccessToken->getAttributes(), $result->getAttributes());
     }
 
-    public function testFirstOrCreate()
+    public function testUpdateOrCreate()
     {
         $this->assertDatabaseCount('user_access_tokens', 0);
         
         $user = User::factory()->create();
         
-        $this->repository->firstOrCreate(
+        $this->repository->updateOrCreate(
             $user->id,
             UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN,
             UserAccessToken::TOKENABLE_TYPE_SPOTIFY_ACCESS_TOKEN,

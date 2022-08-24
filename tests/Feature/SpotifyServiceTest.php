@@ -58,36 +58,6 @@ class SpotifyServiceTest extends TestCase
         );
     }
 
-    public function test_authenticate()
-    {
-        $expected = 'authenticated with success';
-
-        $this->session->generateState()
-            ->shouldBeCalledTimes(1)
-            ->willReturn(self::SPOTIFY_STATE);
-
-        Cache::shouldReceive('put')
-            ->once()
-            ->withArgs(['spotifyState', self::SPOTIFY_STATE]);
-    
-        $options = [
-            'scope' => [
-                SpotifyService::SCOPE_USER_READ_EMAIL,
-                SpotifyService::SCOPE_USER_FOLLOW_READ,
-            ],
-            'show_dialog' => true,
-            'state' => self::SPOTIFY_STATE,
-        ];
-    
-        $this->session->getAuthorizeUrl($options)
-            ->shouldBeCalledTimes(1)
-            ->willReturn($expected);
-        
-        $result = $this->service->authenticate();
-        $this->assertIsString($result);
-        $this->assertEquals($expected, $result);
-    }
-
     public function test_validate_callback_throws_invalid_state_exception()
     {
         $state = 'invalid state';
@@ -143,41 +113,6 @@ class SpotifyServiceTest extends TestCase
         
         $result = $this->service->getUserProfile();
         $this->assertEquals($expected, $result);
-    }
-
-    public function test_saveUserAccessToken_is_successful()
-    {
-        $this->session->getAccessToken()
-            ->shouldBeCalledTimes(1)
-            ->willReturn(self::SPOTIFY_ACCESS_TOKEN);
-
-        $this->session->getRefreshToken()
-            ->shouldBeCalledTimes(1)
-            ->willReturn(self::SPOTIFY_REFRESH_TOKEN);
-
-        $this->session->getScope()
-            ->shouldBeCalledTimes(1)
-            ->willReturn(['testScope']);
-
-        $this->session->getTokenExpiration()
-            ->shouldBeCalledTimes(1)
-            ->willReturn(123);
-
-        $user = User::factory()->create();
-
-        $this->repository->firstOrCreate(
-            $user->id,
-            UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN,
-            UserAccessToken::TOKENABLE_TYPE_SPOTIFY_ACCESS_TOKEN,
-            UserAccessToken::NAME_SPOTIFY_ACCESS_TOKEN,
-            self::SPOTIFY_ACCESS_TOKEN,
-            self::SPOTIFY_REFRESH_TOKEN,
-            ['testScope'],
-            123
-        )
-            ->shouldBeCalledTimes(1);
-
-        $this->service->saveUserAccessToken($user);
     }
 
     public function test_get_user_followed_artists_throws_invalid_access_token_exception()
@@ -249,10 +184,12 @@ class SpotifyServiceTest extends TestCase
             ->withArgs([$key])
             ->andReturn(false);
         
-        // $this->api->setAccessToken($userAccessToken->token)
-        //     ->shouldBeCalledTimes(1);
-        $this->session->refreshAccessToken($userAccessToken->refresh_token)
+        $this->session->setAccessToken($userAccessToken->token)
             ->shouldBeCalledTimes(1);
+        $this->session->setRefreshToken($userAccessToken->refresh_token)
+            ->shouldBeCalledTimes(1);
+        // $this->session->refreshAccessToken($userAccessToken->refresh_token)
+        //     ->shouldBeCalledTimes(1);
         
         $artistTwo = [
             'artist' => fake()->name(),

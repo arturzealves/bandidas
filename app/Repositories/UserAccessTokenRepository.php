@@ -13,7 +13,7 @@ class UserAccessTokenRepository
             ->first();
     }
 
-    public function firstOrCreate(
+    public function updateOrCreate(
         $userId,
         $tokenableId,
         $tokenableType,
@@ -23,7 +23,7 @@ class UserAccessTokenRepository
         array $abilities,
         $expiresIn
     ) {
-        UserAccessToken::firstOrCreate(
+        UserAccessToken::updateOrCreate(
             [
                 'user_id' => $userId,
                 'tokenable_id' => $tokenableId

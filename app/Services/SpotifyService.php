@@ -24,7 +24,7 @@ class SpotifyService
     
     public function __construct(
         SpotifyWebAPI $api,
-        Session $session, 
+        Session $session,
         UserAccessTokenRepository $userAccessTokenRepository
     ) {
         $this->api = $api;
@@ -36,24 +36,6 @@ class SpotifyService
         // $options = [
         //     'auto_refresh' => true,
         // ];
-    }
-
-    public function authenticate(): string
-    {
-        $state = $this->session->generateState();
-
-        Cache::put('spotifyState', $state);
-        
-        $options = [
-            'scope' => [
-                self::SCOPE_USER_READ_EMAIL,
-                self::SCOPE_USER_FOLLOW_READ,
-            ],
-            'show_dialog' => true,
-            'state' => $state,
-        ];
-
-        return $this->session->getAuthorizeUrl($options);
     }
 
     /**
@@ -73,20 +55,6 @@ class SpotifyService
         if (!$this->session->requestAccessToken($code)) {
             throw new SpotifyAccessTokenException();
         }
-    }
-
-    public function saveUserAccessToken(User $user): void
-    {
-        $this->userAccessTokenRepository->firstOrCreate(
-            $user->id,
-            UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN,
-            UserAccessToken::TOKENABLE_TYPE_SPOTIFY_ACCESS_TOKEN,
-            UserAccessToken::NAME_SPOTIFY_ACCESS_TOKEN,
-            $this->session->getAccessToken(),
-            $this->session->getRefreshToken(),
-            $this->session->getScope(),
-            $this->session->getTokenExpiration()
-        );
     }
 
     public function getSession()
@@ -139,10 +107,10 @@ class SpotifyService
             if (Cache::has($key)) {
                 $response = Cache::get($key);
             } else {
-                // $session->setAccessToken($userAccessToken->token);
-                // $session->setRefreshToken($userAccessToken->refresh_token);
+                $this->session->setAccessToken($userAccessToken->token);
+                $this->session->setRefreshToken($userAccessToken->refresh_token);
 
-                $this->session->refreshAccessToken($userAccessToken->refresh_token);
+                // $this->session->refreshAccessToken($userAccessToken->refresh_token);
 
                 $response = $this->api->getUserFollowedArtists($options);
 
