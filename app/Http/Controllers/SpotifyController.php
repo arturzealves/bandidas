@@ -44,50 +44,26 @@ class SpotifyController extends Controller
             $spotifyUser = Socialite::driver('spotify')->user();
     
             $action = Session::get(self::REDIRECT_ACTION);
+            Session::forget(self::REDIRECT_ACTION);
+
             $user = Auth::user();
 
             if (null === $user) {
-                $user = $this->getUserWithExternalAccount($spotifyUser, $userCreator, $action);
+                $user = $this->getUserWithExternalAccount($spotifyUser);
             }
 
             if ($action === self::REDIRECT_ACTION_REGISTER) {
-                $user = $userCreator->create([
-                    'name' => $spotifyUser->name,
-                    'email' => $spotifyUser->email,
-                    'password' => 'useless'.time(),
-                    'password_confirmation' => 'useless'.time(),
-                    'terms' => true,
-                ]);
-
-                event(new Registered($user));
-
-                $this->createUserExternalAccount($spotifyUser, $user);
-            }
-
-            if (null === $user && $action === self::REDIRECT_ACTION_LOGIN) {
-                throw new UserNotFoundException(__('It seems you are not registered yet'));
-            }
-
-            if (!$this->hasExternalAccount($user)) {
-                $this->createUserExternalAccount($spotifyUser, $user);
-            }
-
-            Session::forget(self::REDIRECT_ACTION);
-
-            if ($action === self::REDIRECT_ACTION_LOGIN) {
+                $user = $this->registerSpotifyUser($spotifyUser, $userCreator);
+            } elseif ($action === self::REDIRECT_ACTION_LOGIN) {
+                if (null === $user) {
+                    throw new UserNotFoundException(__('It seems you are not registered yet'));
+                }
                 Auth::login($user);
+            } else {
+                $this->createUserExternalAccount($spotifyUser, $user);
             }
 
-            $userAccessTokenRepository->updateOrCreate(
-                $user->id,
-                UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN,
-                UserAccessToken::TOKENABLE_TYPE_SPOTIFY_ACCESS_TOKEN,
-                UserAccessToken::NAME_SPOTIFY_ACCESS_TOKEN,
-                $spotifyUser->accessTokenResponseBody['access_token'],
-                $spotifyUser->accessTokenResponseBody['refresh_token'],
-                explode(' ', $spotifyUser->accessTokenResponseBody['scope']),
-                $spotifyUser->accessTokenResponseBody['expires_in'],
-            );
+            $this->createUserAccessToken($userAccessTokenRepository, $user, $spotifyUser);
 
             if ($action == self::REDIRECT_ACTION_GET_FOLLOWED_ARTISTS) {
                 ImportSpotifyUserFollowedArtists::dispatch($service, $user);
@@ -100,26 +76,51 @@ class SpotifyController extends Controller
         return redirect('/dashboard');
     }
 
-    protected function hasExternalAccount(User $user)
+    protected function registerSpotifyUser(ContractsUser $spotifyUser, CreateNewUser $userCreator)
     {
-        return null !== $user->userExternalAccounts
-            ->where('provider_name', UserExternalAccount::PROVIDER_SPOTIFY)
-            ->first();
+        $user = $userCreator->create([
+            'name' => $spotifyUser->name,
+            'email' => $spotifyUser->email,
+            'password' => 'useless'.time(),
+            'password_confirmation' => 'useless'.time(),
+            'terms' => true,
+        ]);
+
+        event(new Registered($user));
+
+        $this->createUserExternalAccount($spotifyUser, $user);
+
+        return $user;
     }
 
     protected function createUserExternalAccount(ContractsUser $spotifyUser, User $user)
     {
-        UserExternalAccount::create([
+        UserExternalAccount::firstOrCreate([
             'external_id' => $spotifyUser->id,
             'user_id' => $user->id,
             'provider_name' => UserExternalAccount::PROVIDER_SPOTIFY,
         ]);
     }
 
+    protected function createUserAccessToken(
+        UserAccessTokenRepository $userAccessTokenRepository,
+        User $user,
+        ContractsUser $spotifyUser
+    ) {
+        $userAccessTokenRepository->updateOrCreate(
+            $user->id,
+            UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN,
+            UserAccessToken::TOKENABLE_TYPE_SPOTIFY_ACCESS_TOKEN,
+            UserAccessToken::NAME_SPOTIFY_ACCESS_TOKEN,
+            $spotifyUser->accessTokenResponseBody['access_token'],
+            $spotifyUser->accessTokenResponseBody['refresh_token'],
+            explode(' ', $spotifyUser->accessTokenResponseBody['scope']),
+            $spotifyUser->accessTokenResponseBody['expires_in'],
+        );
+    }
+
     protected function getUserWithExternalAccount(
-        ContractsUser $spotifyUser, 
-        CreateNewUser $userCreator,
-        $redirectAction
+        ContractsUser $spotifyUser
     ): ?User {
         $userExternalAccount = UserExternalAccount::where('external_id', $spotifyUser->id)
             ->where('provider_name', UserExternalAccount::PROVIDER_SPOTIFY)
