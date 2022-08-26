@@ -42,11 +42,8 @@ class ImportSpotifyUserFollowedArtists implements ShouldQueue
      */
     public function handle()
     {
-        try {
-            $artists = $this->spotifyService->getUserFollowedArtists($this->user);
-        } catch (UserAccessTokenNotFoundException $e) {
-            
-        }
+        $artists = $this->spotifyService->getUserFollowedArtists($this->user);
+        
         foreach ($artists as $artistData) {
             $artist = Artist::firstOrCreate(['name' => $artistData->name]);
 

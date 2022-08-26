@@ -2,16 +2,19 @@
 
 namespace Tests\Feature;
 
-use App\Http\Livewire\Spotify\SpotifyGetUserFollowedArtists;
+use App\Http\Controllers\SpotifyController;
 use App\Http\Livewire\Spotify\SpotifyRegisterForm;
+use App\Jobs\ImportSpotifyUserFollowedArtists;
 use App\Models\User;
 use App\Models\UserExternalAccount;
 use App\Services\SpotifyService;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Event;
 use Laravel\Socialite\Contracts\Provider;
 use Laravel\Socialite\Contracts\User as ContractsUser;
 use Laravel\Socialite\Facades\Socialite;
@@ -25,7 +28,7 @@ class SpotifyIntegrationTest extends TestCase
     use ProphecyTrait;
     use RefreshDatabase;
 
-    public function test_authenticate_redirects_to_spotify()
+    public function test_redirect()
     {
         $testRedirectUrl = 'http://spotify.test';
 
@@ -53,17 +56,6 @@ class SpotifyIntegrationTest extends TestCase
         $response->assertRedirectContains($testRedirectUrl);
     }
 
-    public function test_spotify_get_user_followed_artists_event_is_dispatched_successfully()
-    {
-        Livewire::actingAs(User::factory()->create());
-
-        Bus::fake();
-
-        Livewire::test(SpotifyGetUserFollowedArtists::class)
-            ->call('getUserFollowedArtists')
-            ->assertViewIs('livewire.spotify.spotify-get-user-followed-artists');
-    }
-
     public function test_spotify_register_form_is_successful()
     {
         $user = User::factory()->create();
@@ -75,7 +67,55 @@ class SpotifyIntegrationTest extends TestCase
             ->assertSee('Register with Spotify');
     }
 
-    public function test_spotify_controller_callback_is_successful()
+    public function test_is_successful_on_login_with_existing_user_who_registered_with_spotify_account()
+    {
+        $this->seed();
+
+        $code = 'testCode';
+        $state = 'testState';
+
+        $user = User::factory()->create();
+
+        $spotifyProvider = $this->prophesize(Provider::class);
+        Socialite::shouldReceive('driver')
+            ->once()
+            ->with('spotify')
+            ->andReturn($spotifyProvider->reveal());
+
+        $spotifyUser = $this->prophesize(ContractsUser::class);
+        $spotifyProvider->user()->shouldBeCalledTimes(1)->willReturn($spotifyUser->reveal());
+
+        $spotifyUser->id = fake()->md5();
+        $spotifyUser->name = $user->name;
+        $spotifyUser->email = $user->email;
+        $spotifyUser->accessTokenResponseBody = [
+            'access_token' => 'test-access-token',
+            'refresh_token' => 'test-refresh-token',
+            'scope' => 'scope1 scope2',
+            'expires_in' => '120',
+        ];
+
+        UserExternalAccount::factory()->create([
+            'user_id' => $user->id,
+            'external_id' => $spotifyUser->id,
+            'provider_name' => UserExternalAccount::PROVIDER_SPOTIFY
+        ]);
+
+        Auth::shouldReceive('user')->once()->andReturn(null);
+        Auth::shouldReceive('login')->once();
+
+        $this->assertDatabaseCount('user_access_tokens', 0);
+        
+        $response = $this
+            ->withSession([SpotifyController::REDIRECT_ACTION => SpotifyController::REDIRECT_ACTION_LOGIN])
+            ->get(sprintf('/auth/spotify/callback?code=%s&state=%s', $code, $state));
+
+        $response->assertStatus(302);
+        $response->assertRedirect('/dashboard');
+        $this->assertDatabaseCount('user_access_tokens', 1);
+    }
+
+    public function test_is_successful_on_get_followed_artists_with_existing_user_who_registered_without_spotify_account()
     {
         $this->seed();
 
@@ -104,20 +144,96 @@ class SpotifyIntegrationTest extends TestCase
             'expires_in' => '120',
         ];
 
-        UserExternalAccount::factory()->create([
-            'user_id' => $user->id,
-            'external_id' => $spotifyUser->id,
-            'provider_name' => UserExternalAccount::PROVIDER_SPOTIFY
-        ]);
-
-        Auth::shouldReceive('login')->once();
-
-        $this->assertDatabaseCount('user_access_tokens', 0);
+        Bus::fake([ImportSpotifyUserFollowedArtists::class]);
         
-        $response = $this->get(sprintf('/auth/spotify/callback?code=%s&state=%s', $code, $state));
+        $this->assertDatabaseCount('user_access_tokens', 0);
+        $this->assertDatabaseCount('user_external_accounts', 0);
+        
+        $response = $this
+            ->withSession([SpotifyController::REDIRECT_ACTION => SpotifyController::REDIRECT_ACTION_GET_FOLLOWED_ARTISTS])
+            ->get(sprintf('/auth/spotify/callback?code=%s&state=%s', $code, $state));
+            
+        Bus::assertDispatched(ImportSpotifyUserFollowedArtists::class);
 
         $response->assertStatus(302);
-        $response->assertRedirect('/dashboard');
+        $response->assertRedirect('/artists');
         $this->assertDatabaseCount('user_access_tokens', 1);
+        $this->assertDatabaseCount('user_external_accounts', 1);
+    }
+
+    public function test_redirects_when_unregistered_user_tries_to_login()
+    {
+        $this->seed();
+
+        $code = 'testCode';
+        $state = 'testState';
+
+        $spotifyProvider = $this->prophesize(Provider::class);
+        Socialite::shouldReceive('driver')
+            ->once()
+            ->with('spotify')
+            ->andReturn($spotifyProvider->reveal());
+
+        $spotifyUser = $this->prophesize(ContractsUser::class);
+        $spotifyProvider->user()->shouldBeCalledTimes(1)->willReturn($spotifyUser->reveal());
+
+        $spotifyUser->id = fake()->md5();
+        $spotifyUser->name = 'testname';
+        $spotifyUser->email = 'testemail@test.com';
+        $spotifyUser->accessTokenResponseBody = [
+            'access_token' => 'test-access-token',
+            'refresh_token' => 'test-refresh-token',
+            'scope' => 'scope1 scope2',
+            'expires_in' => '120',
+        ];
+
+        $response = $this
+            ->withSession([SpotifyController::REDIRECT_ACTION => SpotifyController::REDIRECT_ACTION_LOGIN])
+            ->get(sprintf('/auth/spotify/callback?code=%s&state=%s', $code, $state));
+
+        $this->assertDatabaseCount('user_external_accounts', 0);
+        $response->assertStatus(302);
+        $response->assertRedirect('/register');
+        $response->assertSessionHasErrors(['msg']);
+    }
+
+    public function test_is_successful_with_new_user_registration()
+    {
+        $this->seed();
+
+        $code = 'testCode';
+        $state = 'testState';
+
+        $spotifyProvider = $this->prophesize(Provider::class);
+        Socialite::shouldReceive('driver')
+            ->once()
+            ->with('spotify')
+            ->andReturn($spotifyProvider->reveal());
+
+        $spotifyUser = $this->prophesize(ContractsUser::class);
+        $spotifyProvider->user()->shouldBeCalledTimes(1)->willReturn($spotifyUser->reveal());
+
+        $spotifyUser->id = fake()->md5();
+        $spotifyUser->name = 'testname';
+        $spotifyUser->email = 'testemail@test.com';
+        $spotifyUser->accessTokenResponseBody = [
+            'access_token' => 'test-access-token',
+            'refresh_token' => 'test-refresh-token',
+            'scope' => 'scope1 scope2',
+            'expires_in' => '120',
+        ];
+
+        $this->assertDatabaseCount('user_external_accounts', 0);
+        
+        Event::fake([Registered::class]);
+        
+        $response = $this
+            ->withSession([SpotifyController::REDIRECT_ACTION => SpotifyController::REDIRECT_ACTION_REGISTER])
+            ->get(sprintf('/auth/spotify/callback?code=%s&state=%s', $code, $state));
+
+        Event::assertDispatched(Registered::class);
+        $this->assertDatabaseCount('user_external_accounts', 1);
+        $response->assertStatus(302);
+        $response->assertRedirect('/dashboard');
     }
 }

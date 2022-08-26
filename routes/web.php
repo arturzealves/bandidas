@@ -29,8 +29,8 @@ Route::middleware([
     Route::resource('artists', ArtistController::class)->only(['index', 'show']);
 });
 
-Route::middleware('guest')->group(function () {
-    Route::get('/auth/spotify/redirect/{action}', [SpotifyController::class, 'redirect'])->name('spotify.redirect');
-});
+// Route::middleware('guest')->group(function () {
+// });
 
+Route::get('/auth/spotify/redirect/{action}', [SpotifyController::class, 'redirect'])->name('spotify.redirect');
 Route::get('/auth/spotify/callback', [SpotifyController::class, 'callback'])->name('spotify.callback');
