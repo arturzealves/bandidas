@@ -54,6 +54,8 @@ class SpotifyController extends Controller
 
             if ($action === self::REDIRECT_ACTION_REGISTER) {
                 $user = $this->registerSpotifyUser($spotifyUser, $userCreator);
+
+                Auth::login($user);
             } elseif ($action === self::REDIRECT_ACTION_LOGIN) {
                 if (null === $user) {
                     throw new UserNotFoundException(__('It seems you are not registered yet'));
