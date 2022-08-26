@@ -30,7 +30,7 @@ return new class extends Migration
 
                 $table->timestamps();
 
-                $table->foreign('user_id')->references('id')->on(DatabaseConstants::TABLE_USERS);
+                $table->foreign('user_id')->references('id')->on(DatabaseConstants::TABLE_USERS)->onDelete('cascade');
             });
         }
     }

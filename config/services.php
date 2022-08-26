@@ -32,8 +32,10 @@ return [
     ],
 
     'spotify' => [
-        'id' => env('SPOTIFY_CLIENT_ID'),
-        'secret' => env('SPOTIFY_CLIENT_SECRET'),
+        // 'id' => env('SPOTIFY_CLIENT_ID'), // deprecated
+        'client_id' => env('SPOTIFY_CLIENT_ID'),  
+        // 'secret' => env('SPOTIFY_CLIENT_SECRET'), // deprecated
+        'client_secret' => env('SPOTIFY_CLIENT_SECRET'),  
         'redirect' => env('SPOTIFY_REDIRECT_URI'),
     ],
 

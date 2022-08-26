@@ -10,7 +10,6 @@ use App\Models\UserAccessToken;
 use App\Repositories\UserAccessTokenRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 use SpotifyWebAPI\Session;
 use SpotifyWebAPI\SpotifyWebAPI;
 
@@ -25,7 +24,7 @@ class SpotifyService
     
     public function __construct(
         SpotifyWebAPI $api,
-        Session $session, 
+        Session $session,
         UserAccessTokenRepository $userAccessTokenRepository
     ) {
         $this->api = $api;
@@ -39,24 +38,12 @@ class SpotifyService
         // ];
     }
 
-    public function authenticate(): string
-    {
-        $state = $this->session->generateState();
-
-        Cache::put('spotifyState', $state);
-        
-        $options = [
-            'scope' => [
-                self::SCOPE_USER_READ_EMAIL,
-                self::SCOPE_USER_FOLLOW_READ,
-            ],
-            'show_dialog' => false,
-            'state' => $state,
-        ];
-
-        return $this->session->getAuthorizeUrl($options);
-    }
-
+    /**
+     * @throws SpotifyWebAPIException
+     * @throws SpotifyWebAPIAuthException
+     * @throws SpotifyInvalidStateException
+     * @throws SpotifyAccessTokenException
+     */
     public function validateCallback($code, $state): void
     {
         // Fetch the stored state value from somewhere. A session for example
@@ -70,31 +57,15 @@ class SpotifyService
         }
     }
 
-    public function saveUserAccessToken(User $user): void
-    {
-        UserAccessToken::firstOrCreate(
-            [
-                'user_id' => $user->id,
-                'tokenable_id' => UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN
-            ],
-            [
-                'user_id' => $user->id,
-                'tokenable_type' => UserAccessToken::TOKENABLE_TYPE_SPOTIFY_ACCESS_TOKEN,
-                'tokenable_id' => UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN,
-                'name' => UserAccessToken::NAME_SPOTIFY_ACCESS_TOKEN,
-                'token' => $this->session->getAccessToken(),
-                'refresh_token' => $this->session->getRefreshToken(),
-                'abilities' => json_encode($this->session->getScope()),
-                'expires_in' => $this->session->getTokenExpiration(),
-            ]
-        );
-    }
-
     public function getSession()
     {
         return $this->session;
     }
 
+    /**
+     * @throws SpotifyWebAPIException
+     * @throws SpotifyWebAPIAuthException
+     */
     public function getUserProfile()
     {
         $accessToken = $this->getSession()->getAccessToken();
@@ -103,6 +74,10 @@ class SpotifyService
         return $this->api->me();
     }
 
+    /**
+     * @throws SpotifyWebAPIException
+     * @throws SpotifyWebAPIAuthException
+     */
     public function getUserFollowedArtists(User $user): array
     {
         $userAccessToken = $this->userAccessTokenRepository->getOneByUserIdAndTokenableId(
@@ -132,10 +107,10 @@ class SpotifyService
             if (Cache::has($key)) {
                 $response = Cache::get($key);
             } else {
-                // $session->setAccessToken($userAccessToken->token);
-                // $session->setRefreshToken($userAccessToken->refresh_token);
+                $this->session->setAccessToken($userAccessToken->token);
+                $this->session->setRefreshToken($userAccessToken->refresh_token);
 
-                $this->session->refreshAccessToken($userAccessToken->refresh_token);
+                // $this->session->refreshAccessToken($userAccessToken->refresh_token);
 
                 $response = $this->api->getUserFollowedArtists($options);
 

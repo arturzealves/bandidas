@@ -27,7 +27,7 @@ return new class extends Migration
                 $table->timestamp('last_used_at')->nullable();
                 $table->timestamps();
 
-                $table->foreign('user_id')->references('id')->on(DatabaseConstants::TABLE_USERS);
+                $table->foreign('user_id')->references('id')->on(DatabaseConstants::TABLE_USERS)->onDelete('cascade');
             });
         }
     }

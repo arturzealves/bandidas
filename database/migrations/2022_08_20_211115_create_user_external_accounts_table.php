@@ -14,13 +14,12 @@ return new class extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable(DatabaseConstants::TABLE_USER_LOCATIONS)) {
-            Schema::create(DatabaseConstants::TABLE_USER_LOCATIONS, function (Blueprint $table) {
+        if (!Schema::hasTable(DatabaseConstants::TABLE_USER_EXTERNAL_ACCOUNTS)) {
+            Schema::create(DatabaseConstants::TABLE_USER_EXTERNAL_ACCOUNTS, function (Blueprint $table) {
                 $table->id();
                 $table->unsignedBigInteger('user_id');
-                $table->decimal('latitude', 8, 6);
-                $table->decimal('longitude', 9, 6);
-
+                $table->string('external_id', 100);
+                $table->string('provider_name', 50);
                 $table->timestamps();
 
                 $table->foreign('user_id')->references('id')->on(DatabaseConstants::TABLE_USERS)->onDelete('cascade');
@@ -35,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(DatabaseConstants::TABLE_USER_LOCATIONS);
+        Schema::dropIfExists(DatabaseConstants::TABLE_USER_EXTERNAL_ACCOUNTS);
     }
 };

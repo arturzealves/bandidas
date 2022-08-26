@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Spotify;
 
-use App\Services\SpotifyService;
+use App\Http\Controllers\SpotifyController;
 use Illuminate\Support\Facades\Redirect;
 use Livewire\Component;
 
@@ -10,11 +10,12 @@ class SpotifyRegisterForm extends Component
 {
     public $url;
 
-    public function authenticate(SpotifyService $spotifyService)
+    public function authenticate()
     {
-        $this->url = $spotifyService->authenticate();
-        
-        return Redirect::to($this->url);
+        return Redirect::route(
+            'spotify.redirect', 
+            ['action' => SpotifyController::REDIRECT_ACTION_REGISTER]
+        );
     }
 
     public function render()

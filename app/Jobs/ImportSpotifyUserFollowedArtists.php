@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Exceptions\UserAccessTokenNotFoundException;
 use App\Models\Artist;
 use App\Models\ArtistHasGenre;
 use App\Models\Genre;
@@ -42,6 +43,7 @@ class ImportSpotifyUserFollowedArtists implements ShouldQueue
     public function handle()
     {
         $artists = $this->spotifyService->getUserFollowedArtists($this->user);
+        
         foreach ($artists as $artistData) {
             $artist = Artist::firstOrCreate(['name' => $artistData->name]);
 

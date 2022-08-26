@@ -19,10 +19,6 @@
                     <x-jet-nav-link href="{{ route('artists.index') }}" :active="request()->routeIs('artists.index')">
                         {{ __('Artists') }}
                     </x-jet-nav-link>
-
-                    <x-jet-nav-link href="{{ route('spotify.auth') }}">
-                        Log in with Spotify
-                    </x-jet-nav-link>
                 </div>
             </div>
 
@@ -145,9 +141,6 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-jet-responsive-nav-link href="{{ route('spotify.auth') }}">
-                Log in with Spotify
-            </x-jet-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
