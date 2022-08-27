@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Exceptions\SpotifyAccessTokenException;
+use App\Exceptions\UserAccessTokenNotFoundException;
 use App\Models\Artist;
 use App\Models\ArtistHasGenre;
 use App\Models\Genre;
@@ -42,43 +42,40 @@ class ImportSpotifyUserFollowedArtists implements ShouldQueue
      */
     public function handle()
     {
-        try {
-            $artists = $this->spotifyService->getUserFollowedArtists($this->user);
-            foreach ($artists as $artistData) {
-                $artist = Artist::firstOrCreate(['name' => $artistData->name]);
+        $artists = $this->spotifyService->getUserFollowedArtists($this->user);
+        
+        foreach ($artists as $artistData) {
+            $artist = Artist::firstOrCreate(['name' => $artistData->name]);
 
-                UserFollowsArtist::firstOrCreate([
-                    'user_id' => $this->user->id,
+            UserFollowsArtist::firstOrCreate([
+                'user_id' => $this->user->id,
+                'artist_id' => $artist->id,
+            ]);
+
+            SpotifyArtist::firstOrCreate(
+                [
+                    'spotify_id' => $artistData->id
+                ],
+                [
                     'artist_id' => $artist->id,
+                    'name' => $artistData->name,
+                    'uri' => $artistData->uri,
+                    'images' => json_encode($artistData->images),
+                    'href' => $artistData->href,
+                    'followers' => $artistData->followers->total,
+                    'popularity' => $artistData->popularity,
+                    'external_urls' => json_encode($artistData->external_urls),
+                ]
+            );
+
+            foreach ($artistData->genres as $name) {
+                $genre = Genre::firstOrCreate(['name' => $name]);
+                
+                ArtistHasGenre::firstOrCreate([
+                    'artist_id' => $artist->id,
+                    'genre_id' => $genre->id,
                 ]);
-
-                SpotifyArtist::firstOrCreate(
-                    [
-                        'spotify_id' => $artistData->id
-                    ],
-                    [
-                        'artist_id' => $artist->id,
-                        'name' => $artistData->name,
-                        'uri' => $artistData->uri,
-                        'images' => json_encode($artistData->images),
-                        'href' => $artistData->href,
-                        'followers' => $artistData->followers->total,
-                        'popularity' => $artistData->popularity,
-                        'external_urls' => json_encode($artistData->external_urls),
-                    ]
-                );
-
-                foreach ($artistData->genres as $name) {
-                    $genre = Genre::firstOrCreate(['name' => $name]);
-                    
-                    ArtistHasGenre::firstOrCreate([
-                        'artist_id' => $artist->id,
-                        'genre_id' => $genre->id,
-                    ]);
-                }
             }
-        } catch (SpotifyAccessTokenException $exception) {
-            var_dump($exception->getMessage());
         }
     }
 }

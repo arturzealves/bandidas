@@ -56,5 +56,7 @@
                 </x-jet-button>
             </div>
         </form>
+
+        @livewire('spotify.spotify-register-form')
     </x-jet-authentication-card>
 </x-guest-layout>

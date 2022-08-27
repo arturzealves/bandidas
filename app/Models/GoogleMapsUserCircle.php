@@ -21,4 +21,9 @@ class GoogleMapsUserCircle extends Model
         'fillColor',
         'fillOpacity',
     ];
+
+    public function googleMapsUserCirclesHasArtists()
+    {
+        return $this->hasMany(GoogleMapsUserCirclesHasArtist::class, 'google_maps_user_circle_id', 'id');
+    }
 }

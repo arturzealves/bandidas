@@ -44,5 +44,13 @@
                 </x-jet-button>
             </div>
         </form>
+
+        <form method="GET" action="{{ route ('spotify.redirect', ['action' => 'login']) }}">
+            <div class="block mt-4">
+                <x-jet-button class="ml-4 bg-green-500 hover:bg-green-600">
+                    {{ __('Login with Spotify') }}
+                </x-jet-button>
+            </div>
+        </form>
     </x-jet-authentication-card>
 </x-guest-layout>

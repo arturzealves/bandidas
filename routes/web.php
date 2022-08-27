@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArtistController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SpotifyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -24,10 +26,11 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@dashboard')->name('dashboard');
-    
-    Route::get('/spotify/auth', 'App\Http\Controllers\SpotifyController@auth')->name('spotify.auth');
-    Route::get('/spotify/callback', 'App\Http\Controllers\SpotifyController@callback')->name('spotify.callback');
-    Route::get('/spotify', 'App\Http\Controllers\SpotifyController@spotify')->name('spotify');
-
     Route::resource('artists', ArtistController::class)->only(['index', 'show']);
 });
+
+// Route::middleware('guest')->group(function () {
+// });
+
+Route::get('/auth/spotify/redirect/{action}', [SpotifyController::class, 'redirect'])->name('spotify.redirect');
+Route::get('/auth/spotify/callback', [SpotifyController::class, 'callback'])->name('spotify.callback');

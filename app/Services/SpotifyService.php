@@ -10,41 +10,41 @@ use App\Models\UserAccessToken;
 use App\Repositories\UserAccessTokenRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
-use SpotifyWebAPI\SpotifyWebAPI;
 use SpotifyWebAPI\Session;
+use SpotifyWebAPI\SpotifyWebAPI;
 
 class SpotifyService
 {
-    private $userAccessTokenRepository;
+    const SCOPE_USER_READ_EMAIL = 'user-read-email';
+    const SCOPE_USER_FOLLOW_READ = 'user-follow-read';
+
     private $api;
+    private $session;
+    private $userAccessTokenRepository;
     
-    public function __construct(UserAccessTokenRepository $userAccessTokenRepository, SpotifyWebAPI $api)
-    {
-        $this->userAccessTokenRepository = $userAccessTokenRepository;
+    public function __construct(
+        SpotifyWebAPI $api,
+        Session $session,
+        UserAccessTokenRepository $userAccessTokenRepository
+    ) {
         $this->api = $api;
+        $this->api->setSession($session);
+
+        $this->session = $session;
+        $this->userAccessTokenRepository = $userAccessTokenRepository;
+
+        // $options = [
+        //     'auto_refresh' => true,
+        // ];
     }
 
-    public function authenticate(Session $session): string
-    {
-        $state = $session->generateState();
-
-        Cache::put('spotifyState', $state);
-        
-        $options = [
-            'scope' => [
-                'user-read-private',
-                'user-read-email',
-                'user-follow-read',
-            ],
-            'show_dialog' => true,
-            'state' => $state,
-        ];
-
-        return $session->getAuthorizeUrl($options);
-    }
-
-    public function callback(Session $session, User $user, $code, $state): void
+    /**
+     * @throws SpotifyWebAPIException
+     * @throws SpotifyWebAPIAuthException
+     * @throws SpotifyInvalidStateException
+     * @throws SpotifyAccessTokenException
+     */
+    public function validateCallback($code, $state): void
     {
         // Fetch the stored state value from somewhere. A session for example
         if ($state !== Cache::get('spotifyState')) {
@@ -52,28 +52,32 @@ class SpotifyService
             throw new SpotifyInvalidStateException();
         }
         
-        if (!$session->requestAccessToken($code)) {
+        if (!$this->session->requestAccessToken($code)) {
             throw new SpotifyAccessTokenException();
         }
-
-        UserAccessToken::firstOrCreate(
-            [
-                'user_id' => $user->id,
-                'tokenable_id' => UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN
-            ],
-            [
-                'user_id' => $user->id,
-                'tokenable_type' => UserAccessToken::TOKENABLE_TYPE_SPOTIFY_ACCESS_TOKEN,
-                'tokenable_id' => UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN,
-                'name' => UserAccessToken::NAME_SPOTIFY_ACCESS_TOKEN,
-                'token' => $session->getAccessToken(),
-                'refresh_token' => $session->getRefreshToken(),
-                'abilities' => json_encode($session->getScope()),
-                'expires_in' => $session->getTokenExpiration(),
-            ]
-        );
     }
 
+    public function getSession()
+    {
+        return $this->session;
+    }
+
+    /**
+     * @throws SpotifyWebAPIException
+     * @throws SpotifyWebAPIAuthException
+     */
+    public function getUserProfile()
+    {
+        $accessToken = $this->getSession()->getAccessToken();
+        $this->api->setAccessToken($accessToken);
+        
+        return $this->api->me();
+    }
+
+    /**
+     * @throws SpotifyWebAPIException
+     * @throws SpotifyWebAPIAuthException
+     */
     public function getUserFollowedArtists(User $user): array
     {
         $userAccessToken = $this->userAccessTokenRepository->getOneByUserIdAndTokenableId(
@@ -103,8 +107,11 @@ class SpotifyService
             if (Cache::has($key)) {
                 $response = Cache::get($key);
             } else {
-                $this->api->setAccessToken($userAccessToken->token);
-        
+                $this->session->setAccessToken($userAccessToken->token);
+                $this->session->setRefreshToken($userAccessToken->refresh_token);
+
+                // $this->session->refreshAccessToken($userAccessToken->refresh_token);
+
                 $response = $this->api->getUserFollowedArtists($options);
 
                 $userAccessToken->last_used_at = Carbon::now();

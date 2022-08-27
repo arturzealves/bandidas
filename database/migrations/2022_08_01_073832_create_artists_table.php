@@ -36,7 +36,7 @@ return new class extends Migration
                 $table->json('external_urls');
                 $table->timestamps();
 
-                $table->foreign('artist_id')->references('id')->on(DatabaseConstants::TABLE_ARTISTS);
+                $table->foreign('artist_id')->references('id')->on(DatabaseConstants::TABLE_ARTISTS)->onDelete('cascade');
             });
         }
 
@@ -53,8 +53,8 @@ return new class extends Migration
                 $table->unsignedBigInteger('artist_id');
                 $table->unsignedBigInteger('genre_id');
 
-                $table->foreign('artist_id')->references('id')->on(DatabaseConstants::TABLE_ARTISTS);
-                $table->foreign('genre_id')->references('id')->on(DatabaseConstants::TABLE_GENRES);
+                $table->foreign('artist_id')->references('id')->on(DatabaseConstants::TABLE_ARTISTS)->onDelete('cascade');
+                $table->foreign('genre_id')->references('id')->on(DatabaseConstants::TABLE_GENRES)->onDelete('cascade');
             });
         }
 
@@ -64,8 +64,8 @@ return new class extends Migration
                 $table->unsignedBigInteger('user_id');
                 $table->unsignedBigInteger('artist_id');
 
-                $table->foreign('user_id')->references('id')->on(DatabaseConstants::TABLE_USERS);
-                $table->foreign('artist_id')->references('id')->on(DatabaseConstants::TABLE_ARTISTS);
+                $table->foreign('user_id')->references('id')->on(DatabaseConstants::TABLE_USERS)->onDelete('cascade');
+                $table->foreign('artist_id')->references('id')->on(DatabaseConstants::TABLE_ARTISTS)->onDelete('cascade');
             });
         }
     }

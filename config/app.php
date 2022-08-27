@@ -196,7 +196,12 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
+
+        /**
+         * Custom providers
+         */
         App\Providers\SpotifyServiceProvider::class,
+        SocialiteProviders\Manager\ServiceProvider::class,
 
     ],
 

@@ -8,7 +8,7 @@ export default class GoogleMaps {
     constructor() {
         this.mapProperties = {
             zoom: 7,
-            // center: { lat: 38.72, lng: -9.139 },
+            center: { lat: 38.72, lng: -9.139 },
             mapTypeId: 'terrain',
             mapTypeControl: false,
             streetViewControl: false,
@@ -102,7 +102,7 @@ export default class GoogleMaps {
         this.selectedCircle.setOptions(this.defaultCircleOptions);
         this.selectedCircle = null;
         this.selectedIndex = null;
-        // document.getElementById('sideDrawer').classList.remove('active');
+        document.getElementById('sideDrawer').classList.remove('active');
     }
 
     drawCircle(circle, index) {
@@ -279,7 +279,7 @@ export default class GoogleMaps {
                 scope.bindEventListeners(circle);
                 scope.selectCircleAtIndex(circle.index);
 
-                // Livewire.emit('mount', circle.id);
+                Livewire.emit('mount', circle.id);
 
                 //   this.circleOptions.fillColor = "#FFFFFF";
                 //   console.log('nice', this, element);
@@ -338,13 +338,13 @@ export default class GoogleMaps {
 
         Livewire.emit('submit');
 
-        console.log(form);
+        console.log('saveUserLocation', form);
     }
 
     setUser(user) {
         this.user = user;
 
-        console.log(this.user);
+        console.log('setUser', this.user);
 
         // this.map.setCenter(this.user.center); 
         // this.map.setZoom(10);
@@ -353,9 +353,14 @@ export default class GoogleMaps {
     }
 
     setUserLocation(location) {
-        console.log(location);
+        console.log('setUserLocation', location);
 
+        if (location == null) {
+            return this;
+        }
+        
         this.centerOnUserLocation(parseFloat(location.latitude), parseFloat(location.longitude));
+
         // this.map.setCenter({
         //     lat: parseFloat(location.latitude),
         //     lng: parseFloat(location.longitude)
@@ -390,9 +395,9 @@ export default class GoogleMaps {
         // https://developers.google.com/maps/documentation/javascript/reference/polygon?authuser=1#Circle
 
         // Fill inputs
-        // Livewire.emit('mount', this.selectedCircle.id);
+        Livewire.emit('mount', this.selectedCircle.id);
 
-        // document.getElementById('sideDrawer').classList.add('active');
+        document.getElementById('sideDrawer').classList.add('active');
 
         // alternative to previous call
         // var selectedUserCircle = this.googleMapsUserCircles[index]
