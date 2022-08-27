@@ -102,7 +102,7 @@ class GoogleMaps {
         this.selectedCircle.setOptions(this.defaultCircleOptions);
         this.selectedCircle = null;
         this.selectedIndex = null;
-        // document.getElementById('sideDrawer').classList.remove('active');
+        document.getElementById('sideDrawer').classList.remove('active');
     }
 
     drawCircle(circle, index) {
@@ -279,7 +279,7 @@ class GoogleMaps {
                 scope.bindEventListeners(circle);
                 scope.selectCircleAtIndex(circle.index);
 
-                // Livewire.emit('mount', circle.id);
+                Livewire.emit('mount', circle.id);
 
                 //   this.circleOptions.fillColor = "#FFFFFF";
                 //   console.log('nice', this, element);
@@ -395,9 +395,9 @@ class GoogleMaps {
         // https://developers.google.com/maps/documentation/javascript/reference/polygon?authuser=1#Circle
 
         // Fill inputs
-        // Livewire.emit('mount', this.selectedCircle.id);
+        Livewire.emit('mount', this.selectedCircle.id);
 
-        // document.getElementById('sideDrawer').classList.add('active');
+        document.getElementById('sideDrawer').classList.add('active');
 
         // alternative to previous call
         // var selectedUserCircle = this.googleMapsUserCircles[index]

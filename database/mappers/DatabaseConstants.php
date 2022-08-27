@@ -11,6 +11,7 @@ final class DatabaseConstants
 
     const TABLE_GENRES = 'genres';
     const TABLE_GOOGLE_MAPS_USER_CIRCLES = 'google_maps_user_circles';
+    const TABLE_GOOGLE_MAPS_USER_CIRCLES_HAS_ARTISTS = 'google_maps_user_circles_has_artists';
 
     const TABLE_PASSWORD_RESETS = 'password_resets';
     const TABLE_PERSONAL_ACCESS_TOKENS = 'personal_access_tokens';
