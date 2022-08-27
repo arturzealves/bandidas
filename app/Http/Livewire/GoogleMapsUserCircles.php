@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\GoogleMapsUserCircle;
+use App\Models\GoogleMapsUserCirclesHasArtist;
 use Illuminate\Support\Facades\Auth;
 
 class GoogleMapsUserCircles extends Component
@@ -13,6 +14,8 @@ class GoogleMapsUserCircles extends Component
     public $latitude;
     public $longitude;
     public $radius;
+    public $isCircleSelected = true;
+    public $selectedCircleBudget = 0;
 
     protected $rules = [
         // 'name' => 'optional|string',
@@ -37,6 +40,10 @@ class GoogleMapsUserCircles extends Component
         $this->latitude = $object->latitude;
         $this->longitude = $object->longitude;
         $this->radius = $object->radius;
+        $this->isCircleSelected = true;
+
+        $this->selectedCircleBudget = optional(GoogleMapsUserCirclesHasArtist::where('google_maps_user_circle_id', $this->circle_id)
+            ->first())->budget;
     }
 
     public function destroy($id)
@@ -50,14 +57,13 @@ class GoogleMapsUserCircles extends Component
     public function render()
     {
         $user = Auth::user();
-
         $locations = GoogleMapsUserCircle::where('user_id', $user->id)->get();
 
         return view('livewire.google-maps-user-circles')
             ->with([
                 'user' => $user,
                 'userLocation' => $user->location,
-                'locations' => $locations
+                'locations' => $locations,
             ]);
     }
 
@@ -65,7 +71,7 @@ class GoogleMapsUserCircles extends Component
     {
         $this->validate();
 
-        GoogleMapsUserCircle::create([
+        $circle = GoogleMapsUserCircle::create([
             'name' => $this->name,
             'user_id' => Auth::user()->id,
             'latitude' => $this->latitude,
@@ -73,7 +79,7 @@ class GoogleMapsUserCircles extends Component
             'radius' => $this->radius,
         ]);
 
-        $this->reset();
+        $this->circle_id = $circle->id;
     }
 
     public function update()

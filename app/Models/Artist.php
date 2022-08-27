@@ -17,4 +17,9 @@ class Artist extends Model
     {
         return $this->hasOne(SpotifyArtist::class);
     }
+
+    public function googleMapsUserCirclesHasArtists()
+    {
+        return $this->hasMany(GoogleMapsUserCircleHasArtist::class, 'artist_id', 'id');
+    }
 }
