@@ -29,8 +29,14 @@ Route::middleware([
     Route::resource('artists', ArtistController::class)->only(['index', 'show']);
 });
 
-// Route::middleware('guest')->group(function () {
-// });
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    'user.is.promoter'
+])->group(function () {
+    Route::get('/map', 'App\Http\Controllers\Promoter\MapController@index')->name('map');
+});
 
 Route::get('/auth/spotify/redirect/{action}', [SpotifyController::class, 'redirect'])->name('spotify.redirect');
 Route::get('/auth/spotify/callback', [SpotifyController::class, 'callback'])->name('spotify.callback');

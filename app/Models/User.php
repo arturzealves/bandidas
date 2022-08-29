@@ -79,4 +79,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(UserExternalAccount::class, 'user_id', 'id');
     }
+
+    public function isPromoter()
+    {
+        return $this->user_type_id === UserType::TYPE_PROMOTER_ID;
+    }
 }

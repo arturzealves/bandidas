@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\GoogleMapsPromoterMarker;
 use Livewire\Component;
 use App\Models\GoogleMapsUserCircle;
 use App\Models\GoogleMapsUserCirclesHasArtist;
@@ -57,13 +58,15 @@ class GoogleMapsUserCircles extends Component
     public function render()
     {
         $user = Auth::user();
-        $locations = GoogleMapsUserCircle::where('user_id', $user->id)->get();
+        $circleLocations = GoogleMapsUserCircle::where('user_id', $user->id)->get();
+        $markerLocations = GoogleMapsPromoterMarker::all();
 
         return view('livewire.google-maps-user-circles')
             ->with([
                 'user' => $user,
                 'userLocation' => $user->location,
-                'locations' => $locations,
+                'circleLocations' => $circleLocations,
+                'markerLocations' => $markerLocations,
             ]);
     }
 
