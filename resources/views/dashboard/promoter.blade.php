@@ -14,6 +14,8 @@
                 <span>Número de utilizadores: {{ $userCount }} </span><br>
                 <span>Número de artistas: {{ $spotifyArtistCount }} </span><br>
                 <span>Número de artistas registados: {{ $artistCount }} </span><br>
+
+                <a href="{{ route('map') }}">Mapa</a>
             </div>
         </div>
     </div>

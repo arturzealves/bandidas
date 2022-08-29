@@ -4,9 +4,11 @@
             // console.log('loaded');
 
             window.GoogleMaps
+                .setDrawingModes([google.maps.drawing.OverlayType.CIRCLE])
                 .setUser(@js($user))
                 .setUserLocation(@js($userLocation))
-                .drawCircles(@js($locations));
+                .drawCircles(@js($circleLocations))
+                .drawMarkers(@js($markerLocations));
         });
     </script>
 

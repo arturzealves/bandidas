@@ -6,6 +6,10 @@ window.initMap = function () {
 };
 class GoogleMaps {
     constructor() {
+        this.options = {
+            drawingModes: []
+        };
+
         this.mapProperties = {
             zoom: 7,
             center: { lat: 38.72, lng: -9.139 },
@@ -35,12 +39,15 @@ class GoogleMaps {
         };
 
         this.circles = [];
+        this.markers = [];
         this.googleMapsUserCircles = [];
+        this.googleMapsPromoterMarkers = [];
         this.map = {};
         this.self = this;
         this.selectedIndex = null;
         this.selectedCircle = null;
         this.user = null;
+        this.drawingManager = null;
     }
 
     addCircle(circle) {
@@ -52,6 +59,14 @@ class GoogleMaps {
         // console.log('addCircle', circle, ' total ', this.circles.length)
 
         // <button wire:click="destroy({{ $post->id }})"
+    }
+
+    addMarker(marker) {
+        this.circles.push(marker);
+
+        if (typeof marker.index == 'undefined') {
+            marker.index = this.markers.length - 1;
+        }
     }
 
     bindEventListeners(circle) {
@@ -191,6 +206,32 @@ class GoogleMaps {
         return this;
     }
 
+    drawMarker(marker, index) {
+        let mapMarker = new google.maps.Marker({
+            id: marker.id,
+            index: index,
+            map: this.map,
+            position: {
+                lat: parseFloat(marker.latitude),
+                lng: parseFloat(marker.longitude),
+            },
+        });
+
+        // this.bindEventListeners(mapMarker);
+
+        return mapMarker;
+    }
+
+    drawMarkers(markers) {
+        this.googleMapsPromoterMarkers = markers;
+
+        for (const index in markers) {
+            this.addMarker(this.drawMarker(markers[index], index));
+        }
+
+        return this;
+    }
+
     // Center on location
     centerOnUserLocation(latitude, longitude) {
         // const pos = {
@@ -221,6 +262,58 @@ class GoogleMaps {
         this.saveUserLocation(pos.lat, pos.lng);
     }
 
+    createDrawingManager(map, modes) {
+        if (this.drawingManager !== null) {
+            this.drawingManager.setMap(null);
+        }
+
+        this.drawingManager = new google.maps.drawing.DrawingManager({
+            drawingControl: true,
+            drawingControlOptions: {
+                position: google.maps.ControlPosition.TOP_CENTER,
+                drawingModes: modes,
+            },
+            circleOptions: this.defaultCircleOptions,
+        });
+
+        this.drawingManager.setMap(map);
+
+        let scope = this;
+
+        google.maps.event.addListener(
+            this.drawingManager,
+            'circlecomplete',
+            function (circle) {
+                // Exit circle drawing mode after finishing a circle
+                scope.drawingManager.setDrawingMode(null);
+
+                scope.saveCircle(circle);
+                scope.addCircle(circle);
+                scope.bindEventListeners(circle);
+                scope.selectCircleAtIndex(circle.index);
+
+                Livewire.emit('mount', circle.id);
+
+                //   this.circleOptions.fillColor = "#FFFFFF";
+                //   console.log('nice', this, element);
+                // });
+
+                // google.maps.event.addListener(circle, 'click', function(element) {
+                //   element.id = circle.id;
+                //   scope.selectCircleAtIndex(scope.circles.length - 1);
+                // });
+            }
+        );
+
+        google.maps.event.addListener(
+            this.drawingManager,
+            'markercomplete',
+            function (marker) {
+                scope.saveMarker(marker);
+            }
+        );
+    }
+
     initMap() {
         // Create the map.
         this.map = new google.maps.Map(
@@ -247,17 +340,7 @@ class GoogleMaps {
         );
 
         // Drawing mode
-        const drawingManager = new google.maps.drawing.DrawingManager({
-            // drawingMode: google.maps.drawing.OverlayType.CIRCLE,
-            drawingControl: true,
-            drawingControlOptions: {
-                position: google.maps.ControlPosition.TOP_CENTER,
-                drawingModes: [google.maps.drawing.OverlayType.CIRCLE],
-            },
-            circleOptions: this.defaultCircleOptions,
-        });
-
-        drawingManager.setMap(this.map);
+        this.createDrawingManager(this.map, this.options.drawingModes);
 
         let scope = this;
         google.maps.event.addListener(this.map, 'click', function () {
@@ -267,30 +350,6 @@ class GoogleMaps {
             }
         });
 
-        google.maps.event.addListener(
-            drawingManager,
-            'circlecomplete',
-            function (circle) {
-                // Exit circle drawing mode after finishing a circle
-                drawingManager.setDrawingMode(null);
-
-                scope.saveCircle(circle);
-                scope.addCircle(circle);
-                scope.bindEventListeners(circle);
-                scope.selectCircleAtIndex(circle.index);
-
-                Livewire.emit('mount', circle.id);
-
-                //   this.circleOptions.fillColor = "#FFFFFF";
-                //   console.log('nice', this, element);
-                // });
-
-                // google.maps.event.addListener(circle, 'click', function(element) {
-                //   element.id = circle.id;
-                //   scope.selectCircleAtIndex(scope.circles.length - 1);
-                // });
-            }
-        );
     }
 
     focus(circle) {
@@ -328,6 +387,18 @@ class GoogleMaps {
         }
     }
 
+    saveMarker(marker) {
+        // Update the DOM elements and trigger the model properties update
+        document.getElementById('latitude').value = marker.position.lat();
+        document.getElementById('latitude').dispatchEvent(new Event('change'));
+        document.getElementById('longitude').value = marker.position.lng();
+        document.getElementById('longitude').dispatchEvent(new Event('change'));
+
+        document
+            .getElementById('google-maps-promoter-markers-form-submit')
+            .click();
+    }
+
     saveUserLocation(latitude, longitude) {
         let form = document.getElementById('userLocationForm');
         
@@ -339,6 +410,18 @@ class GoogleMaps {
         Livewire.emit('submit');
 
         console.log('saveUserLocation', form);
+    }
+
+    // setOptions(options) {
+    //     this.options = {...this.options, ...options};
+
+    //     return this;
+    // }
+
+    setDrawingModes(modes) {
+        this.createDrawingManager(this.map, modes);
+
+        return this;
     }
 
     setUser(user) {
