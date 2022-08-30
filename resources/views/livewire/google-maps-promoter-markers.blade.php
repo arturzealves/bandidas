@@ -5,7 +5,7 @@
             window.GoogleMaps
                 .setDrawingModes([google.maps.drawing.OverlayType.MARKER])
                 .setUser(@js($user))
-                .drawMarkers(@js($locations));
+                .drawMarkers(@js($locations), 'red');
         });
     </script>
 

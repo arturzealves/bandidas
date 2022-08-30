@@ -6,6 +6,7 @@ use App\Models\GoogleMapsPromoterMarker;
 use Livewire\Component;
 use App\Models\GoogleMapsUserCircle;
 use App\Models\GoogleMapsUserCirclesHasArtist;
+use App\Services\GPS\LocationService;
 use Illuminate\Support\Facades\Auth;
 
 class GoogleMapsUserCircles extends Component
@@ -55,11 +56,21 @@ class GoogleMapsUserCircles extends Component
         }
     }
 
-    public function render()
+    public function render(LocationService $locationService)
     {
         $user = Auth::user();
         $circleLocations = GoogleMapsUserCircle::where('user_id', $user->id)->get();
         $markerLocations = GoogleMapsPromoterMarker::all();
+
+        $locationsInsideCircles = collect();
+        foreach ($markerLocations as $index => $marker) {
+            foreach ($circleLocations as $circle) {
+                if ($locationService->isLocationInsideCircle($marker, $circle)) {
+                    $locationsInsideCircles->push($marker);
+                    $markerLocations->forget($index);
+                }
+            }
+        }
 
         return view('livewire.google-maps-user-circles')
             ->with([
@@ -67,6 +78,7 @@ class GoogleMapsUserCircles extends Component
                 'userLocation' => $user->location,
                 'circleLocations' => $circleLocations,
                 'markerLocations' => $markerLocations,
+                'locationsInsideCircles' => $locationsInsideCircles,
             ]);
     }
 
