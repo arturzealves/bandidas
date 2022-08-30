@@ -8,7 +8,8 @@
                 .setUser(@js($user))
                 .setUserLocation(@js($userLocation))
                 .drawCircles(@js($circleLocations))
-                .drawMarkers(@js($markerLocations));
+                .drawMarkers(@js($markerLocations), 'red')
+                .drawMarkers(@js($locationsInsideCircles), 'green');
         });
     </script>
 
