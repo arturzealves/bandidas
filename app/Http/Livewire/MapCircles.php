@@ -3,12 +3,10 @@
 namespace App\Http\Livewire;
 
 use App\Events\MapCircleCreated;
-use App\Models\MapMarker;
-use Livewire\Component;
 use App\Models\MapCircle;
-use App\Models\ArtistMapCircle;
-use App\Services\GPS\LocationService;
+use App\Models\MapMarker;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
 
 class MapCircles extends Component
 {
@@ -56,21 +54,21 @@ class MapCircles extends Component
         }
     }
 
-    public function render(LocationService $locationService)
+    public function render()
     {
         $user = Auth::user();
         $circleLocations = MapCircle::where('user_id', $user->id)->get();
-        $markerLocations = MapMarker::all();
 
         $locationsInsideCircles = collect();
-        foreach ($markerLocations as $index => $marker) {
-            foreach ($circleLocations as $circle) {
-                if ($locationService->isLocationInsideCircle($marker, $circle)) {
-                    $locationsInsideCircles->push($marker);
-                    $markerLocations->forget($index);
+        foreach ($circleLocations as $circle) {
+            foreach ($circle->promoterMarkers()->get() as $marker) {
+                if (!$locationsInsideCircles->contains($marker)) {
+                    $locationsInsideCircles->add($marker);
                 }
             }
         }
+
+        $markerLocations = MapMarker::all()->diff($locationsInsideCircles);
 
         return view('livewire.map-circles')
             ->with([

@@ -4,7 +4,6 @@ namespace App\Listeners;
 
 use App\Events\MapMarkerCreated;
 use App\Models\MapCircle;
-use App\Models\MapMarker;
 use App\Services\GPS\LocationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
