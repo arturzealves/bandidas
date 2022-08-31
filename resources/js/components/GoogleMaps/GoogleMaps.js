@@ -406,7 +406,7 @@ class GoogleMaps {
         document.getElementById('longitude').dispatchEvent(new Event('change'));
 
         document
-            .getElementById('google-maps-promoter-markers-form-submit')
+            .getElementById('map-markers-form-submit')
             .click();
     }
 

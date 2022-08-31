@@ -34,7 +34,7 @@
 
             Artists:
             <div>
-                <livewire:google-maps-user-circles-has-artists-select 
+                <livewire:artist-map-circles-select 
                     wire:model.lazy="artists"
                     circle_id="{{ $circle_id }}"
                     key="{{ $circle_id }}" 

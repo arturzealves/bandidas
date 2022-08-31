@@ -19,7 +19,7 @@
             <input type="text" wire:model.lazy="longitude" id="longitude">
             <br>
             <br>
-            <button type="submit" id="google-maps-promoter-markers-form-submit" class="px-4 py-2 mt-4 text-white bg-blue-600 rounded">
+            <button type="submit" id="map-markers-form-submit" class="px-4 py-2 mt-4 text-white bg-blue-600 rounded">
                 Submit
             </button>
         </form>

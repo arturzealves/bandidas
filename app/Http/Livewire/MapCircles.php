@@ -2,14 +2,15 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\GoogleMapsPromoterMarker;
+use App\Events\MapCircleCreated;
+use App\Models\MapMarker;
 use Livewire\Component;
-use App\Models\GoogleMapsUserCircle;
-use App\Models\GoogleMapsUserCirclesHasArtist;
+use App\Models\MapCircle;
+use App\Models\ArtistMapCircle;
 use App\Services\GPS\LocationService;
 use Illuminate\Support\Facades\Auth;
 
-class GoogleMapsUserCircles extends Component
+class MapCircles extends Component
 {
     public $name = 'default name';
     public $circle_id;
@@ -36,21 +37,20 @@ class GoogleMapsUserCircles extends Component
             return;
         }
 
-        $object = GoogleMapsUserCircle::find($id);
-        $this->name = $object->name;
-        $this->circle_id = $object->id;
-        $this->latitude = $object->latitude;
-        $this->longitude = $object->longitude;
-        $this->radius = $object->radius;
+        $circle = MapCircle::find($id);
+        $this->name = $circle->name;
+        $this->circle_id = $circle->id;
+        $this->latitude = $circle->latitude;
+        $this->longitude = $circle->longitude;
+        $this->radius = $circle->radius;
         $this->isCircleSelected = true;
 
-        $this->selectedCircleBudget = optional(GoogleMapsUserCirclesHasArtist::where('google_maps_user_circle_id', $this->circle_id)
-            ->first())->budget;
+        $this->selectedCircleBudget = optional($circle->artists()->first())->budget;
     }
 
     public function destroy($id)
     {
-        $object = GoogleMapsUserCircle::find($id);
+        $object = MapCircle::find($id);
         if (!empty($object)) {
             $object->delete();
         }
@@ -59,8 +59,8 @@ class GoogleMapsUserCircles extends Component
     public function render(LocationService $locationService)
     {
         $user = Auth::user();
-        $circleLocations = GoogleMapsUserCircle::where('user_id', $user->id)->get();
-        $markerLocations = GoogleMapsPromoterMarker::all();
+        $circleLocations = MapCircle::where('user_id', $user->id)->get();
+        $markerLocations = MapMarker::all();
 
         $locationsInsideCircles = collect();
         foreach ($markerLocations as $index => $marker) {
@@ -72,7 +72,7 @@ class GoogleMapsUserCircles extends Component
             }
         }
 
-        return view('livewire.google-maps-user-circles')
+        return view('livewire.map-circles')
             ->with([
                 'user' => $user,
                 'userLocation' => $user->location,
@@ -86,7 +86,7 @@ class GoogleMapsUserCircles extends Component
     {
         $this->validate();
 
-        $circle = GoogleMapsUserCircle::create([
+        $circle = MapCircle::create([
             'name' => $this->name,
             'user_id' => Auth::user()->id,
             'latitude' => $this->latitude,
@@ -94,12 +94,14 @@ class GoogleMapsUserCircles extends Component
             'radius' => $this->radius,
         ]);
 
+        MapCircleCreated::dispatch($circle);
+
         $this->circle_id = $circle->id;
     }
 
     public function update()
     {
-        GoogleMapsUserCircle::updateOrCreate(
+        MapCircle::updateOrCreate(
             [
                 'id' => $this->circle_id,
             ],
