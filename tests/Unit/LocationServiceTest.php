@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Models\GoogleMapsPromoterMarker;
-use App\Models\GoogleMapsUserCircle;
+use App\Models\MapMarker;
+use App\Models\MapCircle;
 use App\Services\GPS\LocationService;
 use PHPUnit\Framework\TestCase;
 
@@ -11,16 +11,16 @@ class LocationServiceTest extends TestCase
 {
     public function testIsLocationInsideCircle()
     {
-        $circle = new GoogleMapsUserCircle();
+        $circle = new MapCircle();
         $circle->latitude = 38.704429;
         $circle->longitude = -9.145777;
         $circle->radius = 34;
 
-        $markerInsideCircle = new GoogleMapsPromoterMarker();
+        $markerInsideCircle = new MapMarker();
         $markerInsideCircle->latitude = 38.704390;
         $markerInsideCircle->longitude = -9.145781;
 
-        $markerOutsideCircle = new GoogleMapsPromoterMarker();
+        $markerOutsideCircle = new MapMarker();
         $markerOutsideCircle->latitude = 38.704737;
         $markerOutsideCircle->longitude = -9.145832;
 

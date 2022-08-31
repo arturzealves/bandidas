@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\MapCircleCreated;
+use App\Events\MapMarkerCreated;
+use App\Listeners\MapCircleCreatedListener;
+use App\Listeners\MapMarkerCreatedListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -22,6 +26,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         SocialiteWasCalled::class => [
             SpotifyExtendSocialite::class.'@handle',
+        ],
+        MapCircleCreated::class => [
+            MapCircleCreatedListener::class,
+        ],
+        MapMarkerCreated::class => [
+            MapMarkerCreatedListener::class,
         ],
     ];
 

@@ -11,7 +11,7 @@
             style="width: 100%;"
         ></div>
 
-        @livewire('google-maps-promoter-markers')
+        @livewire('map-markers')
 
         @push('scripts')
             <script

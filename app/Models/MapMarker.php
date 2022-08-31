@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GoogleMapsPromoterMarker extends Model
+class MapMarker extends Model
 {
     use HasFactory;
 
@@ -14,4 +14,9 @@ class GoogleMapsPromoterMarker extends Model
         'latitude',
         'longitude',
     ];
+
+    public function userCircles()
+    {
+        return $this->belongsToMany(MapCircle::class)->withTimestamps();
+    }
 }

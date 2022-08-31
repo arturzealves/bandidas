@@ -11,7 +11,7 @@
             style="width: 100%;"
         ></div>
 
-        @livewire('google-maps-user-circles')
+        @livewire('map-circles')
         @livewire('user-location-form')
 
         @push('scripts')

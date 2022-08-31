@@ -2,11 +2,12 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\GoogleMapsPromoterMarker;
+use App\Events\MapMarkerCreated;
+use App\Models\MapMarker;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class GoogleMapsPromoterMarkers extends Component
+class MapMarkers extends Component
 {
     public $latitude;
     public $longitude;
@@ -19,9 +20,9 @@ class GoogleMapsPromoterMarkers extends Component
     public function render()
     {
         $user = Auth::user();
-        $locations = GoogleMapsPromoterMarker::where('user_id', $user->id)->get();
+        $locations = MapMarker::where('user_id', $user->id)->get();
 
-        return view('livewire.google-maps-promoter-markers')
+        return view('livewire.map-markers')
             ->with([
                 'user' => $user,
                 // 'userLocation' => $user->location,
@@ -34,11 +35,13 @@ class GoogleMapsPromoterMarkers extends Component
     {
         $this->validate();
 
-        $marker = GoogleMapsPromoterMarker::create([
+        $marker = MapMarker::create([
             'user_id' => Auth::user()->id,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
         ]);
+
+        MapMarkerCreated::dispatch($marker);
 
         $this->marker_id = $marker->id;
     }

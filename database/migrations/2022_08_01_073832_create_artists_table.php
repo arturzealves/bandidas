@@ -47,8 +47,8 @@ return new class extends Migration
             });
         }
 
-        if (!Schema::hasTable(DatabaseConstants::TABLE_ARTIST_HAS_GENRES)) {
-            Schema::create(DatabaseConstants::TABLE_ARTIST_HAS_GENRES, function (Blueprint $table) {
+        if (!Schema::hasTable(DatabaseConstants::TABLE_ARTIST_GENRE)) {
+            Schema::create(DatabaseConstants::TABLE_ARTIST_GENRE, function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->unsignedBigInteger('artist_id');
                 $table->unsignedBigInteger('genre_id');
@@ -80,8 +80,8 @@ return new class extends Migration
         if (Schema::hasTable(DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS)) {
             Schema::dropIfExists(DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS);
         }
-        if (Schema::hasTable(DatabaseConstants::TABLE_ARTIST_HAS_GENRES)) {
-            Schema::dropIfExists(DatabaseConstants::TABLE_ARTIST_HAS_GENRES);
+        if (Schema::hasTable(DatabaseConstants::TABLE_ARTIST_GENRE)) {
+            Schema::dropIfExists(DatabaseConstants::TABLE_ARTIST_GENRE);
         }
         if (Schema::hasTable(DatabaseConstants::TABLE_GENRES)) {
             Schema::dropIfExists(DatabaseConstants::TABLE_GENRES);

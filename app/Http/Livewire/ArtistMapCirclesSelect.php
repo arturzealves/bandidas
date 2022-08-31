@@ -3,10 +3,10 @@
 namespace App\Http\Livewire;
 
 use App\Models\Artist;
-use App\Models\GoogleMapsUserCirclesHasArtist;
+use App\Models\ArtistMapCircle;
 use Livewire\Component;
 
-class GoogleMapsUserCirclesHasArtistsSelect extends Component
+class ArtistMapCirclesSelect extends Component
 {
     public $circle_id;
     public $artists;
@@ -16,9 +16,9 @@ class GoogleMapsUserCirclesHasArtistsSelect extends Component
     public function mount()
     {
         $this->artists = Artist::pluck('name', 'id')->toArray();
-        $this->selected = GoogleMapsUserCirclesHasArtist::where('google_maps_user_circle_id', $this->circle_id)
-            ->get()
-            ->pluck('artist_id');
+        // $this->selected = ArtistMapCircle::where('map_circle_id', $this->circle_id)
+        //     ->get()
+        //     ->pluck('artist_id');
     }
 
     public function update($element)
@@ -26,12 +26,12 @@ class GoogleMapsUserCirclesHasArtistsSelect extends Component
         $artistId = $element['value'];
         
         if (!in_array($element['value'], $this->selected)) {
-            GoogleMapsUserCirclesHasArtist::where('google_maps_user_circle_id', $this->circle_id)
+            ArtistMapCircle::where('map_circle_id', $this->circle_id)
                 ->where('artist_id', $artistId)
                 ->delete();
         } else {
-            GoogleMapsUserCirclesHasArtist::create([
-                'google_maps_user_circle_id' => $this->circle_id,
+            ArtistMapCircle::create([
+                'map_circle_id' => $this->circle_id,
                 'artist_id' => $artistId,
                 'budget' => $this->budget,
             ]);
@@ -40,7 +40,7 @@ class GoogleMapsUserCirclesHasArtistsSelect extends Component
 
     public function updateBudget()
     {
-        $record = GoogleMapsUserCirclesHasArtist::where('google_maps_user_circle_id', $this->circle_id)
+        $record = ArtistMapCircle::where('map_circle_id', $this->circle_id)
             ->first();
 
         if (null !== $record) {
@@ -51,6 +51,6 @@ class GoogleMapsUserCirclesHasArtistsSelect extends Component
     
     public function render()
     {
-        return view('livewire.google-maps-user-circles-has-artists-select');
+        return view('livewire.artist-map-circles-select');
     }
 }
