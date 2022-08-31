@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use App\Events\MapCircleCreated;
-use App\Models\MapCircle;
 use App\Models\MapMarker;
 use App\Services\GPS\LocationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
