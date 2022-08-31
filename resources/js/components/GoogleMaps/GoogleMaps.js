@@ -380,6 +380,10 @@ class GoogleMaps {
         document.getElementById('radius').value = circle.radius;
         document.getElementById('radius').dispatchEvent(new Event('change'));
 
+        if (!circle.id && document.getElementById('circle_id').value !== '') {
+            circle.id = document.getElementById('circle_id').value;
+        }
+
         if (circle.id) {
             document.getElementById('circle_id').value = circle.id;
             document
