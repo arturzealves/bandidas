@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Events\MapCircleCreated;
+use App\Events\MapCircleUpdated;
 use App\Models\MapCircle;
 use App\Models\MapMarker;
 use Illuminate\Support\Facades\Auth;
@@ -101,7 +102,7 @@ class MapCircles extends Component
 
     public function update()
     {
-        MapCircle::updateOrCreate(
+        $circle = MapCircle::updateOrCreate(
             [
                 'id' => $this->circle_id,
             ],
@@ -114,6 +115,8 @@ class MapCircles extends Component
             ],
         );
 
+        MapCircleUpdated::dispatch($circle);
+        
         $this->reset();
     }
 }

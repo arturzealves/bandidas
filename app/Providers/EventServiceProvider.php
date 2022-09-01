@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Events\MapCircleCreated;
+use App\Events\MapCircleUpdated;
 use App\Events\MapMarkerCreated;
 use App\Listeners\MapCircleCreatedListener;
+use App\Listeners\MapCircleUpdatedListener;
 use App\Listeners\MapMarkerCreatedListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -32,6 +34,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         MapMarkerCreated::class => [
             MapMarkerCreatedListener::class,
+        ],
+        MapCircleUpdated::class => [
+            MapCircleUpdatedListener::class,
         ],
     ];
 
