@@ -13,7 +13,7 @@
         });
     </script>
 
-    <div id="sideDrawer" class="{{ $isCircleSelected ? 'active' : '' }}">
+    <div id="sideDrawer">
         <form wire:submit.prevent="submit">
             @csrf
             name:

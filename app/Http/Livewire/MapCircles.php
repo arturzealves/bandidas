@@ -15,7 +15,7 @@ class MapCircles extends Component
     public $latitude;
     public $longitude;
     public $radius;
-    public $isCircleSelected = true;
+    // public $isCircleSelected = true;
     public $selectedCircleBudget = 0;
 
     protected $rules = [
@@ -41,9 +41,10 @@ class MapCircles extends Component
         $this->latitude = $circle->latitude;
         $this->longitude = $circle->longitude;
         $this->radius = $circle->radius;
-        $this->isCircleSelected = true;
+        // $this->isCircleSelected = true;
 
         $this->selectedCircleBudget = optional($circle->artists()->first())->budget;
+        $this->dispatchBrowserEvent('mounted', ['id' => $this->circle_id]);
     }
 
     public function destroy($id)
@@ -92,9 +93,10 @@ class MapCircles extends Component
             'radius' => $this->radius,
         ]);
 
-        MapCircleCreated::dispatch($circle);
-
         $this->circle_id = $circle->id;
+
+        MapCircleCreated::dispatch($circle);
+        $this->dispatchBrowserEvent('submitted', ['id' => $this->circle_id]);
     }
 
     public function update()
