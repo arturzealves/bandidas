@@ -1,13 +1,14 @@
 #sideDrawer {
-    width: 500px;
+    width: 400px;
     height: 100vh;
     position: absolute;
-    top: 0;
+    top: 65px;
     bottom: 0;
-    right: -500px;
-    background-color: rgba(255, 0, 0, 0.8);
+    right: -400px;
+    background-color: rgba(100, 116, 139, 0.95);
     transition: right 0.5s;
     padding: 25px;
+    z-index: 1;
 }
 
 #sideDrawer.active {
