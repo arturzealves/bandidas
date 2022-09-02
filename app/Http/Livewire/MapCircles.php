@@ -2,19 +2,21 @@
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
-use App\Models\GoogleMapsUserCircle;
-use App\Models\GoogleMapsUserCirclesHasArtist;
+use App\Events\MapCircleCreated;
+use App\Events\MapCircleUpdated;
+use App\Models\MapCircle;
+use App\Models\MapMarker;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
 
-class GoogleMapsUserCircles extends Component
+class MapCircles extends Component
 {
     public $name = 'default name';
     public $circle_id;
     public $latitude;
     public $longitude;
     public $radius;
-    public $isCircleSelected = true;
+    // public $isCircleSelected = true;
     public $selectedCircleBudget = 0;
 
     protected $rules = [
@@ -34,21 +36,21 @@ class GoogleMapsUserCircles extends Component
             return;
         }
 
-        $object = GoogleMapsUserCircle::find($id);
-        $this->name = $object->name;
-        $this->circle_id = $object->id;
-        $this->latitude = $object->latitude;
-        $this->longitude = $object->longitude;
-        $this->radius = $object->radius;
-        $this->isCircleSelected = true;
+        $circle = MapCircle::find($id);
+        $this->name = $circle->name;
+        $this->circle_id = $circle->id;
+        $this->latitude = $circle->latitude;
+        $this->longitude = $circle->longitude;
+        $this->radius = $circle->radius;
+        // $this->isCircleSelected = true;
 
-        $this->selectedCircleBudget = optional(GoogleMapsUserCirclesHasArtist::where('google_maps_user_circle_id', $this->circle_id)
-            ->first())->budget;
+        $this->selectedCircleBudget = optional($circle->artists()->first())->budget;
+        $this->dispatchBrowserEvent('mounted', ['id' => $this->circle_id]);
     }
 
     public function destroy($id)
     {
-        $object = GoogleMapsUserCircle::find($id);
+        $object = MapCircle::find($id);
         if (!empty($object)) {
             $object->delete();
         }
@@ -57,13 +59,26 @@ class GoogleMapsUserCircles extends Component
     public function render()
     {
         $user = Auth::user();
-        $locations = GoogleMapsUserCircle::where('user_id', $user->id)->get();
+        $circleLocations = MapCircle::where('user_id', $user->id)->get();
 
-        return view('livewire.google-maps-user-circles')
+        $locationsInsideCircles = collect();
+        foreach ($circleLocations as $circle) {
+            foreach ($circle->promoterMarkers()->get() as $marker) {
+                if (!$locationsInsideCircles->contains($marker)) {
+                    $locationsInsideCircles->add($marker);
+                }
+            }
+        }
+
+        $markerLocations = MapMarker::all()->diff($locationsInsideCircles);
+
+        return view('livewire.map-circles')
             ->with([
                 'user' => $user,
                 'userLocation' => $user->location,
-                'locations' => $locations,
+                'circleLocations' => $circleLocations,
+                'markerLocations' => $markerLocations,
+                'locationsInsideCircles' => $locationsInsideCircles,
             ]);
     }
 
@@ -71,7 +86,7 @@ class GoogleMapsUserCircles extends Component
     {
         $this->validate();
 
-        $circle = GoogleMapsUserCircle::create([
+        $circle = MapCircle::create([
             'name' => $this->name,
             'user_id' => Auth::user()->id,
             'latitude' => $this->latitude,
@@ -80,11 +95,14 @@ class GoogleMapsUserCircles extends Component
         ]);
 
         $this->circle_id = $circle->id;
+
+        MapCircleCreated::dispatch($circle);
+        $this->dispatchBrowserEvent('submitted', ['id' => $this->circle_id]);
     }
 
     public function update()
     {
-        GoogleMapsUserCircle::updateOrCreate(
+        $circle = MapCircle::updateOrCreate(
             [
                 'id' => $this->circle_id,
             ],
@@ -97,6 +115,8 @@ class GoogleMapsUserCircles extends Component
             ],
         );
 
+        MapCircleUpdated::dispatch($circle);
+        
         $this->reset();
     }
 }

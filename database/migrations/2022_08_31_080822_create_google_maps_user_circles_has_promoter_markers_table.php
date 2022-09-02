@@ -14,12 +14,12 @@ return new class extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable(DatabaseConstants::TABLE_ARTIST_MAP_CIRCLE)) {
-            Schema::create(DatabaseConstants::TABLE_ARTIST_MAP_CIRCLE, function (Blueprint $table) {
+        if (!Schema::hasTable(DatabaseConstants::TABLE_MAP_CIRCLES_MAP_MARKER)) {
+            Schema::create(DatabaseConstants::TABLE_MAP_CIRCLES_MAP_MARKER, function (Blueprint $table) {
                 $table->id();
                 $table->unsignedBigInteger('map_circle_id');
-                $table->unsignedBigInteger('artist_id');
-                $table->decimal('budget', 7, 2)->nullable();
+                $table->unsignedBigInteger('map_marker_id');
+                $table->mediumInteger('distance');
                 $table->timestamps();
 
                 $table->foreign('map_circle_id')
@@ -27,12 +27,12 @@ return new class extends Migration
                     ->on(DatabaseConstants::TABLE_GOOGLE_MAPS_USER_CIRCLES)
                     ->onDelete('cascade');
 
-                $table->foreign('artist_id')
+                $table->foreign('map_marker_id')
                     ->references('id')
-                    ->on(DatabaseConstants::TABLE_ARTISTS)
+                    ->on(DatabaseConstants::TABLE_GOOGLE_MAPS_PROMOTER_MARKERS)
                     ->onDelete('cascade');
             });
-        }   
+        }
     }
 
     /**
@@ -42,6 +42,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(DatabaseConstants::TABLE_ARTIST_MAP_CIRCLE);
+        Schema::dropIfExists(DatabaseConstants::TABLE_MAP_CIRCLES_MAP_MARKER);
     }
 };

@@ -4,15 +4,17 @@ namespace Database\Mappers;
 
 final class DatabaseConstants
 {
-    const TABLE_ARTIST_HAS_GENRES = 'artist_has_genres';
+    const TABLE_ARTIST_GENRE = 'artist_genre';
     const TABLE_ARTISTS = 'artists';
 
     const TABLE_FAILED_JOBS = 'failed_jobs';
 
     const TABLE_GENRES = 'genres';
-    const TABLE_GOOGLE_MAPS_USER_CIRCLES = 'google_maps_user_circles';
-    const TABLE_GOOGLE_MAPS_USER_CIRCLES_HAS_ARTISTS = 'google_maps_user_circles_has_artists';
-
+    const TABLE_GOOGLE_MAPS_PROMOTER_MARKERS = 'map_markers';
+    const TABLE_GOOGLE_MAPS_USER_CIRCLES = 'map_circles';
+    const TABLE_ARTIST_MAP_CIRCLE = 'artist_map_circle';
+    const TABLE_MAP_CIRCLES_MAP_MARKER = 'map_circle_map_marker';
+    
     const TABLE_PASSWORD_RESETS = 'password_resets';
     const TABLE_PERSONAL_ACCESS_TOKENS = 'personal_access_tokens';
     

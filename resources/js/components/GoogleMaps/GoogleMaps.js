@@ -6,6 +6,10 @@ window.initMap = function () {
 };
 export default class GoogleMaps {
     constructor() {
+        this.options = {
+            drawingModes: []
+        };
+
         this.mapProperties = {
             zoom: 7,
             center: { lat: 38.72, lng: -9.139 },
@@ -35,12 +39,15 @@ export default class GoogleMaps {
         };
 
         this.circles = [];
+        this.markers = [];
         this.googleMapsUserCircles = [];
+        this.googleMapsPromoterMarkers = [];
         this.map = {};
         this.self = this;
         this.selectedIndex = null;
         this.selectedCircle = null;
         this.user = null;
+        this.drawingManager = null;
     }
 
     addCircle(circle) {
@@ -49,43 +56,23 @@ export default class GoogleMaps {
         if (typeof circle.index == 'undefined') {
             circle.index = this.circles.length - 1;
         }
-        // console.log('addCircle', circle, ' total ', this.circles.length)
+    }
 
-        // <button wire:click="destroy({{ $post->id }})"
+    addMarker(marker) {
+        this.markers.push(marker);
+
+        if (typeof marker.index == 'undefined') {
+            marker.index = this.markers.length - 1;
+        }
     }
 
     bindEventListeners(circle) {
-        let scope = this;
-
-        google.maps.event.addListener(circle, 'click', function () {
-            // console.log('click ', circle);
-            scope.selectCircleAtIndex(circle.index);
-        });
-
-        google.maps.event.addListener(circle, 'contextmenu', function () {
-            // console.log('contextmenu ', circle);
-            scope.deleteCircle(circle);
-        });
-
-        google.maps.event.addListener(circle, 'mouseover', function () {
-            // console.log('mouseover ', circle);
-            scope.focus(circle);
-        });
-
-        google.maps.event.addListener(circle, 'mouseout', function () {
-            // console.log('mouseout ', circle);
-            scope.unfocus(circle);
-        });
-
-        google.maps.event.addListener(circle, 'radius_changed', function () {
-            // console.log('radius_changed ', circle);
-            scope.saveCircle(circle);
-        });
-
-        google.maps.event.addListener(circle, 'center_changed', function () {
-            // console.log('center_changed ', circle);
-            scope.saveCircle(circle);
-        });
+        google.maps.event.addListener(circle, 'click', () => this.selectCircleAtIndex(circle.index));
+        google.maps.event.addListener(circle, 'contextmenu', () => this.deleteCircle(circle));
+        google.maps.event.addListener(circle, 'mouseover', () => this.focus(circle));
+        google.maps.event.addListener(circle, 'mouseout', () => this.unfocus(circle));
+        google.maps.event.addListener(circle, 'radius_changed', () => this.updateCircle(circle));
+        google.maps.event.addListener(circle, 'center_changed', () => this.updateCircle(circle));
     }
 
     deleteCircle(circle) {
@@ -191,6 +178,43 @@ export default class GoogleMaps {
         return this;
     }
 
+    drawMarker(marker, index, icon) {
+        let mapMarker = new google.maps.Marker({
+            id: marker.id,
+            index: index,
+            map: this.map,
+            position: {
+                lat: parseFloat(marker.latitude),
+                lng: parseFloat(marker.longitude),
+            },
+            icon: icon
+        });
+
+        // this.bindEventListeners(mapMarker);
+
+        return mapMarker;
+    }
+
+    drawMarkers(markers, color) {
+        this.googleMapsPromoterMarkers = markers;
+
+        let svgMarker = {
+            path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+            fillColor: color,
+            fillOpacity: 0.6,
+            strokeWeight: 0,
+            rotation: 0,
+            scale: 2,
+            anchor: new google.maps.Point(15, 30),
+        };
+
+        for (const index in markers) {
+            this.addMarker(this.drawMarker(markers[index], index, svgMarker));
+        }
+
+        return this;
+    }
+
     // Center on location
     centerOnUserLocation(latitude, longitude) {
         // const pos = {
@@ -221,6 +245,62 @@ export default class GoogleMaps {
         this.saveUserLocation(pos.lat, pos.lng);
     }
 
+    createDrawingManager(map, modes) {
+        if (this.drawingManager !== null) {
+            this.drawingManager.setMap(null);
+        }
+
+        this.drawingManager = new google.maps.drawing.DrawingManager({
+            drawingControl: true,
+            drawingControlOptions: {
+                position: google.maps.ControlPosition.TOP_CENTER,
+                drawingModes: modes,
+            },
+            circleOptions: this.defaultCircleOptions,
+        });
+
+        this.drawingManager.setMap(map);
+
+        let scope = this;
+
+        google.maps.event.addListener(
+            this.drawingManager,
+            'circlecomplete',
+            function (circle) {
+                // Exit circle drawing mode after finishing a circle
+                scope.drawingManager.setDrawingMode(null);
+
+                scope.saveCircle(circle);
+                scope.addCircle(circle);
+                scope.bindEventListeners(circle);
+                scope.selectCircleAtIndex(circle.index);
+
+                Livewire.emit('mount', circle.id);
+
+                window.addEventListener('submitted', event => {
+                    circle.id = event.detail.id;
+                });
+
+                //   this.circleOptions.fillColor = "#FFFFFF";
+                //   console.log('nice', this, element);
+                // });
+
+                // google.maps.event.addListener(circle, 'click', function(element) {
+                //   element.id = circle.id;
+                //   scope.selectCircleAtIndex(scope.circles.length - 1);
+                // });
+            }
+        );
+
+        google.maps.event.addListener(
+            this.drawingManager,
+            'markercomplete',
+            function (marker) {
+                scope.saveMarker(marker);
+            }
+        );
+    }
+
     initMap() {
         // Create the map.
         this.map = new google.maps.Map(
@@ -247,17 +327,7 @@ export default class GoogleMaps {
         );
 
         // Drawing mode
-        const drawingManager = new google.maps.drawing.DrawingManager({
-            // drawingMode: google.maps.drawing.OverlayType.CIRCLE,
-            drawingControl: true,
-            drawingControlOptions: {
-                position: google.maps.ControlPosition.TOP_CENTER,
-                drawingModes: [google.maps.drawing.OverlayType.CIRCLE],
-            },
-            circleOptions: this.defaultCircleOptions,
-        });
-
-        drawingManager.setMap(this.map);
+        this.createDrawingManager(this.map, this.options.drawingModes);
 
         let scope = this;
         google.maps.event.addListener(this.map, 'click', function () {
@@ -267,30 +337,6 @@ export default class GoogleMaps {
             }
         });
 
-        google.maps.event.addListener(
-            drawingManager,
-            'circlecomplete',
-            function (circle) {
-                // Exit circle drawing mode after finishing a circle
-                drawingManager.setDrawingMode(null);
-
-                scope.saveCircle(circle);
-                scope.addCircle(circle);
-                scope.bindEventListeners(circle);
-                scope.selectCircleAtIndex(circle.index);
-
-                Livewire.emit('mount', circle.id);
-
-                //   this.circleOptions.fillColor = "#FFFFFF";
-                //   console.log('nice', this, element);
-                // });
-
-                // google.maps.event.addListener(circle, 'click', function(element) {
-                //   element.id = circle.id;
-                //   scope.selectCircleAtIndex(scope.circles.length - 1);
-                // });
-            }
-        );
     }
 
     focus(circle) {
@@ -301,6 +347,31 @@ export default class GoogleMaps {
         }
     }
 
+    updateCircle(circle) {
+        // Update the DOM elements and trigger the model properties update
+        document.getElementById('latitude').value = circle.center.lat();
+        document.getElementById('latitude').dispatchEvent(new Event('change'));
+        document.getElementById('longitude').value = circle.center.lng();
+        document.getElementById('longitude').dispatchEvent(new Event('change'));
+        document.getElementById('radius').value = circle.radius;
+        document.getElementById('radius').dispatchEvent(new Event('change'));
+
+        if (!circle.id && document.getElementById('circle_id').value !== '') {
+            circle.id = document.getElementById('circle_id').value;
+        }
+
+        document.getElementById('circle_id').value = circle.id;
+        document
+            .getElementById('circle_id')
+            .dispatchEvent(new Event('change'));
+
+        // trigger the form update
+        document
+            .getElementById('google-maps-user-circle-form-update')
+            .click();
+    }
+
+
     saveCircle(circle) {
         // Update the DOM elements and trigger the model properties update
         document.getElementById('latitude').value = circle.center.lat();
@@ -310,22 +381,22 @@ export default class GoogleMaps {
         document.getElementById('radius').value = circle.radius;
         document.getElementById('radius').dispatchEvent(new Event('change'));
 
-        if (circle.id) {
-            document.getElementById('circle_id').value = circle.id;
-            document
-                .getElementById('circle_id')
-                .dispatchEvent(new Event('change'));
+        // trigger the form save
+        document
+            .getElementById('google-maps-user-circle-form-submit')
+            .click();
+    }
 
-            // trigger the form update
-            document
-                .getElementById('google-maps-user-circle-form-update')
-                .click();
-        } else {
-            // trigger the form save
-            document
-                .getElementById('google-maps-user-circle-form-submit')
-                .click();
-        }
+    saveMarker(marker) {
+        // Update the DOM elements and trigger the model properties update
+        document.getElementById('latitude').value = marker.position.lat();
+        document.getElementById('latitude').dispatchEvent(new Event('change'));
+        document.getElementById('longitude').value = marker.position.lng();
+        document.getElementById('longitude').dispatchEvent(new Event('change'));
+
+        document
+            .getElementById('map-markers-form-submit')
+            .click();
     }
 
     saveUserLocation(latitude, longitude) {
@@ -339,6 +410,18 @@ export default class GoogleMaps {
         Livewire.emit('submit');
 
         console.log('saveUserLocation', form);
+    }
+
+    // setOptions(options) {
+    //     this.options = {...this.options, ...options};
+
+    //     return this;
+    // }
+
+    setDrawingModes(modes) {
+        this.createDrawingManager(this.map, modes);
+
+        return this;
     }
 
     setUser(user) {
@@ -370,6 +453,7 @@ export default class GoogleMaps {
     }
 
     selectCircleAtIndex(index) {
+        let scope = this;
         // console.log('selectCircle: total circles', this.circles.length);
 
         this.deselectCircle();
@@ -377,7 +461,6 @@ export default class GoogleMaps {
         this.selectedCircle = this.circles[index];
         this.selectedIndex = index;
 
-        console.log('clicked on circle', this.selectedCircle, index);
         this.selectedCircle.setOptions(this.selectedCircleOptions);
 
         // var overlay = new google.maps.OverlayView()
@@ -397,21 +480,11 @@ export default class GoogleMaps {
         // Fill inputs
         Livewire.emit('mount', this.selectedCircle.id);
 
-        document.getElementById('sideDrawer').classList.add('active');
+        window.addEventListener('mounted', event => {
+            document.getElementById('sideDrawer').classList.add('active');
+            scope.selectedCircle.id = event.detail.id;
+        });
 
-        // alternative to previous call
-        // var selectedUserCircle = this.googleMapsUserCircles[index]
-        // console.log('selected circle', selectedUserCircle);
-        // document.getElementById('name').value = selectedUserCircle.name
-        // document.getElementById('name').dispatchEvent(new Event('change'))
-        // document.getElementById('latitude').value = selectedUserCircle.latitude
-        // document.getElementById('latitude').dispatchEvent(new Event('change'))
-        // document.getElementById('longitude').value = selectedUserCircle.longitude
-        // document.getElementById('longitude').dispatchEvent(new Event('change'))
-        // document.getElementById('radius').value = selectedUserCircle.radius
-        // document.getElementById('radius').dispatchEvent(new Event('change'))
-        // document.getElementById('circle_id').value = selectedUserCircle.id
-        // document.getElementById('circle_id').dispatchEvent(new Event('change'))
     }
 
     unfocus(circle) {

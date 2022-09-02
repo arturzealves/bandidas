@@ -11,8 +11,7 @@
             style="width: 100%;"
         ></div>
 
-        @livewire('map-circles')
-        @livewire('user-location-form')
+        @livewire('map-markers')
 
         @push('scripts')
             <script

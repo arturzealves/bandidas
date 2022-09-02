@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GoogleMapsUserCircle extends Model
+class MapCircle extends Model
 {
     use HasFactory;
 
@@ -22,8 +22,13 @@ class GoogleMapsUserCircle extends Model
         'fillOpacity',
     ];
 
-    public function googleMapsUserCirclesHasArtists()
+    public function artists()
     {
-        return $this->hasMany(GoogleMapsUserCirclesHasArtist::class, 'google_maps_user_circle_id', 'id');
+        return $this->belongsToMany(Artist::class)->withTimestamps();
+    }
+
+    public function promoterMarkers()
+    {
+        return $this->belongsToMany(MapMarker::class)->withTimestamps();
     }
 }

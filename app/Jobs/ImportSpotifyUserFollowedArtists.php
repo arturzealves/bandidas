@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Exceptions\UserAccessTokenNotFoundException;
 use App\Models\Artist;
-use App\Models\ArtistHasGenre;
+use App\Models\ArtistGenre;
 use App\Models\Genre;
 use App\Models\SpotifyArtist;
 use App\Models\User;
@@ -70,11 +70,8 @@ class ImportSpotifyUserFollowedArtists implements ShouldQueue
 
             foreach ($artistData->genres as $name) {
                 $genre = Genre::firstOrCreate(['name' => $name]);
-                
-                ArtistHasGenre::firstOrCreate([
-                    'artist_id' => $artist->id,
-                    'genre_id' => $genre->id,
-                ]);
+
+                $artist->genres()->attach($genre);
             }
         }
     }
