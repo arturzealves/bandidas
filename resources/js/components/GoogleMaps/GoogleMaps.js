@@ -1,10 +1,7 @@
-// import userLocationIcon from '@/../images/icons/map_user_location.png'
-// import {OverlayViewService} from './OverlayViewService'
-
 window.initMap = function () {
     window.GoogleMaps.initMap();
 };
-export default class GoogleMaps {
+class GoogleMaps {
     constructor() {
         this.options = {
             drawingModes: []
@@ -43,7 +40,6 @@ export default class GoogleMaps {
         this.googleMapsUserCircles = [];
         this.googleMapsPromoterMarkers = [];
         this.map = {};
-        this.self = this;
         this.selectedIndex = null;
         this.selectedCircle = null;
         this.user = null;
@@ -83,7 +79,7 @@ export default class GoogleMaps {
 
     deselectCircle() {
         if (this.selectedCircle == null) {
-            return;
+            return null;
         }
         console.log('deselecting circle');
         this.selectedCircle.setOptions(this.defaultCircleOptions);
@@ -114,55 +110,6 @@ export default class GoogleMaps {
         console.log(mapCircle, circle);
 
         this.bindEventListeners(mapCircle);
-
-        // // Temporary delete button
-        // const deleteButton = document.createElement('button')
-
-        // deleteButton.classList.add('map-user-location-button')
-        // deleteButton.addEventListener('click', () => {
-        //     scope.deleteCircle(mapCircle)
-        // })
-
-        // this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(
-        //     deleteButton
-        // )
-
-        // // const bounds = new google.maps.LatLngBounds(
-        // //     new google.maps.LatLng(35.907052, -10.347496),
-        // //     new google.maps.LatLng(37.282994, -2.327476)
-        // // )
-
-        // let image =
-        //     'https://cdn-icons.flaticon.com/png/512/2961/premium/2961937.png?token=exp=1660331458~hmac=d17bb56ce196deb9a83c34781060aac6'
-
-        // let overlayViewService = new OverlayViewService();
-        // let overlayView = overlayViewService.createMapOverlayView(mapCircle, image);
-
-        // overlayView.setMap(scope.map)
-        // // overlay.setMap(scope.map)
-        // // console.log('overlay', overlayView)
-
-        // const toggleButton = document.createElement('button')
-
-        // toggleButton.textContent = 'Toggle'
-        // toggleButton.classList.add('map-user-location-button')
-
-        // const toggleDOMButton = document.createElement('button')
-
-        // toggleDOMButton.textContent = 'Toggle DOM Attachment'
-        // toggleDOMButton.classList.add('map-user-location-button')
-        // toggleButton.addEventListener('click', () => {
-        //     overlay.toggle()
-        // })
-        // toggleDOMButton.addEventListener('click', () => {
-        //     overlay.toggleDOM(scope.map)
-        // })
-        // scope.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(
-        //     toggleDOMButton
-        // )
-        // scope.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(
-        //     toggleButton
-        // )
 
         return mapCircle;
     }

@@ -26,20 +26,22 @@ module.exports = {
   coverageDirectory: "coverage",
 
   // An array of regexp pattern strings used to skip coverage collection
-  // coveragePathIgnorePatterns: [
+  coveragePathIgnorePatterns: [
   //   "/node_modules/"
-  // ],
+  "/resources/js/test/mocks/"
+  ],
 
   // Indicates which provider should be used to instrument code for coverage
   coverageProvider: "v8",
 
   // A list of reporter names that Jest uses when writing coverage reports
-  // coverageReporters: [
-  //   "json",
+  coverageReporters: [
+    // "json",
+    "html",
   //   "text",
   //   "lcov",
   //   "clover"
-  // ],
+  ],
 
   // An object that configures minimum threshold enforcement for coverage results
   // coverageThreshold: undefined,
@@ -159,9 +161,10 @@ module.exports = {
   // ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  // testPathIgnorePatterns: [
-  //   "/node_modules/"
-  // ],
+  testPathIgnorePatterns: [
+    // "/node_modules/"
+    "/resources/js/test/mocks/"
+  ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
   // testRegex: [],
@@ -181,6 +184,9 @@ module.exports = {
   //   "/node_modules/",
   //   "\\.pnp\\.[^\\/]+$"
   // ],
+  "transform": {
+    "^.+\\.[t|j]sx?$": "babel-jest"
+  },
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,
