@@ -1,6 +1,3 @@
-// import userLocationIcon from '@/../images/icons/map_user_location.png'
-// import {OverlayViewService} from './OverlayViewService'
-
 window.initMap = function () {
     window.GoogleMaps.initMap();
 };
@@ -43,7 +40,6 @@ class GoogleMaps {
         this.googleMapsUserCircles = [];
         this.googleMapsPromoterMarkers = [];
         this.map = {};
-        this.self = this;
         this.selectedIndex = null;
         this.selectedCircle = null;
         this.user = null;
@@ -75,6 +71,29 @@ class GoogleMaps {
         google.maps.event.addListener(circle, 'center_changed', () => this.updateCircle(circle));
     }
 
+    circleComplete(circle) {
+        // Exit circle drawing mode after finishing a circle
+        this.drawingManager.setDrawingMode(null);
+
+        this.saveCircle(circle);
+        this.addCircle(circle);
+        this.bindEventListeners(circle);
+        this.selectCircleAtIndex(circle.index);
+
+        Livewire.emit('mount', circle.id);
+
+        window.addEventListener('submitted', event => this.setCircleId(circle, event.detail.id));
+
+        //   this.circleOptions.fillColor = "#FFFFFF";
+        //   console.log('nice', this, element);
+        // });
+
+        // google.maps.event.addListener(circle, 'click', function(element) {
+        //   element.id = circle.id;
+        //   this.selectCircleAtIndex(this.circles.length - 1);
+        // });
+    }
+
     deleteCircle(circle) {
         this.circles[circle.index].setMap(null);
 
@@ -83,7 +102,7 @@ class GoogleMaps {
 
     deselectCircle() {
         if (this.selectedCircle == null) {
-            return;
+            return null;
         }
         console.log('deselecting circle');
         this.selectedCircle.setOptions(this.defaultCircleOptions);
@@ -114,55 +133,6 @@ class GoogleMaps {
         console.log(mapCircle, circle);
 
         this.bindEventListeners(mapCircle);
-
-        // // Temporary delete button
-        // const deleteButton = document.createElement('button')
-
-        // deleteButton.classList.add('map-user-location-button')
-        // deleteButton.addEventListener('click', () => {
-        //     scope.deleteCircle(mapCircle)
-        // })
-
-        // this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(
-        //     deleteButton
-        // )
-
-        // // const bounds = new google.maps.LatLngBounds(
-        // //     new google.maps.LatLng(35.907052, -10.347496),
-        // //     new google.maps.LatLng(37.282994, -2.327476)
-        // // )
-
-        // let image =
-        //     'https://cdn-icons.flaticon.com/png/512/2961/premium/2961937.png?token=exp=1660331458~hmac=d17bb56ce196deb9a83c34781060aac6'
-
-        // let overlayViewService = new OverlayViewService();
-        // let overlayView = overlayViewService.createMapOverlayView(mapCircle, image);
-
-        // overlayView.setMap(scope.map)
-        // // overlay.setMap(scope.map)
-        // // console.log('overlay', overlayView)
-
-        // const toggleButton = document.createElement('button')
-
-        // toggleButton.textContent = 'Toggle'
-        // toggleButton.classList.add('map-user-location-button')
-
-        // const toggleDOMButton = document.createElement('button')
-
-        // toggleDOMButton.textContent = 'Toggle DOM Attachment'
-        // toggleDOMButton.classList.add('map-user-location-button')
-        // toggleButton.addEventListener('click', () => {
-        //     overlay.toggle()
-        // })
-        // toggleDOMButton.addEventListener('click', () => {
-        //     overlay.toggleDOM(scope.map)
-        // })
-        // scope.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(
-        //     toggleDOMButton
-        // )
-        // scope.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(
-        //     toggleButton
-        // )
 
         return mapCircle;
     }
@@ -245,6 +215,18 @@ class GoogleMaps {
         this.saveUserLocation(pos.lat, pos.lng);
     }
 
+    circleMounted(circleId) {
+        document.getElementById('sideDrawer').classList.add('active');
+        this.selectedCircle.id = circleId;
+    }
+
+    clickOnMap() {
+        console.log('click on map');
+        if (this.selectedCircle != null || this.selectedIndex != null) {
+            this.deselectCircle();
+        }
+    }
+
     createDrawingManager(map, modes) {
         if (this.drawingManager !== null) {
             this.drawingManager.setMap(null);
@@ -261,44 +243,9 @@ class GoogleMaps {
 
         this.drawingManager.setMap(map);
 
-        let scope = this;
+        google.maps.event.addListener(this.drawingManager, 'circlecomplete', (circle) => this.circleComplete(circle));
 
-        google.maps.event.addListener(
-            this.drawingManager,
-            'circlecomplete',
-            function (circle) {
-                // Exit circle drawing mode after finishing a circle
-                scope.drawingManager.setDrawingMode(null);
-
-                scope.saveCircle(circle);
-                scope.addCircle(circle);
-                scope.bindEventListeners(circle);
-                scope.selectCircleAtIndex(circle.index);
-
-                Livewire.emit('mount', circle.id);
-
-                window.addEventListener('submitted', event => {
-                    circle.id = event.detail.id;
-                });
-
-                //   this.circleOptions.fillColor = "#FFFFFF";
-                //   console.log('nice', this, element);
-                // });
-
-                // google.maps.event.addListener(circle, 'click', function(element) {
-                //   element.id = circle.id;
-                //   scope.selectCircleAtIndex(scope.circles.length - 1);
-                // });
-            }
-        );
-
-        google.maps.event.addListener(
-            this.drawingManager,
-            'markercomplete',
-            function (marker) {
-                scope.saveMarker(marker);
-            }
-        );
+        google.maps.event.addListener(this.drawingManager, 'markercomplete', (marker) => this.saveMarker(marker));
     }
 
     initMap() {
@@ -312,15 +259,7 @@ class GoogleMaps {
         const locationButton = document.createElement('button');
 
         locationButton.classList.add('map-user-location-button');
-        locationButton.addEventListener('click', () => {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        this.centerOnUserLocation(position.coords.latitude, position.coords.longitude);
-                    }
-                );
-            }
-        });
+        locationButton.addEventListener('click', () => this.getUserLocation());
 
         this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(
             locationButton
@@ -330,13 +269,7 @@ class GoogleMaps {
         this.createDrawingManager(this.map, this.options.drawingModes);
 
         let scope = this;
-        google.maps.event.addListener(this.map, 'click', function () {
-            console.log('click on map');
-            if (scope.selectedCircle != null || scope.selectedIndex != null) {
-                scope.deselectCircle();
-            }
-        });
-
+        google.maps.event.addListener(this.map, 'click', () => this.clickOnMap());
     }
 
     focus(circle) {
@@ -418,6 +351,10 @@ class GoogleMaps {
     //     return this;
     // }
 
+    setCircleId(circle, id) {
+        circle.id = id;
+    }
+
     setDrawingModes(modes) {
         this.createDrawingManager(this.map, modes);
 
@@ -433,6 +370,16 @@ class GoogleMaps {
         // this.map.setZoom(10);
 
         return this;
+    }
+
+    getUserLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    this.centerOnUserLocation(position.coords.latitude, position.coords.longitude);
+                }
+            );
+        }
     }
 
     setUserLocation(location) {
@@ -480,11 +427,7 @@ class GoogleMaps {
         // Fill inputs
         Livewire.emit('mount', this.selectedCircle.id);
 
-        window.addEventListener('mounted', event => {
-            document.getElementById('sideDrawer').classList.add('active');
-            scope.selectedCircle.id = event.detail.id;
-        });
-
+        window.addEventListener('mounted', event => this.circleMounted(event.detail.id));
     }
 
     unfocus(circle) {
