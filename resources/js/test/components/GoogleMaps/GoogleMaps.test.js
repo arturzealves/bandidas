@@ -214,7 +214,6 @@ describe('GoogleMaps.js features', () => {
         let circle = {};
         window.GoogleMaps.bindEventListeners(circle);
 
-        // console.log(window.GoogleMaps.event);
         // expect(window.GoogleMaps.event).toBe(
     });
     
@@ -245,6 +244,16 @@ describe('GoogleMaps.js features', () => {
         window.GoogleMaps.circleComplete(circle);
 
         expect(window.GoogleMaps.circles.length).toBe(2);
+    });
+    
+    it('should execute after a circle is mounted', () => {
+        let id = 2;
+        window.GoogleMaps.selectedCircle = { id: null };
+
+        window.GoogleMaps.circleMounted(id);
+        
+        expect(document.getElementById('sideDrawer').classList.contains('active')).toBe(true);
+        expect(window.GoogleMaps.selectedCircle.id).toBe(id);
     });
 
     it('should delete a circle', () => {
@@ -575,6 +584,14 @@ describe('GoogleMaps.js features', () => {
         expect(typeof result).toBe('object');
     });
     
+    it('should get the user location', () => {
+        global.navigator.geolocation = {
+            getCurrentPosition: jest.fn(),
+        };
+
+        window.GoogleMaps.getUserLocation();
+    });
+
     it('should set the user', () => {
         let user = { id: 1 };
         let result = window.GoogleMaps.setUser(user);

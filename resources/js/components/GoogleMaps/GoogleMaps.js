@@ -215,6 +215,11 @@ class GoogleMaps {
         this.saveUserLocation(pos.lat, pos.lng);
     }
 
+    circleMounted(circleId) {
+        document.getElementById('sideDrawer').classList.add('active');
+        this.selectedCircle.id = circleId;
+    }
+
     clickOnMap() {
         console.log('click on map');
         if (this.selectedCircle != null || this.selectedIndex != null) {
@@ -254,15 +259,7 @@ class GoogleMaps {
         const locationButton = document.createElement('button');
 
         locationButton.classList.add('map-user-location-button');
-        locationButton.addEventListener('click', () => {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        this.centerOnUserLocation(position.coords.latitude, position.coords.longitude);
-                    }
-                );
-            }
-        });
+        locationButton.addEventListener('click', () => this.getUserLocation());
 
         this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(
             locationButton
@@ -375,6 +372,16 @@ class GoogleMaps {
         return this;
     }
 
+    getUserLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    this.centerOnUserLocation(position.coords.latitude, position.coords.longitude);
+                }
+            );
+        }
+    }
+
     setUserLocation(location) {
         console.log('setUserLocation', location);
 
@@ -420,11 +427,7 @@ class GoogleMaps {
         // Fill inputs
         Livewire.emit('mount', this.selectedCircle.id);
 
-        window.addEventListener('mounted', event => {
-            document.getElementById('sideDrawer').classList.add('active');
-            scope.selectedCircle.id = event.detail.id;
-        });
-
+        window.addEventListener('mounted', event => this.circleMounted(event.detail.id));
     }
 
     unfocus(circle) {
