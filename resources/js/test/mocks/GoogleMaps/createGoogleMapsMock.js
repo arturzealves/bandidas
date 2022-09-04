@@ -189,11 +189,11 @@ const createGoogleMapsMock = (libraries = []) => {
     }),
     Map: jest.fn().mockImplementation(function(mapDiv, opts) {
       this.mapDiv = mapDiv;
+      this.center = {};
       this.opts = opts;
       this.controls = Array(13).fill([]);
       createMVCObject(this);
       createMockFuncsFromArray(this, [
-        'setCenter',
         'setClickableIcons',
         'setHeading',
         'setMapTypeId',
@@ -208,6 +208,12 @@ const createGoogleMapsMock = (libraries = []) => {
       ]);
       this.getDiv = jest.fn().mockImplementation(function () {
         return this.mapDiv;
+      });
+      this.setCenter = jest.fn().mockImplementation(function (latitude, longitude) {
+        this.center = { lat: latitude, lng: longitude };
+      });
+      this.getCenter = jest.fn().mockImplementation(function () {
+        return this.center;
       });
     }),
     MapTypeControlStyle: {
