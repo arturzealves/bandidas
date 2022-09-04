@@ -16,9 +16,11 @@ class ArtistMapCirclesSelect extends Component
     public function mount()
     {
         $this->artists = Artist::pluck('name', 'id')->toArray();
-        // $this->selected = ArtistMapCircle::where('map_circle_id', $this->circle_id)
-        //     ->get()
-        //     ->pluck('artist_id');
+        $this->selected = ArtistMapCircle::where('map_circle_id', $this->circle_id)
+            ->get()
+            ->pluck('artist_id');
+
+        $this->budget = optional(ArtistMapCircle::where('map_circle_id', $this->circle_id)->first())->budget;
     }
 
     public function update($element)
