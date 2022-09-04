@@ -107,6 +107,47 @@ describe('GoogleMaps.js structure', () => {
 
 describe('GoogleMaps.js features', () => {
     let googleMaps;
+    let sideDrawer;
+    let idInput;
+    let latitudeInput;
+    let longitudeInput;
+    let radiusInput;
+    let submitButton;
+    let updateButton;
+
+    const clearDOM = () => {
+        document.body.innerHTML = '';
+    };
+
+    const buildDOM = () => {
+        clearDOM();
+
+        sideDrawer = document.createElement('div');
+        sideDrawer.setAttribute('id', 'sideDrawer');
+
+        idInput = document.createElement('input');
+        idInput.setAttribute('id', 'circle_id');
+
+        latitudeInput = document.createElement('input');
+        latitudeInput.setAttribute('id', 'latitude');
+        latitudeInput.setAttribute('name', 'latitude');
+
+        longitudeInput = document.createElement('input');
+        longitudeInput.setAttribute('id', 'longitude');
+        longitudeInput.setAttribute('name', 'longitude');
+
+        radiusInput = document.createElement('input');
+        radiusInput.setAttribute('id', 'radius');
+
+        submitButton = document.createElement('button');
+        submitButton.setAttribute('id', 'google-maps-user-circle-form-submit');
+        
+        updateButton = document.createElement('button');
+        updateButton.setAttribute('id', 'google-maps-user-circle-form-update');
+
+        sideDrawer.append(idInput, latitudeInput, longitudeInput, radiusInput, submitButton, updateButton);
+        document.body.append(sideDrawer);
+    };
 
     beforeEach(() => {
         googleMaps = createGoogleMapsMock(['drawing', 'event']);
@@ -117,10 +158,17 @@ describe('GoogleMaps.js features', () => {
 
         global.Livewire = createLivewireMock();
 
-        document.body.innerHTML = '';
+        buildDOM();
     });
 
-    it('should test initMap', () => {
+    it('should have initMap on window', () => {
+        window.initMap();
+
+        expect(googleMaps.Map).toHaveBeenCalledTimes(1);
+        expect(googleMaps.Map.mock.instances.length).toBe(1);
+    });
+
+    it('should execute initMap successfully', () => {
         var mapDiv = document.createElement('div');
         mapDiv.setAttribute('id', 'map');
         document.body.innerHTML = mapDiv.outerHTML;
@@ -169,6 +217,35 @@ describe('GoogleMaps.js features', () => {
         // console.log(window.GoogleMaps.event);
         // expect(window.GoogleMaps.event).toBe(
     });
+    
+    it('should execute after a new circle is created', () => {
+        let latitude = 12.34;
+        let longitude = 24.41;
+        let circle = {
+            index: 0,
+            center: {
+                lat: () => latitude,
+                lng: () => longitude,
+            },
+            radius: 452,
+        };
+
+        window.GoogleMaps.circles = [{
+            id: 1,
+            index: 0,
+            setOptions: jest.fn()
+        }]
+
+        window.GoogleMaps.drawingManager = {
+            setDrawingMode: jest.fn()
+        };
+
+        expect(window.GoogleMaps.circles.length).toBe(1);
+        
+        window.GoogleMaps.circleComplete(circle);
+
+        expect(window.GoogleMaps.circles.length).toBe(2);
+    });
 
     it('should delete a circle', () => {
         let circle = { 
@@ -197,8 +274,6 @@ describe('GoogleMaps.js features', () => {
             setOptions: jest.fn()
         };
 
-        let sideDrawer = document.createElement('div');
-        sideDrawer.setAttribute('id', 'sideDrawer');
         sideDrawer.setAttribute('class', 'active');
 
         document.body.innerHTML = sideDrawer.outerHTML;
@@ -308,6 +383,19 @@ describe('GoogleMaps.js features', () => {
         expect(window.GoogleMaps.googleMapsPromoterMarkers).toBe(markers);
         expect(typeof result).toBe('object');
     });
+    
+    it('should click on the map', () => {
+        window.GoogleMaps.selectedCircle = {
+            id: 1,
+            index: 0,
+            setOptions: jest.fn()
+        };
+        
+        window.GoogleMaps.clickOnMap();
+
+        expect(window.GoogleMaps.selectedCircle === null).toBe(true);
+        expect(window.GoogleMaps.selectedIndex === null).toBe(true);
+    });
 
     it('should center on user location', () => {
         let latitude = 92.123;
@@ -343,6 +431,7 @@ describe('GoogleMaps.js features', () => {
         let map = {};
         let modes = {sample: 'mode'};
 
+        window.GoogleMaps.drawingManager = null;
         window.GoogleMaps.createDrawingManager(map, modes);
 
         expect(googleMaps.drawing.DrawingManager).toHaveBeenCalledTimes(1);
@@ -388,23 +477,8 @@ describe('GoogleMaps.js features', () => {
             radius: 452,
         };
 
-        let idInput = document.createElement('input');
-        idInput.setAttribute('id', 'circle_id');
+        let idInput = document.getElementById('circle_id');
         idInput.value = existingId;
-
-        let latitudeInput = document.createElement('input');
-        latitudeInput.setAttribute('id', 'latitude');
-
-        let longitudeInput = document.createElement('input');
-        longitudeInput.setAttribute('id', 'longitude');
-
-        let radiusInput = document.createElement('input');
-        radiusInput.setAttribute('id', 'radius');
-
-        let submitButton = document.createElement('button');
-        submitButton.setAttribute('id', 'google-maps-user-circle-form-update');
-
-        document.body.append(idInput, latitudeInput, longitudeInput, radiusInput, submitButton);
 
         window.GoogleMaps.updateCircle(circle);
 
@@ -425,20 +499,6 @@ describe('GoogleMaps.js features', () => {
             radius: 412,
         };
 
-        let latitudeInput = document.createElement('input');
-        latitudeInput.setAttribute('id', 'latitude');
-
-        let longitudeInput = document.createElement('input');
-        longitudeInput.setAttribute('id', 'longitude');
-
-        let radiusInput = document.createElement('input');
-        radiusInput.setAttribute('id', 'radius');
-
-        let submitButton = document.createElement('button');
-        submitButton.setAttribute('id', 'google-maps-user-circle-form-submit');
-
-        document.body.append(latitudeInput, longitudeInput, radiusInput, submitButton);
-
         window.GoogleMaps.saveCircle(circle);
 
         expect(latitudeInput.value).toBe(String(latitude));
@@ -455,6 +515,8 @@ describe('GoogleMaps.js features', () => {
                 lng: () => longitude,
             },
         };
+
+        clearDOM();
 
         let latitudeInput = document.createElement('input');
         latitudeInput.setAttribute('id', 'latitude');
@@ -494,8 +556,18 @@ describe('GoogleMaps.js features', () => {
         expect(latitudeInput.value).toBe(String(latitude));
         expect(longitudeInput.value).toBe(String(longitude));
     });
+    
+    it('should set the circle id', () => {
+        let id = 912;
+        let circle = {id: 0};
+
+        window.GoogleMaps.setCircleId(circle, id);
+        expect(circle.id).toBe(id);
+    });
 
     it('should set drawing modes', () => {
+        window.GoogleMaps.drawingManager = null;
+
         let result = window.GoogleMaps.setDrawingModes({});
 
         expect(googleMaps.drawing.DrawingManager).toHaveBeenCalledTimes(1);
@@ -544,11 +616,7 @@ describe('GoogleMaps.js features', () => {
     });
 
     it('should select the circle at given index', () => {
-        let sideDrawer = document.createElement('div');
-        sideDrawer.setAttribute('id', 'sideDrawer');
-
-        document.body.innerHTML = sideDrawer.outerHTML;
-
+        window.GoogleMaps.selectedCircle = null;
         window.GoogleMaps.circles = [
             {
                 id: 2, 
@@ -574,7 +642,7 @@ describe('GoogleMaps.js features', () => {
         expect(circle.options.editable).toBe(false);
         
         circle.index = 1;
-        window.GoogleMaps.selectedIndex = 2;
+        window.GoogleMaps.selectedIndex = 1;
         
         window.GoogleMaps.unfocus(circle);
         expect(circle.setOptions).toHaveBeenCalledTimes(2);

@@ -71,6 +71,29 @@ class GoogleMaps {
         google.maps.event.addListener(circle, 'center_changed', () => this.updateCircle(circle));
     }
 
+    circleComplete(circle) {
+        // Exit circle drawing mode after finishing a circle
+        this.drawingManager.setDrawingMode(null);
+
+        this.saveCircle(circle);
+        this.addCircle(circle);
+        this.bindEventListeners(circle);
+        this.selectCircleAtIndex(circle.index);
+
+        Livewire.emit('mount', circle.id);
+
+        window.addEventListener('submitted', event => this.setCircleId(circle, event.detail.id));
+
+        //   this.circleOptions.fillColor = "#FFFFFF";
+        //   console.log('nice', this, element);
+        // });
+
+        // google.maps.event.addListener(circle, 'click', function(element) {
+        //   element.id = circle.id;
+        //   this.selectCircleAtIndex(this.circles.length - 1);
+        // });
+    }
+
     deleteCircle(circle) {
         this.circles[circle.index].setMap(null);
 
@@ -192,6 +215,13 @@ class GoogleMaps {
         this.saveUserLocation(pos.lat, pos.lng);
     }
 
+    clickOnMap() {
+        console.log('click on map');
+        if (this.selectedCircle != null || this.selectedIndex != null) {
+            this.deselectCircle();
+        }
+    }
+
     createDrawingManager(map, modes) {
         if (this.drawingManager !== null) {
             this.drawingManager.setMap(null);
@@ -208,44 +238,9 @@ class GoogleMaps {
 
         this.drawingManager.setMap(map);
 
-        let scope = this;
+        google.maps.event.addListener(this.drawingManager, 'circlecomplete', (circle) => this.circleComplete(circle));
 
-        google.maps.event.addListener(
-            this.drawingManager,
-            'circlecomplete',
-            function (circle) {
-                // Exit circle drawing mode after finishing a circle
-                scope.drawingManager.setDrawingMode(null);
-
-                scope.saveCircle(circle);
-                scope.addCircle(circle);
-                scope.bindEventListeners(circle);
-                scope.selectCircleAtIndex(circle.index);
-
-                Livewire.emit('mount', circle.id);
-
-                window.addEventListener('submitted', event => {
-                    circle.id = event.detail.id;
-                });
-
-                //   this.circleOptions.fillColor = "#FFFFFF";
-                //   console.log('nice', this, element);
-                // });
-
-                // google.maps.event.addListener(circle, 'click', function(element) {
-                //   element.id = circle.id;
-                //   scope.selectCircleAtIndex(scope.circles.length - 1);
-                // });
-            }
-        );
-
-        google.maps.event.addListener(
-            this.drawingManager,
-            'markercomplete',
-            function (marker) {
-                scope.saveMarker(marker);
-            }
-        );
+        google.maps.event.addListener(this.drawingManager, 'markercomplete', (marker) => this.saveMarker(marker));
     }
 
     initMap() {
@@ -277,13 +272,7 @@ class GoogleMaps {
         this.createDrawingManager(this.map, this.options.drawingModes);
 
         let scope = this;
-        google.maps.event.addListener(this.map, 'click', function () {
-            console.log('click on map');
-            if (scope.selectedCircle != null || scope.selectedIndex != null) {
-                scope.deselectCircle();
-            }
-        });
-
+        google.maps.event.addListener(this.map, 'click', () => this.clickOnMap());
     }
 
     focus(circle) {
@@ -364,6 +353,10 @@ class GoogleMaps {
 
     //     return this;
     // }
+
+    setCircleId(circle, id) {
+        circle.id = id;
+    }
 
     setDrawingModes(modes) {
         this.createDrawingManager(this.map, modes);
