@@ -36,7 +36,7 @@ class MapMarkerCreatedListener
             $distance = $this->locationService->getDistanceBetweenLocationAndCircle($event->marker, $circle);
 
             if ($distance < $circle->radius) {
-                $event->marker->userCircles()->attach($circle);
+                $event->marker->userCircles()->attach($circle, ['distance' => $distance]);
             }
         }
     }
