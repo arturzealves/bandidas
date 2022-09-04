@@ -130,8 +130,6 @@ class GoogleMaps {
             radius: circle.radius,
         });
 
-        console.log(mapCircle, circle);
-
         this.bindEventListeners(mapCircle);
 
         return mapCircle;

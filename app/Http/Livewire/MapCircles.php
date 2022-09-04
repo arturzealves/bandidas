@@ -16,6 +16,7 @@ class MapCircles extends Component
     public $latitude;
     public $longitude;
     public $radius;
+    public $budget = 0;
     // public $isCircleSelected = true;
     public $selectedCircleBudget = 0;
 
@@ -24,6 +25,7 @@ class MapCircles extends Component
         'latitude' => 'required|numeric|min:-90|max:90',
         'longitude' => 'required|numeric|min:-180|max:180',
         'radius' => 'required|numeric|max:16777215',
+        'budget' => 'numeric|min:0|max:99999',
     ];
 
     protected $listeners = [
@@ -42,6 +44,7 @@ class MapCircles extends Component
         $this->latitude = $circle->latitude;
         $this->longitude = $circle->longitude;
         $this->radius = $circle->radius;
+        $this->budget = $circle->budget;
         // $this->isCircleSelected = true;
 
         $this->selectedCircleBudget = optional($circle->artists()->first())->budget;
@@ -112,6 +115,7 @@ class MapCircles extends Component
                 'latitude' => $this->latitude,
                 'longitude' => $this->longitude,
                 'radius' => $this->radius,
+                'budget' => $this->budget,
             ],
         );
 
