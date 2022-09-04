@@ -20,6 +20,7 @@ class MapCircle extends Model
         'strokeWeight',
         'fillColor',
         'fillOpacity',
+        'budget',
     ];
 
     public function artists()

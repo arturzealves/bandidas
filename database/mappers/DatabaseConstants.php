@@ -10,10 +10,10 @@ final class DatabaseConstants
     const TABLE_FAILED_JOBS = 'failed_jobs';
 
     const TABLE_GENRES = 'genres';
-    const TABLE_GOOGLE_MAPS_PROMOTER_MARKERS = 'map_markers';
-    const TABLE_GOOGLE_MAPS_USER_CIRCLES = 'map_circles';
+    const TABLE_MAP_MARKERS = 'map_markers';
+    const TABLE_MAP_CIRCLES = 'map_circles';
     const TABLE_ARTIST_MAP_CIRCLE = 'artist_map_circle';
-    const TABLE_MAP_CIRCLES_MAP_MARKER = 'map_circle_map_marker';
+    const TABLE_MAP_CIRCLE_MAP_MARKER = 'map_circle_map_marker';
     
     const TABLE_PASSWORD_RESETS = 'password_resets';
     const TABLE_PERSONAL_ACCESS_TOKENS = 'personal_access_tokens';

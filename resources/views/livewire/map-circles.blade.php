@@ -37,7 +37,12 @@
                 <dd>
                     <input type="text" wire:model.lazy="radius" id="radius" class="w-full disabled:opacity-50" disabled>
                 </dd>
+                <dt>Budget</dt>
+                <dd>
+                    <input type="number" wire:model.lazy="budget" step="1" min="0" class="w-full"/>
+                </dd>
             </dl>
+            <hr>
             <div>
                 <livewire:artist-map-circles-select 
                     wire:model.lazy="artists"
