@@ -32,4 +32,9 @@ class MapCircle extends Model
     {
         return $this->belongsToMany(MapMarker::class)->withTimestamps();
     }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
 }

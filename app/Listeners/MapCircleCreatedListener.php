@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\MapCircleCreated;
+use App\Gamify\Points\MapCircleCreated as PointsMapCircleCreated;
 use App\Models\MapMarker;
 use App\Services\GPS\LocationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -39,5 +40,7 @@ class MapCircleCreatedListener
                 $event->circle->promoterMarkers()->attach($marker, ['distance' => $distance]);
             }
         }
+
+        $event->circle->user->givePoint(new PointsMapCircleCreated($event->circle));
     }
 }
