@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Exceptions\UserAccessTokenNotFoundException;
+use App\Gamify\Points\SpotifyArtistsImported;
 use App\Models\Artist;
 use App\Models\ArtistGenre;
 use App\Models\Genre;
@@ -42,15 +42,13 @@ class ImportSpotifyUserFollowedArtists implements ShouldQueue
      */
     public function handle()
     {
-        $artists = $this->spotifyService->getUserFollowedArtists($this->user);
+        $artistsData = $this->spotifyService->getUserFollowedArtists($this->user);
         
-        foreach ($artists as $artistData) {
+        $artistIds = [];
+        foreach ($artistsData as $artistData) {
             $artist = Artist::firstOrCreate(['name' => $artistData->name]);
-
-            UserFollowsArtist::firstOrCreate([
-                'user_id' => $this->user->id,
-                'artist_id' => $artist->id,
-            ]);
+            
+            $artistIds[] = $artist->id;
 
             SpotifyArtist::firstOrCreate(
                 [
@@ -74,5 +72,9 @@ class ImportSpotifyUserFollowedArtists implements ShouldQueue
                 $artist->genres()->attach($genre);
             }
         }
+
+        $this->user->followedArtists()->sync($artistIds);
+
+        $this->user->givePoint(new SpotifyArtistsImported($this->user));
     }
 }

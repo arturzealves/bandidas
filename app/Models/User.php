@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Mappers\DatabaseConstants;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -85,6 +86,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function mapCircles()
     {
         return $this->hasMany(MapCircle::class);
+    }
+
+    public function followedArtists()
+    {
+        return $this->belongsToMany(Artist::class, DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS)->withTimestamps();;
     }
 
     public function isPromoter()

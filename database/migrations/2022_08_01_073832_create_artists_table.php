@@ -63,6 +63,7 @@ return new class extends Migration
                 $table->bigIncrements('id');
                 $table->unsignedBigInteger('user_id');
                 $table->unsignedBigInteger('artist_id');
+                $table->timestamps();
 
                 $table->foreign('user_id')->references('id')->on(DatabaseConstants::TABLE_USERS)->onDelete('cascade');
                 $table->foreign('artist_id')->references('id')->on(DatabaseConstants::TABLE_ARTISTS)->onDelete('cascade');

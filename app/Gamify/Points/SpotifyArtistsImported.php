@@ -2,24 +2,26 @@
 
 namespace App\Gamify\Points;
 
-use App\Models\MapCircle;
+use App\Models\User;
 use QCod\Gamify\PointType;
 
-class MapCircleCreated extends PointType
+class SpotifyArtistsImported extends PointType
 {
     /**
      * Number of points
      *
      * @var int
      */
-    public $points = 1;
+    public $points = 5;
+
+    public $allowDuplicates = false;
 
     /**
      * Point constructor
      *
      * @param $subject
      */
-    public function __construct(MapCircle $subject)
+    public function __construct(User $subject)
     {
         $this->subject = $subject;
     }
@@ -31,6 +33,6 @@ class MapCircleCreated extends PointType
      */
     public function payee()
     {
-        return $this->getSubject()->user;
+        return $this->getSubject();
     }
 }
