@@ -1,112 +1,111 @@
 import createGoogleMapsMock from '../../mocks/GoogleMaps/createGoogleMapsMock';
 import createLivewireMock from '../../mocks/createLivewireMock.js';
-require('../../../components/GoogleMaps/GoogleMaps.js');
+import GoogleMaps from '../../../components/GoogleMaps/GoogleMaps.js';
+
+let googleMaps = new GoogleMaps();
 
 describe('GoogleMaps.js structure', () => {
-    it('window.initMap should be a function', () => {
-        expect(typeof window.initMap).toBe('function');
-    });
-    it('window.GoogleMaps should be an object', () => {
-        expect(typeof window.GoogleMaps).toBe('object');
+    it('GoogleMaps should be an object', () => {
+        expect(typeof googleMaps).toBe('object');
     });
     it('should have all its properties initialized', () => {
-        expect(typeof window.GoogleMaps.options).toBe('object');
-        expect(Array.isArray(window.GoogleMaps.options.drawingModes)).toBe(
+        expect(typeof googleMaps.options).toBe('object');
+        expect(Array.isArray(googleMaps.options.drawingModes)).toBe(
             true
         );
-        expect(typeof window.GoogleMaps.mapProperties).toBe('object');
-        expect(typeof window.GoogleMaps.mapProperties.zoom).toBe('number');
-        expect(typeof window.GoogleMaps.mapProperties.center).toBe('object');
-        expect(typeof window.GoogleMaps.mapProperties.mapTypeId).toBe('string');
-        expect(typeof window.GoogleMaps.mapProperties.mapTypeControl).toBe(
+        expect(typeof googleMaps.mapProperties).toBe('object');
+        expect(typeof googleMaps.mapProperties.zoom).toBe('number');
+        expect(typeof googleMaps.mapProperties.center).toBe('object');
+        expect(typeof googleMaps.mapProperties.mapTypeId).toBe('string');
+        expect(typeof googleMaps.mapProperties.mapTypeControl).toBe(
             'boolean'
         );
-        expect(typeof window.GoogleMaps.mapProperties.fullscreenControl).toBe(
+        expect(typeof googleMaps.mapProperties.fullscreenControl).toBe(
             'boolean'
         );
-        expect(typeof window.GoogleMaps.mapProperties.rotateControl).toBe(
+        expect(typeof googleMaps.mapProperties.rotateControl).toBe(
             'boolean'
         );
-        expect(typeof window.GoogleMaps.mapProperties.scaleControl).toBe(
+        expect(typeof googleMaps.mapProperties.scaleControl).toBe(
             'boolean'
         );
-        expect(typeof window.GoogleMaps.mapProperties.zoomControl).toBe(
+        expect(typeof googleMaps.mapProperties.zoomControl).toBe(
             'boolean'
         );
-        expect(typeof window.GoogleMaps.defaultCircleOptions).toBe('object');
-        expect(typeof window.GoogleMaps.defaultCircleOptions.fillColor).toBe(
+        expect(typeof googleMaps.defaultCircleOptions).toBe('object');
+        expect(typeof googleMaps.defaultCircleOptions.fillColor).toBe(
             'string'
         );
-        expect(typeof window.GoogleMaps.defaultCircleOptions.strokeColor).toBe(
+        expect(typeof googleMaps.defaultCircleOptions.strokeColor).toBe(
             'string'
         );
         expect(
-            typeof window.GoogleMaps.defaultCircleOptions.strokeOpacity
+            typeof googleMaps.defaultCircleOptions.strokeOpacity
         ).toBe('number');
-        expect(typeof window.GoogleMaps.defaultCircleOptions.fillOpacity).toBe(
+        expect(typeof googleMaps.defaultCircleOptions.fillOpacity).toBe(
             'number'
         );
-        expect(typeof window.GoogleMaps.defaultCircleOptions.strokeWeight).toBe(
+        expect(typeof googleMaps.defaultCircleOptions.strokeWeight).toBe(
             'number'
         );
-        expect(typeof window.GoogleMaps.defaultCircleOptions.clickable).toBe(
+        expect(typeof googleMaps.defaultCircleOptions.clickable).toBe(
             'boolean'
         );
-        expect(typeof window.GoogleMaps.defaultCircleOptions.editable).toBe(
+        expect(typeof googleMaps.defaultCircleOptions.editable).toBe(
             'boolean'
         );
-        expect(typeof window.GoogleMaps.defaultCircleOptions.zIndex).toBe(
+        expect(typeof googleMaps.defaultCircleOptions.zIndex).toBe(
             'number'
         );
-        expect(typeof window.GoogleMaps.selectedCircleOptions).toBe('object');
-        expect(typeof window.GoogleMaps.selectedCircleOptions.fillOpacity).toBe(
+        expect(typeof googleMaps.selectedCircleOptions).toBe('object');
+        expect(typeof googleMaps.selectedCircleOptions.fillOpacity).toBe(
             'number'
         );
-        expect(typeof window.GoogleMaps.selectedCircleOptions.editable).toBe(
+        expect(typeof googleMaps.selectedCircleOptions.editable).toBe(
             'boolean'
         );
-        expect(Array.isArray(window.GoogleMaps.circles)).toBe(true);
-        expect(Array.isArray(window.GoogleMaps.markers)).toBe(true);
-        expect(Array.isArray(window.GoogleMaps.googleMapsUserCircles)).toBe(
+        expect(Array.isArray(googleMaps.circles)).toBe(true);
+        expect(Array.isArray(googleMaps.markers)).toBe(true);
+        expect(Array.isArray(googleMaps.googleMapsUserCircles)).toBe(
             true
         );
-        expect(Array.isArray(window.GoogleMaps.googleMapsPromoterMarkers)).toBe(
+        expect(Array.isArray(googleMaps.googleMapsPromoterMarkers)).toBe(
             true
         );
-        expect(typeof window.GoogleMaps.map).toBe('object');
-        expect(window.GoogleMaps.selectedIndex === null).toBe(true);
-        expect(window.GoogleMaps.selectedCircle === null).toBe(true);
-        expect(window.GoogleMaps.user === null).toBe(true);
-        expect(window.GoogleMaps.drawingManager === null).toBe(true);
+        expect(typeof googleMaps.map).toBe('object');
+        expect(googleMaps.selectedIndex === null).toBe(true);
+        expect(googleMaps.selectedCircle === null).toBe(true);
+        expect(googleMaps.user === null).toBe(true);
+        expect(googleMaps.drawingManager === null).toBe(true);
     });
     it('should have all its functions defined', () => {
-        expect(typeof window.GoogleMaps.addCircle).toBe('function');
-        expect(typeof window.GoogleMaps.addMarker).toBe('function');
-        expect(typeof window.GoogleMaps.bindEventListeners).toBe('function');
-        expect(typeof window.GoogleMaps.deleteCircle).toBe('function');
-        expect(typeof window.GoogleMaps.deselectCircle).toBe('function');
-        expect(typeof window.GoogleMaps.drawCircle).toBe('function');
-        expect(typeof window.GoogleMaps.drawCircles).toBe('function');
-        expect(typeof window.GoogleMaps.drawMarker).toBe('function');
-        expect(typeof window.GoogleMaps.drawMarkers).toBe('function');
-        expect(typeof window.GoogleMaps.centerOnUserLocation).toBe('function');
-        expect(typeof window.GoogleMaps.createDrawingManager).toBe('function');
-        expect(typeof window.GoogleMaps.initMap).toBe('function');
-        expect(typeof window.GoogleMaps.focus).toBe('function');
-        expect(typeof window.GoogleMaps.updateCircle).toBe('function');
-        expect(typeof window.GoogleMaps.saveCircle).toBe('function');
-        expect(typeof window.GoogleMaps.saveMarker).toBe('function');
-        expect(typeof window.GoogleMaps.saveUserLocation).toBe('function');
-        expect(typeof window.GoogleMaps.setDrawingModes).toBe('function');
-        expect(typeof window.GoogleMaps.setUser).toBe('function');
-        expect(typeof window.GoogleMaps.setUserLocation).toBe('function');
-        expect(typeof window.GoogleMaps.selectCircleAtIndex).toBe('function');
-        expect(typeof window.GoogleMaps.unfocus).toBe('function');
+        expect(typeof googleMaps.addCircle).toBe('function');
+        expect(typeof googleMaps.addMarker).toBe('function');
+        expect(typeof googleMaps.bindEventListeners).toBe('function');
+        expect(typeof googleMaps.deleteCircle).toBe('function');
+        expect(typeof googleMaps.deselectCircle).toBe('function');
+        expect(typeof googleMaps.drawCircle).toBe('function');
+        expect(typeof googleMaps.drawCircles).toBe('function');
+        expect(typeof googleMaps.drawMarker).toBe('function');
+        expect(typeof googleMaps.drawMarkers).toBe('function');
+        expect(typeof googleMaps.centerOnUserLocation).toBe('function');
+        expect(typeof googleMaps.createDrawingManager).toBe('function');
+        expect(typeof googleMaps.initMap).toBe('function');
+        expect(typeof googleMaps.focus).toBe('function');
+        expect(typeof googleMaps.updateCircle).toBe('function');
+        expect(typeof googleMaps.saveCircle).toBe('function');
+        expect(typeof googleMaps.saveMarker).toBe('function');
+        expect(typeof googleMaps.saveUserLocation).toBe('function');
+        expect(typeof googleMaps.setDrawingModes).toBe('function');
+        expect(typeof googleMaps.setUser).toBe('function');
+        expect(typeof googleMaps.setUserLocation).toBe('function');
+        expect(typeof googleMaps.selectCircleAtIndex).toBe('function');
+        expect(typeof googleMaps.unfocus).toBe('function');
     });
 });
 
 describe('GoogleMaps.js features', () => {
-    let googleMaps;
+    let googleMapsMock;
     let sideDrawer;
     let idInput;
     let latitudeInput;
@@ -150,10 +149,10 @@ describe('GoogleMaps.js features', () => {
     };
 
     beforeEach(() => {
-        googleMaps = createGoogleMapsMock(['drawing', 'event']);
+        googleMapsMock = createGoogleMapsMock(['drawing', 'event']);
 
         global.window.google = {
-            maps: googleMaps,
+            maps: googleMapsMock,
         };
 
         global.Livewire = createLivewireMock();
@@ -161,60 +160,60 @@ describe('GoogleMaps.js features', () => {
         buildDOM();
     });
 
-    it('should have initMap on window', () => {
-        window.initMap();
+    // it('should have initMap on window', () => {
+    //     window.initMap();
 
-        expect(googleMaps.Map).toHaveBeenCalledTimes(1);
-        expect(googleMaps.Map.mock.instances.length).toBe(1);
-    });
+    //     expect(googleMapsMock.Map).toHaveBeenCalledTimes(1);
+    //     expect(googleMapsMock.Map.mock.instances.length).toBe(1);
+    // });
 
     it('should execute initMap successfully', () => {
         var mapDiv = document.createElement('div');
         mapDiv.setAttribute('id', 'map');
         document.body.innerHTML = mapDiv.outerHTML;
 
-        window.GoogleMaps.initMap();
+        googleMaps.initMap();
 
-        expect(googleMaps.Map).toHaveBeenCalledTimes(1);
-        expect(googleMaps.Map.mock.instances.length).toBe(1);
-        expect(googleMaps.Map).toHaveBeenLastCalledWith(mapDiv, window.GoogleMaps.mapProperties);
-        expect(window.GoogleMaps.map).toBeDefined();
+        expect(googleMapsMock.Map).toHaveBeenCalledTimes(1);
+        expect(googleMapsMock.Map.mock.instances.length).toBe(1);
+        expect(googleMapsMock.Map).toHaveBeenLastCalledWith(mapDiv, googleMaps.mapProperties);
+        expect(googleMaps.map).toBeDefined();
 
-        expect(window.GoogleMaps.map.controls[googleMaps.ControlPosition.TOP_RIGHT][0]).toBeInstanceOf(HTMLButtonElement);
+        expect(googleMaps.map.controls[googleMapsMock.ControlPosition.TOP_RIGHT][0]).toBeInstanceOf(HTMLButtonElement);
 
-        expect(googleMaps.drawing.DrawingManager).toHaveBeenCalledTimes(1);
-        expect(googleMaps.drawing.DrawingManager.mock.instances.length).toBe(1);
+        expect(googleMapsMock.drawing.DrawingManager).toHaveBeenCalledTimes(1);
+        expect(googleMapsMock.drawing.DrawingManager.mock.instances.length).toBe(1);
     });
 
     it('should add a circle', () => {
-        window.GoogleMaps.initMap();
-        expect(window.GoogleMaps.circles.length).toBe(0);
+        googleMaps.initMap();
+        expect(googleMaps.circles.length).toBe(0);
 
-        window.GoogleMaps.addCircle({index: 2});
-        expect(window.GoogleMaps.circles.length).toBe(1);
+        googleMaps.addCircle({index: 2});
+        expect(googleMaps.circles.length).toBe(1);
 
-        window.GoogleMaps.addCircle({});
-        expect(window.GoogleMaps.circles.length).toBe(2);
-        expect(window.GoogleMaps.circles[1].index).toBe(1);
+        googleMaps.addCircle({});
+        expect(googleMaps.circles.length).toBe(2);
+        expect(googleMaps.circles[1].index).toBe(1);
     });
 
     it('should add a marker', () => {
-        window.GoogleMaps.initMap();
-        expect(window.GoogleMaps.markers.length).toBe(0);
+        googleMaps.initMap();
+        expect(googleMaps.markers.length).toBe(0);
 
-        window.GoogleMaps.addMarker({index: 2});
-        expect(window.GoogleMaps.markers.length).toBe(1);
+        googleMaps.addMarker({index: 2});
+        expect(googleMaps.markers.length).toBe(1);
 
-        window.GoogleMaps.addMarker({});
-        expect(window.GoogleMaps.markers.length).toBe(2);
-        expect(window.GoogleMaps.markers[1].index).toBe(1);
+        googleMaps.addMarker({});
+        expect(googleMaps.markers.length).toBe(2);
+        expect(googleMaps.markers[1].index).toBe(1);
     });
 
     it('should bind event listeners', () => {
         let circle = {};
-        window.GoogleMaps.bindEventListeners(circle);
+        googleMaps.bindEventListeners(circle);
 
-        // expect(window.GoogleMaps.event).toBe(
+        // expect(googleMaps.event).toBe(
     });
     
     it('should execute after a new circle is created', () => {
@@ -229,31 +228,31 @@ describe('GoogleMaps.js features', () => {
             radius: 452,
         };
 
-        window.GoogleMaps.circles = [{
+        googleMaps.circles = [{
             id: 1,
             index: 0,
             setOptions: jest.fn()
         }]
 
-        window.GoogleMaps.drawingManager = {
+        googleMaps.drawingManager = {
             setDrawingMode: jest.fn()
         };
 
-        expect(window.GoogleMaps.circles.length).toBe(1);
+        expect(googleMaps.circles.length).toBe(1);
         
-        window.GoogleMaps.circleComplete(circle);
+        googleMaps.circleComplete(circle);
 
-        expect(window.GoogleMaps.circles.length).toBe(2);
+        expect(googleMaps.circles.length).toBe(2);
     });
     
     it('should execute after a circle is mounted', () => {
         let id = 2;
-        window.GoogleMaps.selectedCircle = { id: null };
+        googleMaps.selectedCircle = { id: null };
 
-        window.GoogleMaps.circleMounted(id);
+        googleMaps.circleMounted(id);
         
         expect(document.getElementById('sideDrawer').classList.contains('active')).toBe(true);
-        expect(window.GoogleMaps.selectedCircle.id).toBe(id);
+        expect(googleMaps.selectedCircle.id).toBe(id);
     });
 
     it('should delete a circle', () => {
@@ -263,21 +262,21 @@ describe('GoogleMaps.js features', () => {
             setMap: jest.fn(),
         };
 
-        window.GoogleMaps.circles = [
+        googleMaps.circles = [
             { index: 0, id: 3, setMap: jest.fn() },
             { index: 1, id: 2, setMap: jest.fn() },
         ];
 
-        expect(window.GoogleMaps.circles.length).toBe(2);
-        window.GoogleMaps.deleteCircle(circle);
-        // expect(window.GoogleMaps.circles.length).toBe(1);
+        expect(googleMaps.circles.length).toBe(2);
+        googleMaps.deleteCircle(circle);
+        // expect(googleMaps.circles.length).toBe(1);
     });
 
     it('should deselect a circle', () => {
-        window.GoogleMaps.selectedCircle = null;
-        expect(window.GoogleMaps.deselectCircle() === null).toBe(true);
+        googleMaps.selectedCircle = null;
+        expect(googleMaps.deselectCircle() === null).toBe(true);
         
-        window.GoogleMaps.selectedCircle = {
+        googleMaps.selectedCircle = {
             id: 1,
             index: 0,
             setOptions: jest.fn()
@@ -287,15 +286,15 @@ describe('GoogleMaps.js features', () => {
 
         document.body.innerHTML = sideDrawer.outerHTML;
 
-        window.GoogleMaps.selectedIndex = 1;
+        googleMaps.selectedIndex = 1;
 
-        expect(window.GoogleMaps.selectedCircle === null).toBe(false);
-        expect(window.GoogleMaps.selectedIndex === null).toBe(false);
+        expect(googleMaps.selectedCircle === null).toBe(false);
+        expect(googleMaps.selectedIndex === null).toBe(false);
         expect(document.getElementById('sideDrawer').className === 'active').toBe(true);
         
-        window.GoogleMaps.deselectCircle();
-        expect(window.GoogleMaps.selectedCircle === null).toBe(true);
-        expect(window.GoogleMaps.selectedIndex === null).toBe(true);
+        googleMaps.deselectCircle();
+        expect(googleMaps.selectedCircle === null).toBe(true);
+        expect(googleMaps.selectedIndex === null).toBe(true);
         expect(document.getElementById('sideDrawer').className === 'active').toBe(false);
     });
 
@@ -313,10 +312,10 @@ describe('GoogleMaps.js features', () => {
         };
         let index = 0;
 
-        let result = window.GoogleMaps.drawCircle(circle, index);
+        let result = googleMaps.drawCircle(circle, index);
 
-        expect(googleMaps.Circle).toHaveBeenCalledTimes(1);
-        expect(result).toBeInstanceOf(googleMaps.Circle);
+        expect(googleMapsMock.Circle).toHaveBeenCalledTimes(1);
+        expect(result).toBeInstanceOf(googleMapsMock.Circle);
         expect(result.opts.id).toBe(circle.id);
         expect(result.opts.index).toBe(index);
         expect(result.opts.strokeColor).toBe(circle.strokeColor);
@@ -330,7 +329,7 @@ describe('GoogleMaps.js features', () => {
     });
     
     it('should draw circles', () => {
-        let existingCirclesCount = window.GoogleMaps.circles.length;
+        let existingCirclesCount = googleMaps.circles.length;
 
         let circle = {
             id: 123,
@@ -346,11 +345,11 @@ describe('GoogleMaps.js features', () => {
 
         let circles = [circle];
 
-        let result = window.GoogleMaps.drawCircles(circles);
+        let result = googleMaps.drawCircles(circles);
 
-        expect(googleMaps.Circle).toHaveBeenCalledTimes(1);
-        expect(window.GoogleMaps.circles.length).toBe(existingCirclesCount + 1);
-        expect(window.GoogleMaps.googleMapsUserCircles).toBe(circles);
+        expect(googleMapsMock.Circle).toHaveBeenCalledTimes(1);
+        expect(googleMaps.circles.length).toBe(existingCirclesCount + 1);
+        expect(googleMaps.googleMapsUserCircles).toBe(circles);
         expect(typeof result).toBe('object');
     });
 
@@ -363,10 +362,10 @@ describe('GoogleMaps.js features', () => {
         let index = 3;
         let icon = 'icon.png';
 
-        let result = window.GoogleMaps.drawMarker(marker, index, icon);
+        let result = googleMaps.drawMarker(marker, index, icon);
 
-        expect(googleMaps.Marker).toHaveBeenCalledTimes(1);
-        expect(result).toBeInstanceOf(googleMaps.Marker);
+        expect(googleMapsMock.Marker).toHaveBeenCalledTimes(1);
+        expect(result).toBeInstanceOf(googleMapsMock.Marker);
         expect(result.opts.id).toBe(marker.id);
         expect(result.opts.index).toBe(index);
         expect(result.opts.position.lat).toBe(marker.latitude);
@@ -375,7 +374,7 @@ describe('GoogleMaps.js features', () => {
     });
 
     it('should draw markers', () => {
-        let existingMarkersCount = window.GoogleMaps.markers.length;
+        let existingMarkersCount = googleMaps.markers.length;
         let marker = {
             id: 123,
             latitude: 90,
@@ -385,32 +384,32 @@ describe('GoogleMaps.js features', () => {
         let markers = [marker];
         let color = 'green';
 
-        let result = window.GoogleMaps.drawMarkers(markers, color);
+        let result = googleMaps.drawMarkers(markers, color);
 
-        expect(googleMaps.Marker).toHaveBeenCalledTimes(1);
-        expect(window.GoogleMaps.markers.length).toBe(existingMarkersCount + 1);
-        expect(window.GoogleMaps.googleMapsPromoterMarkers).toBe(markers);
+        expect(googleMapsMock.Marker).toHaveBeenCalledTimes(1);
+        expect(googleMaps.markers.length).toBe(existingMarkersCount + 1);
+        expect(googleMaps.googleMapsPromoterMarkers).toBe(markers);
         expect(typeof result).toBe('object');
     });
     
     it('should click on the map', () => {
-        window.GoogleMaps.selectedCircle = {
+        googleMaps.selectedCircle = {
             id: 1,
             index: 0,
             setOptions: jest.fn()
         };
         
-        window.GoogleMaps.clickOnMap();
+        googleMaps.clickOnMap();
 
-        expect(window.GoogleMaps.selectedCircle === null).toBe(true);
-        expect(window.GoogleMaps.selectedIndex === null).toBe(true);
+        expect(googleMaps.selectedCircle === null).toBe(true);
+        expect(googleMaps.selectedIndex === null).toBe(true);
     });
 
     it('should center on user location', () => {
         let latitude = 92.123;
         let longitude = 23.342;
 
-        window.GoogleMaps.user = {
+        googleMaps.user = {
             profile_photo_url: 'http://photo.png',
         }
 
@@ -429,47 +428,47 @@ describe('GoogleMaps.js features', () => {
 
         let expectedCenter = { lat: latitude, lng: longitude };
 
-        window.GoogleMaps.centerOnUserLocation(latitude, longitude);
+        googleMaps.centerOnUserLocation(latitude, longitude);
 
-        // expect(window.GoogleMaps.map.getCenter()).toMatchObject(expectedCenter);
-        expect(googleMaps.Marker).toHaveBeenCalledTimes(1);
-        expect(googleMaps.Marker.mock.instances.length).toBe(1);
+        // expect(googleMaps.map.getCenter()).toMatchObject(expectedCenter);
+        expect(googleMapsMock.Marker).toHaveBeenCalledTimes(1);
+        expect(googleMapsMock.Marker.mock.instances.length).toBe(1);
     });
 
     it('should create DrawingManager', () => {
         let map = {};
         let modes = {sample: 'mode'};
 
-        window.GoogleMaps.drawingManager = null;
-        window.GoogleMaps.createDrawingManager(map, modes);
+        googleMaps.drawingManager = null;
+        googleMaps.createDrawingManager(map, modes);
 
-        expect(googleMaps.drawing.DrawingManager).toHaveBeenCalledTimes(1);
-        expect(googleMaps.drawing.DrawingManager.mock.instances.length).toBe(1);
-        expect(googleMaps.drawing.DrawingManager).toHaveBeenLastCalledWith({
+        expect(googleMapsMock.drawing.DrawingManager).toHaveBeenCalledTimes(1);
+        expect(googleMapsMock.drawing.DrawingManager.mock.instances.length).toBe(1);
+        expect(googleMapsMock.drawing.DrawingManager).toHaveBeenLastCalledWith({
             drawingControl: true,
             drawingControlOptions: {
-                position: googleMaps.ControlPosition.TOP_CENTER,
+                position: googleMapsMock.ControlPosition.TOP_CENTER,
                 drawingModes: modes,
             },
-            circleOptions: window.GoogleMaps.defaultCircleOptions,
+            circleOptions: googleMaps.defaultCircleOptions,
         });
     });
 
 
     it('should focus', () => {
         let circle = {
-            options: window.GoogleMaps.defaultCircleOptions,
+            options: googleMaps.defaultCircleOptions,
             setOptions: jest.fn(),
         };
 
-        window.GoogleMaps.focus(circle);
+        googleMaps.focus(circle);
         expect(circle.setOptions).toHaveBeenCalledTimes(0);
         expect(circle.options.editable).toBe(false);
         
         circle.index = 1;
-        window.GoogleMaps.selectedIndex = 2;
+        googleMaps.selectedIndex = 2;
         
-        window.GoogleMaps.focus(circle);
+        googleMaps.focus(circle);
         expect(circle.setOptions).toHaveBeenCalledTimes(1);
         expect(circle.options.editable).toBe(true);
     });
@@ -489,7 +488,7 @@ describe('GoogleMaps.js features', () => {
         let idInput = document.getElementById('circle_id');
         idInput.value = existingId;
 
-        window.GoogleMaps.updateCircle(circle);
+        googleMaps.updateCircle(circle);
 
         expect(idInput.value).toBe(String(existingId));
         expect(latitudeInput.value).toBe(String(latitude));
@@ -508,7 +507,7 @@ describe('GoogleMaps.js features', () => {
             radius: 412,
         };
 
-        window.GoogleMaps.saveCircle(circle);
+        googleMaps.saveCircle(circle);
 
         expect(latitudeInput.value).toBe(String(latitude));
         expect(longitudeInput.value).toBe(String(longitude));
@@ -538,7 +537,7 @@ describe('GoogleMaps.js features', () => {
 
         document.body.append(latitudeInput, longitudeInput, submitButton);
 
-        window.GoogleMaps.saveMarker(marker);
+        googleMaps.saveMarker(marker);
 
         expect(latitudeInput.value).toBe(String(latitude));
         expect(longitudeInput.value).toBe(String(longitude));
@@ -560,7 +559,7 @@ describe('GoogleMaps.js features', () => {
         form.appendChild(longitudeInput);
         document.body.append(form);
 
-        window.GoogleMaps.saveUserLocation(latitude, longitude);
+        googleMaps.saveUserLocation(latitude, longitude);
 
         expect(latitudeInput.value).toBe(String(latitude));
         expect(longitudeInput.value).toBe(String(longitude));
@@ -570,17 +569,17 @@ describe('GoogleMaps.js features', () => {
         let id = 912;
         let circle = {id: 0};
 
-        window.GoogleMaps.setCircleId(circle, id);
+        googleMaps.setCircleId(circle, id);
         expect(circle.id).toBe(id);
     });
 
     it('should set drawing modes', () => {
-        window.GoogleMaps.drawingManager = null;
+        googleMaps.drawingManager = null;
 
-        let result = window.GoogleMaps.setDrawingModes({});
+        let result = googleMaps.setDrawingModes({});
 
-        expect(googleMaps.drawing.DrawingManager).toHaveBeenCalledTimes(1);
-        expect(googleMaps.drawing.DrawingManager.mock.instances.length).toBe(1);
+        expect(googleMapsMock.drawing.DrawingManager).toHaveBeenCalledTimes(1);
+        expect(googleMapsMock.drawing.DrawingManager.mock.instances.length).toBe(1);
         expect(typeof result).toBe('object');
     });
     
@@ -589,19 +588,19 @@ describe('GoogleMaps.js features', () => {
             getCurrentPosition: jest.fn(),
         };
 
-        window.GoogleMaps.getUserLocation();
+        googleMaps.getUserLocation();
     });
 
     it('should set the user', () => {
         let user = { id: 1 };
-        let result = window.GoogleMaps.setUser(user);
+        let result = googleMaps.setUser(user);
         
         expect(typeof result).toBe('object');
-        expect(window.GoogleMaps.user).toBe(user);
+        expect(googleMaps.user).toBe(user);
     });
 
     it('should set the user location', () => {
-        let result = window.GoogleMaps.setUserLocation(null);
+        let result = googleMaps.setUserLocation(null);
         expect(typeof result).toBe('object');
 
         let location = { 
@@ -609,7 +608,7 @@ describe('GoogleMaps.js features', () => {
             longitude: 23.342,
         };
 
-        window.GoogleMaps.user = {
+        googleMaps.user = {
             profile_photo_url: 'http://photo.png',
         }
 
@@ -626,42 +625,42 @@ describe('GoogleMaps.js features', () => {
 
         document.body.innerHTML = form.outerHTML;
 
-        result = window.GoogleMaps.setUserLocation(location);
+        result = googleMaps.setUserLocation(location);
         expect(typeof result).toBe('object');
-        expect(googleMaps.Marker).toHaveBeenCalledTimes(1);
-        expect(googleMaps.Marker.mock.instances.length).toBe(1);
+        expect(googleMapsMock.Marker).toHaveBeenCalledTimes(1);
+        expect(googleMapsMock.Marker.mock.instances.length).toBe(1);
     });
 
     it('should select the circle at given index', () => {
-        window.GoogleMaps.selectedCircle = null;
-        window.GoogleMaps.circles = [
+        googleMaps.selectedCircle = null;
+        googleMaps.circles = [
             {
                 id: 2, 
                 index: 2,
                 setOptions: jest.fn()
             }
         ];
-        window.GoogleMaps.selectedIndex = 2;
+        googleMaps.selectedIndex = 2;
 
-        window.GoogleMaps.selectCircleAtIndex(0);
-        expect(window.GoogleMaps.selectedIndex === 0).toBe(true);
-        expect(window.GoogleMaps.selectedCircle).toMatchObject({id: 2, index: 2 });
+        googleMaps.selectCircleAtIndex(0);
+        expect(googleMaps.selectedIndex === 0).toBe(true);
+        expect(googleMaps.selectedCircle).toMatchObject({id: 2, index: 2 });
     });
 
     it('should unfocus', () => {
         let circle = {
-            options: window.GoogleMaps.defaultCircleOptions,
+            options: googleMaps.defaultCircleOptions,
             setOptions: jest.fn(),
         };
 
-        window.GoogleMaps.unfocus(circle);
+        googleMaps.unfocus(circle);
         expect(circle.setOptions).toHaveBeenCalledTimes(1);
         expect(circle.options.editable).toBe(false);
         
         circle.index = 1;
-        window.GoogleMaps.selectedIndex = 1;
+        googleMaps.selectedIndex = 1;
         
-        window.GoogleMaps.unfocus(circle);
+        googleMaps.unfocus(circle);
         expect(circle.setOptions).toHaveBeenCalledTimes(2);
         expect(circle.options.editable).toBe(false);
     });
