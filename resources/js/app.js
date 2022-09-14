@@ -1,12 +1,15 @@
 import './bootstrap';
 import Alpine from 'alpinejs';
-import GoogleMaps from './components/GoogleMaps/GoogleMaps';
+window.Alpine = Alpine;
+Alpine.start();
 
+import GoogleMaps from './components/GoogleMaps/GoogleMaps';
 window.GoogleMaps = new GoogleMaps();
 window.initMap = function () {
     window.GoogleMaps.initMap();
 };
 
-window.Alpine = Alpine;
+import './websockets/listeners';
 
-Alpine.start();
+import getCookie from './cookies/getCookie';
+window.getCookie = getCookie;
