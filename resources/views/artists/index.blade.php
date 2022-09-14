@@ -18,21 +18,21 @@
 
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="grid grid-cols-7 gap-4 place-content-center">
-                @foreach ($artists as $artist)
-                    <div class="mx-auto text-center">
-                        <a href="{{ route('artists.show', ['artist' => $artist]) }}">
-                            @if ($artist->smallImage)
-                                <img 
-                                    class="mx-auto"
-                                    alt="{{ $artist->name }}"
-                                    src="{{ $artist->smallImage->url }}" 
-                                    width="{{ $artist->smallImage->width }}" 
-                                    height="{{ $artist->smallImage->height }}"
-                                />
-                            @endif
-                            <span>{{ $artist->name }}</span>
-                        </a>
-                    </div>
+                    @foreach ($artists as $artist)
+                        <div class="mx-auto text-center">
+                            <a href="{{ route('artists.show', ['artist' => $artist]) }}">
+                                @if ($artist->smallImage)
+                                    <img
+                                        class="mx-auto"
+                                        alt="{{ $artist->name }}"
+                                        src="{{ $artist->smallImage->url }}"
+                                        width="{{ $artist->smallImage->width }}"
+                                        height="{{ $artist->smallImage->height }}"
+                                    />
+                                @endif
+                                <span>{{ $artist->name }}</span>
+                            </a>
+                        </div>
                     @endforeach
                 </div>
             </div>

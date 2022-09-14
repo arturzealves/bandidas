@@ -1,7 +1,4 @@
-window.initMap = function () {
-    window.GoogleMaps.initMap();
-};
-class GoogleMaps {
+export default class GoogleMaps {
     constructor() {
         this.options = {
             drawingModes: []
@@ -438,5 +435,3 @@ class GoogleMaps {
         }
     }
 }
-
-window.GoogleMaps = new GoogleMaps();

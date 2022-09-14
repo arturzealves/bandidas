@@ -7,6 +7,7 @@ use App\Models\UserType;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class DashboardController extends Controller
 {
@@ -25,6 +26,9 @@ class DashboardController extends Controller
                 'spotifyArtistCount' => SpotifyArtist::count(),
             ];
         }
+
+        $cookie = Cookie::make('userId', $user->id, 10, null, null, false, false);
+        Cookie::queue($cookie);
 
         return view(sprintf('dashboard/%s', $user->type->name))
             ->with($viewVariables);

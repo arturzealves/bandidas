@@ -10,6 +10,7 @@
             itemSelectText: '',
             removeItems: true,
             removeItemButton: true,
+            allowHTML: false,
         });
 
         $refs.select.addEventListener('change', (event) => {
