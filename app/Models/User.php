@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use QCod\Gamify\Gamify;
+use App\Gamify\Gamify;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
