@@ -28,6 +28,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
         'user_type_id',
@@ -90,7 +91,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function followedArtists()
     {
-        return $this->belongsToMany(Artist::class, DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS)->withTimestamps();;
+        return $this->belongsToMany(Artist::class, DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS)->withTimestamps();
     }
 
     public function isPromoter()

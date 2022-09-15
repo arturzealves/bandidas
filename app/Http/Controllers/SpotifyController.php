@@ -82,6 +82,7 @@ class SpotifyController extends Controller
     {
         $user = $userCreator->create([
             'name' => $spotifyUser->name,
+            'username' => $spotifyUser->nickname ?? $spotifyUser->id,
             'email' => $spotifyUser->email,
             'password' => 'useless'.time(),
             'password_confirmation' => 'useless'.time(),
