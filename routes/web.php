@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArtistController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SpotifyController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Routes for authenticated and verified users
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -27,8 +29,10 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@dashboard')->name('dashboard');
     Route::resource('artists', ArtistController::class)->only(['index', 'show']);
+    Route::resource('users', UserController::class)->only(['show'])->scoped(['user' => 'username']);
 });
 
+// Routes for verified promoters
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -38,5 +42,6 @@ Route::middleware([
     Route::get('/map', 'App\Http\Controllers\Promoter\MapController@index')->name('map');
 });
 
+// Public routes
 Route::get('/auth/spotify/redirect/{action}', [SpotifyController::class, 'redirect'])->name('spotify.redirect');
 Route::get('/auth/spotify/callback', [SpotifyController::class, 'callback'])->name('spotify.callback');
