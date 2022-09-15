@@ -21,6 +21,6 @@ class SpotifyArtistsImported extends BadgeType
      */
     public function qualifier($user)
     {
-        return !empty($user->followedArtists()->get());
+        return $user->followedArtists()->get()->isNotEmpty();
     }
 }

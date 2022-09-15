@@ -75,6 +75,7 @@ class ImportSpotifyUserFollowedArtists implements ShouldQueue
 
         $this->user->followedArtists()->sync($artistIds);
 
+        // fix: This badge is not being awarded
         $this->user->givePoint(new SpotifyArtistsImported($this->user));
     }
 }

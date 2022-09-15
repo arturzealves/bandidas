@@ -21,6 +21,6 @@ class FirstMapCircle extends BadgeType
      */
     public function qualifier($user)
     {
-        return $user->mapCircles()->count() >= 1;
+        return $user->mapCircles()->count() == 1;
     }
 }
