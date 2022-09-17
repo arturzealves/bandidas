@@ -61,7 +61,7 @@ return new class extends Migration
         if (!Schema::hasTable(DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS)) {
             Schema::create(DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS, function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->unsignedBigInteger('user_id');
+                $table->uuid('user_id');
                 $table->unsignedBigInteger('artist_id');
                 $table->timestamps();
 

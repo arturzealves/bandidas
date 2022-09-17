@@ -18,9 +18,9 @@ class CreateGamifyTables extends Migration
             $table->increments('id');
             $table->string('name');
             $table->mediumInteger('point', false)->default(0);
-            $table->integer('subject_id')->nullable();
+            $table->uuid('subject_id')->nullable();
             $table->string('subject_type')->nullable();
-            $table->unsignedInteger('payee_id')->nullable();
+            $table->uuid('payee_id')->nullable();
             $table->text('meta')->nullable();
             $table->timestamps();
         });
@@ -38,7 +38,7 @@ class CreateGamifyTables extends Migration
         // user_badges pivot
         Schema::create('user_badges', function (Blueprint $table) {
             $table->primary(['user_id', 'badge_id']);
-            $table->unsignedInteger('user_id');
+            $table->uuid('user_id');
             $table->unsignedInteger('badge_id');
             $table->timestamps();
         });
