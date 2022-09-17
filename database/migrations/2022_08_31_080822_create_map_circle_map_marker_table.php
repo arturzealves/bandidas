@@ -17,8 +17,8 @@ return new class extends Migration
         if (!Schema::hasTable(DatabaseConstants::TABLE_MAP_CIRCLE_MAP_MARKER)) {
             Schema::create(DatabaseConstants::TABLE_MAP_CIRCLE_MAP_MARKER, function (Blueprint $table) {
                 $table->id();
-                $table->unsignedBigInteger('map_circle_id');
-                $table->unsignedBigInteger('map_marker_id');
+                $table->uuid('map_circle_id');
+                $table->uuid('map_marker_id');
                 $table->mediumInteger('distance');
                 $table->timestamps();
 

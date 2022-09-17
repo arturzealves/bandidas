@@ -17,7 +17,7 @@ return new class extends Migration
         if (!Schema::hasTable(DatabaseConstants::TABLE_ARTIST_MAP_CIRCLE)) {
             Schema::create(DatabaseConstants::TABLE_ARTIST_MAP_CIRCLE, function (Blueprint $table) {
                 $table->id();
-                $table->unsignedBigInteger('map_circle_id');
+                $table->uuid('map_circle_id');
                 $table->unsignedBigInteger('artist_id');
                 $table->decimal('budget', 7, 2)->nullable();
                 $table->timestamps();
