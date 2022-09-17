@@ -6,5 +6,5 @@ use QCod\Gamify\HasReputations;
 
 trait Gamify
 {
-    use HasReputations, HasBadges;
+    use HasReputations, HasBadges, HasLevelSystem;
 }

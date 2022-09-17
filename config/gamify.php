@@ -33,5 +33,16 @@ return [
     ],
 
     // Default level
-    'badge_default_level' => 1
+    'badge_default_level' => 1,
+
+    // Allow reputation model to level up
+    'enable_level_system' => true,
+
+    // Defines the needed reputation for each level
+    'level_system' => [
+        1 => 10,
+        2 => 30,
+        3 => 90,
+        4 => 150,
+    ],
 ];
