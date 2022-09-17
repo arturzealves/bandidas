@@ -2,7 +2,7 @@
 
 namespace App\Gamify\Badges;
 
-use QCod\Gamify\BadgeType;
+use App\Gamify\BadgeType;
 
 class FirstMapCircle extends BadgeType
 {
@@ -21,6 +21,7 @@ class FirstMapCircle extends BadgeType
      */
     public function qualifier($user)
     {
-        return $user->mapCircles()->count() == 1;
+        return $this->userHasNotReceivedThisBadgeYet($user)
+            && $user->mapCircles()->count() == 1;
     }
 }

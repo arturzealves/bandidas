@@ -30,7 +30,7 @@ trait HasBadges
             ->qualifier($user)
             ->map->getBadgeId();
 
-        $user->badges()->sync($badgeIds);
+        $user->badges()->syncWithoutDetaching($badgeIds);
 
         foreach ($badgeIds as $badgeId) {
             BadgeAwarded::dispatch($user, $badgeId);

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Gamify\Points\SpotifyArtistsImported;
 use App\Jobs\ImportSpotifyUserFollowedArtists;
 use App\Models\User;
 use App\Services\SpotifyService;
@@ -52,6 +53,15 @@ class ImportSpotifyUserFollowedArtistsTest extends TestCase
             ->shouldBeCalledTimes(1)
             ->willReturn($artists);
 
+        $this->assertEquals(0, $this->user->reputation);
+        $this->assertEquals(0, $this->user->badges()->count());
+
         $this->job->handle();
+
+        $this->assertNotEmpty($this->user->followedArtists);
+        $this->assertTrue($this->user->followedArtists()->get()->isNotEmpty());
+        $this->assertEquals(5, $this->user->reputation);
+        $this->assertEquals(1, $this->user->badges()->count());
+        $this->assertEquals('Imported Spotify followed artists', $this->user->badges()->first()->description);
     }
 }
