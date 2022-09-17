@@ -7,6 +7,8 @@ final class DatabaseConstants
     const TABLE_ARTIST_GENRE = 'artist_genre';
     const TABLE_ARTISTS = 'artists';
 
+    const TABLE_BADGES = 'badges';
+
     const TABLE_FAILED_JOBS = 'failed_jobs';
 
     const TABLE_GENRES = 'genres';
