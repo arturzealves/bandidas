@@ -19,6 +19,7 @@
                         />
                     @endif
 
+                    Level: {{ $user->level() }}<br>
                     XP: {{ $user->reputation }}<br>
                     <br>
 
