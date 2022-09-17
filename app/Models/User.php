@@ -11,6 +11,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Gamify\Gamify;
+use App\Models\Traits\HasUuid;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -20,6 +21,11 @@ class User extends Authenticatable implements MustVerifyEmail
     use Notifiable;
     use TwoFactorAuthenticatable;
     use Gamify;
+    use HasUuid;
+
+    const TYPE_USER = 'user';
+    const TYPE_PROMOTER = 'promoter';
+    const TYPE_ARTIST = 'artist';
 
     /**
      * The attributes that are mass assignable.
@@ -31,7 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'username',
         'email',
         'password',
-        'user_type_id',
+        'user_type',
     ];
 
     /**
@@ -64,11 +70,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'profile_photo_url',
     ];
 
-    public function type()
-    {
-        return $this->hasOne(UserType::class, 'id', 'user_type_id');
-    }
-
     public function userAccessTokens()
     {
         return $this->hasMany(UserAccessToken::class, 'user_id', 'id');
@@ -96,6 +97,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function isPromoter()
     {
-        return $this->user_type_id === UserType::TYPE_PROMOTER_ID;
+        return $this->user_type === User::TYPE_PROMOTER;
     }
 }

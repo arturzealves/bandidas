@@ -17,7 +17,7 @@ return new class extends Migration
         if (!Schema::hasTable(DatabaseConstants::TABLE_USER_ACCESS_TOKENS)) {
             Schema::create(DatabaseConstants::TABLE_USER_ACCESS_TOKENS, function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->unsignedBigInteger('user_id');
+                $table->uuid('user_id');
                 $table->morphs('tokenable');
                 $table->string('name');
                 $table->string('token', 512)->unique();

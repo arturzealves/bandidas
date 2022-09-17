@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SpotifyArtist;
-use App\Models\UserType;
+use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,10 +19,10 @@ class DashboardController extends Controller
             'user' => $user,
         ];
 
-        if ($user->type->name == UserType::TYPE_PROMOTER) {
+        if ($user->user_type == User::TYPE_PROMOTER) {
             $viewVariables += [
-                'userCount' => $userRepository->getCountByUserTypeId(UserType::TYPE_USER_ID),
-                'artistCount' => $userRepository->getCountByUserTypeId(UserType::TYPE_ARTIST_ID),
+                'userCount' => $userRepository->getCountByUserType(User::TYPE_USER),
+                'artistCount' => $userRepository->getCountByUserType(User::TYPE_ARTIST),
                 'spotifyArtistCount' => SpotifyArtist::count(),
             ];
         }
@@ -30,7 +30,7 @@ class DashboardController extends Controller
         $cookie = Cookie::make('userId', $user->id, 10, null, null, false, false);
         Cookie::queue($cookie);
 
-        return view(sprintf('dashboard/%s', $user->type->name))
+        return view(sprintf('dashboard/%s', $user->user_type))
             ->with($viewVariables);
     }
 }

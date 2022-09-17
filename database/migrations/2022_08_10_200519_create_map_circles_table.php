@@ -16,8 +16,8 @@ return new class extends Migration
     {
         if (!Schema::hasTable(DatabaseConstants::TABLE_MAP_CIRCLES)) {
             Schema::create(DatabaseConstants::TABLE_MAP_CIRCLES, function (Blueprint $table) {
-                $table->id();
-                $table->unsignedBigInteger('user_id');
+                $table->uuid('id')->primary();
+                $table->uuid('user_id');
                 $table->string('name', 100);
                 $table->decimal('latitude', 8, 6);
                 $table->decimal('longitude', 9, 6);

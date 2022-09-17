@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\UserType;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,9 +19,9 @@ class UserTypeFactory extends Factory
     {
         return [
             'name' => fake()->randomElement([
-                UserType::TYPE_USER,
-                UserType::TYPE_PROMOTER,
-                UserType::TYPE_ARTIST,
+                User::TYPE_USER,
+                User::TYPE_PROMOTER,
+                User::TYPE_ARTIST,
             ]),
         ];
     }

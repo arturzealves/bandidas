@@ -16,8 +16,8 @@ return new class extends Migration
     {
         if (!Schema::hasTable(DatabaseConstants::TABLE_MAP_MARKERS)) {
             Schema::create(DatabaseConstants::TABLE_MAP_MARKERS, function (Blueprint $table) {
-                $table->id();
-                $table->unsignedBigInteger('user_id');
+                $table->uuid('id')->primary();
+                $table->uuid('user_id');
                 $table->decimal('latitude', 8, 6);
                 $table->decimal('longitude', 9, 6);
 

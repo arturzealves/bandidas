@@ -15,7 +15,7 @@
             <x-jet-label for="user_type" value="{{ __('Name') }}" />
             <select wire:model="userType" wire:change="$emit('postChanged')">
                 @foreach ($userTypes as $userType)
-                    <option value="{{ $userType->id }}">{{ $userType->name }}</option>
+                    <option value="{{ $userType }}">{{ $userType }}</option>
                 @endforeach
             </select>
             <x-jet-input-error for="user_type" class="mt-2" />

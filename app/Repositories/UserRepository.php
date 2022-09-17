@@ -6,8 +6,8 @@ use App\Models\User;
 
 class UserRepository
 {
-    public function getCountByUserTypeId($id): int
+    public function getCountByUserType($type): int
     {
-        return User::where('user_type_id', $id)->count();
+        return User::where('user_type', $type)->count();
     }
 }

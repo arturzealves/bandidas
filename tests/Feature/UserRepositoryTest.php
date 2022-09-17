@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use App\Models\UserType;
 use App\Repositories\UserRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -22,13 +21,12 @@ class UserRepositoryTest extends TestCase
         $this->repository = new UserRepository();
     }
 
-    public function testGetCountByUserTypeId()
+    public function testGetCountByUserType()
     {
-        $userType = UserType::factory()->create();
-        $user = User::factory()->create([
-            'user_type_id' => $userType
+        User::factory()->create([
+            'user_type' => USER::TYPE_PROMOTER
         ]);
 
-        $this->assertEquals(1, $this->repository->getCountByUserTypeId($user->user_type_id));
+        $this->assertEquals(1, $this->repository->getCountByUserType(USER::TYPE_PROMOTER));
     }
 }
