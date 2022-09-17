@@ -2,8 +2,12 @@
 
 namespace App\Gamify\Badges;
 
-use QCod\Gamify\BadgeType;
+use App\Gamify\BadgeType;
 
+/**
+ * known issue: it is not assigning this badge correctly because
+ * we don't track when the user clicked on the import artists button
+ */
 class SpotifyArtistsImported extends BadgeType
 {
     /**
@@ -21,6 +25,7 @@ class SpotifyArtistsImported extends BadgeType
      */
     public function qualifier($user)
     {
-        return $user->followedArtists()->get()->isNotEmpty();
+        return $this->userHasNotReceivedThisBadgeYet($user)
+            && $user->followedArtists()->get()->isNotEmpty();
     }
 }
