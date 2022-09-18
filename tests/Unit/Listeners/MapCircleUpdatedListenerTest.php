@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit\Listeners;
 
 use App\Events\MapCircleUpdated;
 use App\Listeners\MapCircleUpdatedListener;

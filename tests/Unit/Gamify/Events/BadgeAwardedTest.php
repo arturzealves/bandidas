@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit\Gamify\Events;
 
 use App\Gamify\Events\BadgeAwarded;
 use App\Models\User;

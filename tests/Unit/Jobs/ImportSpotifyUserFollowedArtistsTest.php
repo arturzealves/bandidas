@@ -1,15 +1,13 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit\Jobs;
 
-use App\Gamify\Points\SpotifyArtistsImported;
 use App\Jobs\ImportSpotifyUserFollowedArtists;
 use App\Models\User;
 use App\Services\SpotifyService;
 use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Bus;
 use Prophecy\PhpUnit\ProphecyTrait;
 use stdClass;
 use Tests\TestCase;
