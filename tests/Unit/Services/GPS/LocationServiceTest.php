@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Services\GPS;
 
 use App\Models\MapMarker;
 use App\Models\MapCircle;

@@ -24,7 +24,7 @@ class MapCircles extends Component
         // 'name' => 'optional|string',
         'latitude' => 'required|numeric|min:-90|max:90',
         'longitude' => 'required|numeric|min:-180|max:180',
-        'radius' => 'required|numeric|max:16777215',
+        'radius' => 'required|numeric|max:8388607',
         'budget' => 'numeric|min:0|max:99999',
     ];
 
