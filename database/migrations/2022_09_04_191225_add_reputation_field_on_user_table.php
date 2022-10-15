@@ -1,5 +1,6 @@
 <?php
 
+use Database\Mappers\DatabaseConstants;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -13,7 +14,7 @@ class AddReputationFieldOnUserTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table(DatabaseConstants::TABLE_USERS, function (Blueprint $table) {
             $table->unsignedInteger('reputation')->default(0)->after('remember_token');
         });
     }
@@ -25,7 +26,7 @@ class AddReputationFieldOnUserTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table(DatabaseConstants::TABLE_USERS, function (Blueprint $table) {
             $table->dropColumn('reputation');
         });
     }

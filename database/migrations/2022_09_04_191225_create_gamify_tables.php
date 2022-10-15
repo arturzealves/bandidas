@@ -1,5 +1,6 @@
 <?php
 
+use Database\Mappers\DatabaseConstants;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -14,7 +15,7 @@ class CreateGamifyTables extends Migration
     public function up()
     {
         // reputations table
-        Schema::create('reputations', function (Blueprint $table) {
+        Schema::create(DatabaseConstants::TABLE_REPUTATIONS, function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->mediumInteger('point', false)->default(0);
@@ -26,7 +27,7 @@ class CreateGamifyTables extends Migration
         });
 
         // badges table
-        Schema::create('badges', function (Blueprint $table) {
+        Schema::create(DatabaseConstants::TABLE_BADGES, function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('description')->nullable();
@@ -36,7 +37,7 @@ class CreateGamifyTables extends Migration
         });
 
         // user_badges pivot
-        Schema::create('user_badges', function (Blueprint $table) {
+        Schema::create(DatabaseConstants::TABLE_USER_BADGES, function (Blueprint $table) {
             $table->primary(['user_id', 'badge_id']);
             $table->uuid('user_id');
             $table->unsignedInteger('badge_id');
@@ -51,8 +52,8 @@ class CreateGamifyTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_badges');
-        Schema::dropIfExists('badges');
-        Schema::dropIfExists('reputations');
+        Schema::dropIfExists(DatabaseConstants::TABLE_USER_BADGES);
+        Schema::dropIfExists(DatabaseConstants::TABLE_BADGES);
+        Schema::dropIfExists(DatabaseConstants::TABLE_REPUTATIONS);
     }
 }
