@@ -95,6 +95,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Artist::class, DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS)->withTimestamps();
     }
 
+    public function eventsPromoted()
+    {
+        return $this->belongsToMany(Event::class, DatabaseConstants::TABLE_EVENT_PROMOTERS);
+    }
+
     public function isPromoter()
     {
         return $this->user_type === User::TYPE_PROMOTER;

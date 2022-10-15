@@ -31,6 +31,11 @@ class Artist extends Model
 
     public function followers()
     {
-        return $this->belongsToMany(User::class, DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS)->withTimestamps();;
+        return $this->belongsToMany(User::class, DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS)->withTimestamps();
+    }
+
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, DatabaseConstants::TABLE_EVENT_ARTISTS);
     }
 }
