@@ -32,7 +32,9 @@ jobs:
     - run: npm run build
 
     - name: Run PHPUnit
-      run: php vendor/bin/phpunit
+      run: |
+        export APP_REAL_ENV=github
+        php vendor/bin/phpunit
     
     - name: Run Jest
       run: npm run test
