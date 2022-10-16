@@ -11,14 +11,18 @@ class MapMarker extends Model
     use HasFactory;
     use HasUuid;
 
+    protected $primaryKey = 'uuid';
+
     protected $fillable = [
-        'user_id',
+        'user_uuid',
         'latitude',
         'longitude',
     ];
 
     public function userCircles()
     {
-        return $this->belongsToMany(MapCircle::class)->withTimestamps();
+        return $this->belongsToMany(MapCircle::class)
+            ->using(MapCircleMapMarker::class)
+            ->withTimestamps();
     }
 }

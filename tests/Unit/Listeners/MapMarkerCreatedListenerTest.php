@@ -47,6 +47,6 @@ class MapMarkerCreatedListenerTest extends TestCase
         
         $this->listener->handle($event);
         
-        $this->assertContains($mapCircle->id, $event->marker->userCircles->pluck('id'));
+        $this->assertContains($mapCircle->uuid, $event->marker->userCircles->pluck('uuid'));
     }
 }

@@ -2,15 +2,19 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class SpotifyArtist extends Model
 {
     use HasFactory;
+    use HasUuid;
+
+    protected $primaryKey = 'uuid';
 
     protected $fillable = [
-        'artist_id',
+        'artist_uuid',
         'spotify_id',
         'name',
         'uri',

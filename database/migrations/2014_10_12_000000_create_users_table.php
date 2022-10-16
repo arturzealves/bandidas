@@ -15,23 +15,25 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create(DatabaseConstants::TABLE_USERS, function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name');
-            $table->string('username')->unique();
-            $table->string('email')->unique();
-            $table->enum('user_type', [
-                User::TYPE_USER,
-                User::TYPE_PROMOTER,
-                User::TYPE_ARTIST,
-            ]);
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->foreignId('current_team_id')->nullable();
-            $table->string('profile_photo_path', 2048)->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable(DatabaseConstants::TABLE_USERS)) {
+            Schema::create(DatabaseConstants::TABLE_USERS, function (Blueprint $table) {
+                $table->uuid()->primary();
+                $table->string('name');
+                $table->string('username')->unique();
+                $table->string('email')->unique();
+                $table->enum('user_type', [
+                    User::TYPE_USER,
+                    User::TYPE_PROMOTER,
+                    User::TYPE_ARTIST,
+                ]);
+                $table->timestamp('email_verified_at')->nullable();
+                $table->string('password');
+                $table->rememberToken();
+                $table->foreignId('current_team_id')->nullable();
+                $table->string('profile_photo_path', 2048)->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

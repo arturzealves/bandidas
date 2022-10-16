@@ -16,13 +16,13 @@ return new class extends Migration
     {
         if (!Schema::hasTable(DatabaseConstants::TABLE_USER_EXTERNAL_ACCOUNTS)) {
             Schema::create(DatabaseConstants::TABLE_USER_EXTERNAL_ACCOUNTS, function (Blueprint $table) {
-                $table->id();
-                $table->uuid('user_id');
+                $table->uuid()->primary();
+                $table->uuid('user_uuid');
                 $table->string('external_id', 100);
                 $table->string('provider_name', 50);
                 $table->timestamps();
 
-                $table->foreign('user_id')->references('id')->on(DatabaseConstants::TABLE_USERS)->onDelete('cascade');
+                $table->foreign('user_uuid')->references('uuid')->on(DatabaseConstants::TABLE_USERS)->onDelete('cascade');
             });
         }
     }

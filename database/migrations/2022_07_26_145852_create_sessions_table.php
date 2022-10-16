@@ -14,14 +14,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create(DatabaseConstants::TABLE_SESSIONS, function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->uuid('user_id')->nullable()->index();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->longText('payload');
-            $table->integer('last_activity')->index();
-        });
+        if (!Schema::hasTable(DatabaseConstants::TABLE_SESSIONS)) {
+            Schema::create(DatabaseConstants::TABLE_SESSIONS, function (Blueprint $table) {
+                $table->string('id')->primary();
+                $table->uuid('user_id')->nullable()->index();
+                $table->string('ip_address', 45)->nullable();
+                $table->text('user_agent')->nullable();
+                $table->longText('payload');
+                $table->integer('last_activity')->index();
+            });
+        }
     }
 
     /**

@@ -44,18 +44,18 @@ class ImportSpotifyUserFollowedArtists implements ShouldQueue
     {
         $artistsData = $this->spotifyService->getUserFollowedArtists($this->user);
         
-        $artistIds = [];
+        $artistUuids = [];
         foreach ($artistsData as $artistData) {
             $artist = Artist::firstOrCreate(['name' => $artistData->name]);
             
-            $artistIds[] = $artist->id;
+            $artistUuids[] = $artist->uuid;
 
             SpotifyArtist::firstOrCreate(
                 [
                     'spotify_id' => $artistData->id
                 ],
                 [
-                    'artist_id' => $artist->id,
+                    'artist_uuid' => $artist->uuid,
                     'name' => $artistData->name,
                     'uri' => $artistData->uri,
                     'images' => json_encode($artistData->images),
@@ -73,7 +73,7 @@ class ImportSpotifyUserFollowedArtists implements ShouldQueue
             }
         }
 
-        $this->user->followedArtists()->sync($artistIds);
+        $this->user->followedArtists()->sync($artistUuids);
 
         // fix: This badge is not being awarded
         $this->user->givePoint(new SpotifyArtistsImported($this->user));

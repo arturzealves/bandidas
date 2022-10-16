@@ -38,8 +38,8 @@ class CreateGamifyTables extends Migration
 
         // user_badges pivot
         Schema::create(DatabaseConstants::TABLE_USER_BADGES, function (Blueprint $table) {
-            $table->primary(['user_id', 'badge_id']);
-            $table->uuid('user_id');
+            $table->primary(['user_uuid', 'badge_id']);
+            $table->uuid('user_uuid');
             $table->unsignedInteger('badge_id');
             $table->timestamps();
         });

@@ -2,17 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\HasUuid;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class ArtistGenre extends Model
+class ArtistGenre extends Pivot
 {
-    use HasFactory;
-
-    public $timestamps = false;
+    use HasUuid;
+    
+    // public $timestamps = false;
+    
+    protected $primaryKey = 'uuid';
 
     protected $fillable = [
-        'artist_id',
+        'artist_uuid',
         'genre_id',
     ];
 }

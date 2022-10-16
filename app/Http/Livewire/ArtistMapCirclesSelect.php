@@ -8,19 +8,19 @@ use Livewire\Component;
 
 class ArtistMapCirclesSelect extends Component
 {
-    public $circle_id;
+    public $circle_uuid;
     public $artists;
     public $selected;
     public $budget;
 
     public function mount()
     {
-        $this->artists = Artist::pluck('name', 'id')->toArray();
-        $this->selected = ArtistMapCircle::where('map_circle_id', $this->circle_id)
+        $this->artists = Artist::pluck('name', 'uuid')->toArray();
+        $this->selected = ArtistMapCircle::where('map_circle_uuid', $this->circle_uuid)
             ->get()
-            ->pluck('artist_id');
+            ->pluck('artist_uuid');
 
-        $this->budget = optional(ArtistMapCircle::where('map_circle_id', $this->circle_id)->first())->budget;
+        $this->budget = optional(ArtistMapCircle::where('map_circle_uuid', $this->circle_uuid)->first())->budget;
     }
 
     public function update($element)
@@ -28,13 +28,13 @@ class ArtistMapCirclesSelect extends Component
         $artistId = $element['value'];
         
         if (!in_array($element['value'], $this->selected)) {
-            ArtistMapCircle::where('map_circle_id', $this->circle_id)
-                ->where('artist_id', $artistId)
+            ArtistMapCircle::where('map_circle_uuid', $this->circle_uuid)
+                ->where('artist_uuid', $artistId)
                 ->delete();
         } else {
             ArtistMapCircle::create([
-                'map_circle_id' => $this->circle_id,
-                'artist_id' => $artistId,
+                'map_circle_uuid' => $this->circle_uuid,
+                'artist_uuid' => $artistId,
                 'budget' => $this->budget,
             ]);
         }
@@ -42,7 +42,7 @@ class ArtistMapCirclesSelect extends Component
 
     public function updateBudget()
     {
-        $record = ArtistMapCircle::where('map_circle_id', $this->circle_id)
+        $record = ArtistMapCircle::where('map_circle_uuid', $this->circle_uuid)
             ->first();
 
         if (null !== $record) {

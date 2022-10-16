@@ -2,24 +2,28 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class UserAccessToken extends Model
 {
     use HasFactory;
+    use HasUuid;
 
     const TOKENABLE_TYPE_SPOTIFY_ACCESS_TOKEN = 'spotify_access_token';
     const TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN = 1;
     const NAME_SPOTIFY_ACCESS_TOKEN = 'Spotify Access Token';
 
+    protected $primaryKey = 'uuid';
+    
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
     protected $fillable = [
-        'user_id',
+        'user_uuid',
         'tokenable_type',
         'tokenable_id',
         'name',
@@ -51,6 +55,6 @@ class UserAccessToken extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $this->hasOne(User::class, 'uuid', 'user_uuid');
     }
 }

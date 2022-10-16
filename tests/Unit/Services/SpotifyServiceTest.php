@@ -118,8 +118,8 @@ class SpotifyServiceTest extends TestCase
     {
         $user = $this->prophesize(User::class);
 
-        $this->repository->getOneByUserIdAndTokenableId(
-            $user->id,
+        $this->repository->getOneByUserUuidAndTokenableId(
+            $user->uuid,
             UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN
         )
             ->shouldBeCalledTimes(1)
@@ -135,8 +135,8 @@ class SpotifyServiceTest extends TestCase
         $userAccessToken = UserAccessToken::factory()->create();
         $user = $userAccessToken->user;
 
-        $this->repository->getOneByUserIdAndTokenableId(
-            $user->id,
+        $this->repository->getOneByUserUuidAndTokenableId(
+            $user->uuid,
             UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN
         )
             ->shouldBeCalledTimes(1)
@@ -146,7 +146,7 @@ class SpotifyServiceTest extends TestCase
         $options = ['limit' => 50];
         $key = sprintf(
             'spotify_user_%s_following_%s',
-            $user->id,
+            $user->uuid,
             hash('sha256', json_encode($options))
         );
 
@@ -174,7 +174,7 @@ class SpotifyServiceTest extends TestCase
         $options = ['limit' => 50, 'after' => 'test'];
         $key = sprintf(
             'spotify_user_%s_following_%s',
-            $user->id,
+            $user->uuid,
             hash('sha256', json_encode($options))
         );
 

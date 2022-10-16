@@ -76,7 +76,7 @@ class SpotifyIntegrationTest extends TestCase
         $spotifyUser = $this->mockInitialSetup($user);
 
         UserExternalAccount::factory()->create([
-            'user_id' => $user->id,
+            'user_uuid' => $user->uuid,
             'external_id' => $spotifyUser->id,
             'provider_name' => UserExternalAccount::PROVIDER_SPOTIFY
         ]);

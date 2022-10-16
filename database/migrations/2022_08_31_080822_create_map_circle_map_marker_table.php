@@ -16,19 +16,19 @@ return new class extends Migration
     {
         if (!Schema::hasTable(DatabaseConstants::TABLE_MAP_CIRCLE_MAP_MARKER)) {
             Schema::create(DatabaseConstants::TABLE_MAP_CIRCLE_MAP_MARKER, function (Blueprint $table) {
-                $table->id();
-                $table->uuid('map_circle_id');
-                $table->uuid('map_marker_id');
+                $table->uuid();
+                $table->uuid('map_circle_uuid');
+                $table->uuid('map_marker_uuid');
                 $table->mediumInteger('distance');
                 $table->timestamps();
 
-                $table->foreign('map_circle_id')
-                    ->references('id')
+                $table->foreign('map_circle_uuid')
+                    ->references('uuid')
                     ->on(DatabaseConstants::TABLE_MAP_CIRCLES)
                     ->onDelete('cascade');
 
-                $table->foreign('map_marker_id')
-                    ->references('id')
+                $table->foreign('map_marker_uuid')
+                    ->references('uuid')
                     ->on(DatabaseConstants::TABLE_MAP_MARKERS)
                     ->onDelete('cascade');
             });

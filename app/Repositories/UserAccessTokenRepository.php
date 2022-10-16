@@ -6,15 +6,15 @@ use App\Models\UserAccessToken;
 
 class UserAccessTokenRepository
 {
-    public function getOneByUserIdAndTokenableId($userId, $tokenableId): ?UserAccessToken
+    public function getOneByUserUuidAndTokenableId($userUuid, $tokenableId): ?UserAccessToken
     {
-        return UserAccessToken::where('user_id', $userId)
+        return UserAccessToken::where('user_uuid', $userUuid)
             ->where('tokenable_id', $tokenableId)
             ->first();
     }
 
     public function updateOrCreate(
-        $userId,
+        $userUuid,
         $tokenableId,
         $tokenableType,
         $name,
@@ -25,11 +25,11 @@ class UserAccessTokenRepository
     ) {
         UserAccessToken::updateOrCreate(
             [
-                'user_id' => $userId,
+                'user_uuid' => $userUuid,
                 'tokenable_id' => $tokenableId
             ],
             [
-                'user_id' => $userId,
+                'user_uuid' => $userUuid,
                 'tokenable_type' => $tokenableType,
                 'tokenable_id' => $tokenableId,
                 'name' => $name,

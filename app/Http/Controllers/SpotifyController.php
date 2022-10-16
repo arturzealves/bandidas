@@ -106,7 +106,7 @@ class SpotifyController extends Controller
     {
         UserExternalAccount::firstOrCreate([
             'external_id' => $spotifyUser->id,
-            'user_id' => $user->id,
+            'user_uuid' => $user->uuid,
             'provider_name' => UserExternalAccount::PROVIDER_SPOTIFY,
         ]);
     }
@@ -117,7 +117,7 @@ class SpotifyController extends Controller
         ContractsUser $spotifyUser
     ) {
         $userAccessTokenRepository->updateOrCreate(
-            $user->id,
+            $user->uuid,
             UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN,
             UserAccessToken::TOKENABLE_TYPE_SPOTIFY_ACCESS_TOKEN,
             UserAccessToken::NAME_SPOTIFY_ACCESS_TOKEN,

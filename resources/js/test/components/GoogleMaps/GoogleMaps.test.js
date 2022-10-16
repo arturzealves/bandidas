@@ -125,7 +125,7 @@ describe('GoogleMaps.js features', () => {
         sideDrawer.setAttribute('id', 'sideDrawer');
 
         idInput = document.createElement('input');
-        idInput.setAttribute('id', 'circle_id');
+        idInput.setAttribute('id', 'circle_uuid');
 
         latitudeInput = document.createElement('input');
         latitudeInput.setAttribute('id', 'latitude');
@@ -229,7 +229,7 @@ describe('GoogleMaps.js features', () => {
         };
 
         googleMaps.circles = [{
-            id: 1,
+            uuid: 1,
             index: 0,
             setOptions: jest.fn()
         }]
@@ -246,25 +246,25 @@ describe('GoogleMaps.js features', () => {
     });
     
     it('should execute after a circle is mounted', () => {
-        let id = 2;
-        googleMaps.selectedCircle = { id: null };
+        let uuid = 2;
+        googleMaps.selectedCircle = { uuid: null };
 
-        googleMaps.circleMounted(id);
+        googleMaps.circleMounted(uuid);
         
         expect(document.getElementById('sideDrawer').classList.contains('active')).toBe(true);
-        expect(googleMaps.selectedCircle.id).toBe(id);
+        expect(googleMaps.selectedCircle.uuid).toBe(uuid);
     });
 
     it('should delete a circle', () => {
         let circle = { 
             index: 0, 
-            id: 3,
+            uuid: 3,
             setMap: jest.fn(),
         };
 
         googleMaps.circles = [
-            { index: 0, id: 3, setMap: jest.fn() },
-            { index: 1, id: 2, setMap: jest.fn() },
+            { index: 0, uuid: 3, setMap: jest.fn() },
+            { index: 1, uuid: 2, setMap: jest.fn() },
         ];
 
         expect(googleMaps.circles.length).toBe(2);
@@ -277,7 +277,7 @@ describe('GoogleMaps.js features', () => {
         expect(googleMaps.deselectCircle() === null).toBe(true);
         
         googleMaps.selectedCircle = {
-            id: 1,
+            uuid: 1,
             index: 0,
             setOptions: jest.fn()
         };
@@ -300,7 +300,7 @@ describe('GoogleMaps.js features', () => {
 
     it('should draw a circle', () => {
         let circle = {
-            id: 123,
+            uuid: 123,
             strokeColor: '#123456',
             strokeOpacity: 0.12,
             strokeWeight: 1,
@@ -316,7 +316,7 @@ describe('GoogleMaps.js features', () => {
 
         expect(googleMapsMock.Circle).toHaveBeenCalledTimes(1);
         expect(result).toBeInstanceOf(googleMapsMock.Circle);
-        expect(result.opts.id).toBe(circle.id);
+        expect(result.opts.uuid).toBe(circle.uuid);
         expect(result.opts.index).toBe(index);
         expect(result.opts.strokeColor).toBe(circle.strokeColor);
         expect(result.opts.strokeOpacity).toBe(circle.strokeOpacity);
@@ -332,7 +332,7 @@ describe('GoogleMaps.js features', () => {
         let existingCirclesCount = googleMaps.circles.length;
 
         let circle = {
-            id: 123,
+            uuid: 123,
             strokeColor: '#123456',
             strokeOpacity: 0.12,
             strokeWeight: 1,
@@ -355,7 +355,7 @@ describe('GoogleMaps.js features', () => {
 
     it('should draw a marker', () => {
         let marker = {
-            id: 234,
+            uuid: 234,
             latitude: 30,
             longitude: 12,
         };
@@ -366,7 +366,7 @@ describe('GoogleMaps.js features', () => {
 
         expect(googleMapsMock.Marker).toHaveBeenCalledTimes(1);
         expect(result).toBeInstanceOf(googleMapsMock.Marker);
-        expect(result.opts.id).toBe(marker.id);
+        expect(result.opts.uuid).toBe(marker.uuid);
         expect(result.opts.index).toBe(index);
         expect(result.opts.position.lat).toBe(marker.latitude);
         expect(result.opts.position.lng).toBe(marker.longitude);
@@ -376,7 +376,7 @@ describe('GoogleMaps.js features', () => {
     it('should draw markers', () => {
         let existingMarkersCount = googleMaps.markers.length;
         let marker = {
-            id: 123,
+            uuid: 123,
             latitude: 90,
             longitude: 82,
             radius: 1234
@@ -394,7 +394,7 @@ describe('GoogleMaps.js features', () => {
     
     it('should click on the map', () => {
         googleMaps.selectedCircle = {
-            id: 1,
+            uuid: 1,
             index: 0,
             setOptions: jest.fn()
         };
@@ -485,7 +485,7 @@ describe('GoogleMaps.js features', () => {
             radius: 452,
         };
 
-        let idInput = document.getElementById('circle_id');
+        let idInput = document.getElementById('circle_uuid');
         idInput.value = existingId;
 
         googleMaps.updateCircle(circle);
@@ -565,12 +565,12 @@ describe('GoogleMaps.js features', () => {
         expect(longitudeInput.value).toBe(String(longitude));
     });
     
-    it('should set the circle id', () => {
-        let id = 912;
-        let circle = {id: 0};
+    it('should set the circle uuid', () => {
+        let uuid = 912;
+        let circle = {uuid: 0};
 
-        googleMaps.setCircleId(circle, id);
-        expect(circle.id).toBe(id);
+        googleMaps.setCircleUuid(circle, uuid);
+        expect(circle.uuid).toBe(uuid);
     });
 
     it('should set drawing modes', () => {
@@ -592,7 +592,7 @@ describe('GoogleMaps.js features', () => {
     });
 
     it('should set the user', () => {
-        let user = { id: 1 };
+        let user = { uuid: 1 };
         let result = googleMaps.setUser(user);
         
         expect(typeof result).toBe('object');
@@ -635,7 +635,7 @@ describe('GoogleMaps.js features', () => {
         googleMaps.selectedCircle = null;
         googleMaps.circles = [
             {
-                id: 2, 
+                uuid: 2, 
                 index: 2,
                 setOptions: jest.fn()
             }
@@ -644,7 +644,7 @@ describe('GoogleMaps.js features', () => {
 
         googleMaps.selectCircleAtIndex(0);
         expect(googleMaps.selectedIndex === 0).toBe(true);
-        expect(googleMaps.selectedCircle).toMatchObject({id: 2, index: 2 });
+        expect(googleMaps.selectedCircle).toMatchObject({uuid: 2, index: 2 });
     });
 
     it('should unfocus', () => {

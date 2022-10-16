@@ -77,16 +77,16 @@ export default class GoogleMaps {
         this.bindEventListeners(circle);
         this.selectCircleAtIndex(circle.index);
 
-        Livewire.emit('mount', circle.id);
+        Livewire.emit('mount', circle.uuid);
 
-        window.addEventListener('submitted', event => this.setCircleId(circle, event.detail.id));
+        window.addEventListener('submitted', event => this.setCircleUuid(circle, event.detail.uuid));
 
         //   this.circleOptions.fillColor = "#FFFFFF";
         //   console.log('nice', this, element);
         // });
 
         // google.maps.event.addListener(circle, 'click', function(element) {
-        //   element.id = circle.id;
+        //   element.uuid = circle.uuid;
         //   this.selectCircleAtIndex(this.circles.length - 1);
         // });
     }
@@ -94,7 +94,7 @@ export default class GoogleMaps {
     deleteCircle(circle) {
         this.circles[circle.index].setMap(null);
 
-        Livewire.emit('destroy', circle.id);
+        Livewire.emit('destroy', circle.uuid);
     }
 
     deselectCircle() {
@@ -112,7 +112,7 @@ export default class GoogleMaps {
         let scope = this;
 
         let mapCircle = new google.maps.Circle({
-            id: circle.id,
+            uuid: circle.uuid,
             index: index,
             strokeColor: circle.strokeColor ?? '#FF0000',
             strokeOpacity: circle.strokeOpacity ?? 0.8,
@@ -145,7 +145,7 @@ export default class GoogleMaps {
 
     drawMarker(marker, index, icon) {
         let mapMarker = new google.maps.Marker({
-            id: marker.id,
+            uuid: marker.uuid,
             index: index,
             map: this.map,
             position: {
@@ -210,9 +210,9 @@ export default class GoogleMaps {
         this.saveUserLocation(pos.lat, pos.lng);
     }
 
-    circleMounted(circleId) {
+    circleMounted(circleUuid) {
         document.getElementById('sideDrawer').classList.add('active');
-        this.selectedCircle.id = circleId;
+        this.selectedCircle.uuid = circleUuid;
     }
 
     clickOnMap() {
@@ -284,13 +284,13 @@ export default class GoogleMaps {
         document.getElementById('radius').value = circle.radius;
         document.getElementById('radius').dispatchEvent(new Event('change'));
 
-        if (!circle.id && document.getElementById('circle_id').value !== '') {
-            circle.id = document.getElementById('circle_id').value;
+        if (!circle.uuid && document.getElementById('circle_uuid').value !== '') {
+            circle.uuid = document.getElementById('circle_uuid').value;
         }
 
-        document.getElementById('circle_id').value = circle.id;
+        document.getElementById('circle_uuid').value = circle.uuid;
         document
-            .getElementById('circle_id')
+            .getElementById('circle_uuid')
             .dispatchEvent(new Event('change'));
 
         // trigger the form update
@@ -346,8 +346,8 @@ export default class GoogleMaps {
     //     return this;
     // }
 
-    setCircleId(circle, id) {
-        circle.id = id;
+    setCircleUuid(circle, uuid) {
+        circle.uuid = uuid;
     }
 
     setDrawingModes(modes) {
@@ -420,9 +420,9 @@ export default class GoogleMaps {
         // https://developers.google.com/maps/documentation/javascript/reference/polygon?authuser=1#Circle
 
         // Fill inputs
-        Livewire.emit('mount', this.selectedCircle.id);
+        Livewire.emit('mount', this.selectedCircle.uuid);
 
-        window.addEventListener('mounted', event => this.circleMounted(event.detail.id));
+        window.addEventListener('mounted', event => this.circleMounted(event.detail.uuid));
     }
 
     unfocus(circle) {

@@ -23,7 +23,7 @@ class UserAccessTokenFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory(),
+            'user_uuid' => User::factory(),
             'tokenable_type' => UserAccessToken::TOKENABLE_TYPE_SPOTIFY_ACCESS_TOKEN,
             'tokenable_id' => UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN,
             'name' => UserAccessToken::NAME_SPOTIFY_ACCESS_TOKEN,

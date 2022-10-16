@@ -11,8 +11,10 @@ class MapCircle extends Model
     use HasFactory;
     use HasUuid;
 
+    protected $primaryKey = 'uuid';
+
     protected $fillable = [
-        'user_id',
+        'user_uuid',
         'name',
         'latitude',
         'longitude',
@@ -32,11 +34,13 @@ class MapCircle extends Model
 
     public function promoterMarkers()
     {
-        return $this->belongsToMany(MapMarker::class)->withTimestamps();
+        return $this->belongsToMany(MapMarker::class)
+            ->using(MapCircleMapMarker::class)
+            ->withTimestamps();
     }
 
     public function user()
     {
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $this->hasOne(User::class, 'uuid', 'user_uuid');
     }
 }

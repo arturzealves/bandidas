@@ -16,14 +16,14 @@ return new class extends Migration
     {
         if (!Schema::hasTable(DatabaseConstants::TABLE_MAP_MARKERS)) {
             Schema::create(DatabaseConstants::TABLE_MAP_MARKERS, function (Blueprint $table) {
-                $table->uuid('id')->primary();
-                $table->uuid('user_id');
+                $table->uuid()->primary();
+                $table->uuid('user_uuid');
                 $table->decimal('latitude', 8, 6);
                 $table->decimal('longitude', 9, 6);
 
                 $table->timestamps();
 
-                $table->foreign('user_id')->references('id')->on(DatabaseConstants::TABLE_USERS)->onDelete('cascade');
+                $table->foreign('user_uuid')->references('uuid')->on(DatabaseConstants::TABLE_USERS)->onDelete('cascade');
             });
         }
     }
