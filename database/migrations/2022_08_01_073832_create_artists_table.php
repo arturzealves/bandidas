@@ -16,7 +16,7 @@ return new class extends Migration
     {
         if (!Schema::hasTable(DatabaseConstants::TABLE_ARTISTS)) {
             Schema::create(DatabaseConstants::TABLE_ARTISTS, function (Blueprint $table) {
-                $table->bigIncrements('id');
+                $table->uuid()->primary();
                 $table->string('name');
                 $table->timestamps();
             });
@@ -24,8 +24,8 @@ return new class extends Migration
 
         if (!Schema::hasTable(DatabaseConstants::TABLE_SPOTIFY_ARTISTS)) {
             Schema::create(DatabaseConstants::TABLE_SPOTIFY_ARTISTS, function (Blueprint $table) {
-                $table->bigIncrements('id');
-                $table->unsignedBigInteger('artist_id');
+                $table->uuid()->primary();
+                $table->uuid('artist_uuid');
                 $table->string('spotify_id');
                 $table->string('name');
                 $table->string('uri');
@@ -36,37 +36,37 @@ return new class extends Migration
                 $table->json('external_urls');
                 $table->timestamps();
 
-                $table->foreign('artist_id')->references('id')->on(DatabaseConstants::TABLE_ARTISTS)->onDelete('cascade');
+                $table->foreign('artist_uuid')->references('uuid')->on(DatabaseConstants::TABLE_ARTISTS)->onDelete('cascade');
             });
         }
 
         if (!Schema::hasTable(DatabaseConstants::TABLE_GENRES)) {
             Schema::create(DatabaseConstants::TABLE_GENRES, function (Blueprint $table) {
-                $table->bigIncrements('id');
+                $table->uuid()->primary();
                 $table->string('name');
             });
         }
 
         if (!Schema::hasTable(DatabaseConstants::TABLE_ARTIST_GENRE)) {
             Schema::create(DatabaseConstants::TABLE_ARTIST_GENRE, function (Blueprint $table) {
-                $table->bigIncrements('id');
-                $table->unsignedBigInteger('artist_id');
-                $table->unsignedBigInteger('genre_id');
+                $table->uuid()->primary();
+                $table->uuid('artist_uuid');
+                $table->uuid('genre_uuid');
 
-                $table->foreign('artist_id')->references('id')->on(DatabaseConstants::TABLE_ARTISTS)->onDelete('cascade');
-                $table->foreign('genre_id')->references('id')->on(DatabaseConstants::TABLE_GENRES)->onDelete('cascade');
+                $table->foreign('artist_uuid')->references('uuid')->on(DatabaseConstants::TABLE_ARTISTS)->onDelete('cascade');
+                $table->foreign('genre_uuid')->references('uuid')->on(DatabaseConstants::TABLE_GENRES)->onDelete('cascade');
             });
         }
 
         if (!Schema::hasTable(DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS)) {
             Schema::create(DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS, function (Blueprint $table) {
-                $table->bigIncrements('id');
-                $table->uuid('user_id');
-                $table->unsignedBigInteger('artist_id');
+                $table->uuid()->primary();
+                $table->uuid('user_uuid');
+                $table->uuid('artist_uuid');
                 $table->timestamps();
 
-                $table->foreign('user_id')->references('id')->on(DatabaseConstants::TABLE_USERS)->onDelete('cascade');
-                $table->foreign('artist_id')->references('id')->on(DatabaseConstants::TABLE_ARTISTS)->onDelete('cascade');
+                $table->foreign('user_uuid')->references('uuid')->on(DatabaseConstants::TABLE_USERS)->onDelete('cascade');
+                $table->foreign('artist_uuid')->references('uuid')->on(DatabaseConstants::TABLE_ARTISTS)->onDelete('cascade');
             });
         }
     }

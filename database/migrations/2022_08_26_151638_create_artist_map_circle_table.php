@@ -16,19 +16,19 @@ return new class extends Migration
     {
         if (!Schema::hasTable(DatabaseConstants::TABLE_ARTIST_MAP_CIRCLE)) {
             Schema::create(DatabaseConstants::TABLE_ARTIST_MAP_CIRCLE, function (Blueprint $table) {
-                $table->id();
-                $table->uuid('map_circle_id');
-                $table->unsignedBigInteger('artist_id');
+                $table->uuid();
+                $table->uuid('map_circle_uuid');
+                $table->uuid('artist_uuid');
                 $table->decimal('budget', 7, 2)->nullable();
                 $table->timestamps();
 
-                $table->foreign('map_circle_id')
-                    ->references('id')
+                $table->foreign('map_circle_uuid')
+                    ->references('uuid')
                     ->on(DatabaseConstants::TABLE_MAP_CIRCLES)
                     ->onDelete('cascade');
 
-                $table->foreign('artist_id')
-                    ->references('id')
+                $table->foreign('artist_uuid')
+                    ->references('uuid')
                     ->on(DatabaseConstants::TABLE_ARTISTS)
                     ->onDelete('cascade');
             });

@@ -26,7 +26,7 @@ class ArtistsTest extends TestCase
 
         $artist = Artist::factory()->create();
     
-        $response = $this->get(sprintf('/artists/%s', $artist->id));
+        $response = $this->get(sprintf('/artists/%s', $artist->uuid));
 
         $response->assertStatus(200);
         $response->assertSee($artist->name);

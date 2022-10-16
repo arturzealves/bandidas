@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Gamify\Gamify;
+use App\Models\Traits\HasUuid;
+use App\Models\Traits\MustVerifyEmailWithUuid;
 use Database\Mappers\DatabaseConstants;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,8 +13,6 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use App\Gamify\Gamify;
-use App\Models\Traits\HasUuid;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -22,10 +23,13 @@ class User extends Authenticatable implements MustVerifyEmail
     use TwoFactorAuthenticatable;
     use Gamify;
     use HasUuid;
+    use MustVerifyEmailWithUuid;
 
     const TYPE_USER = 'user';
     const TYPE_PROMOTER = 'promoter';
     const TYPE_ARTIST = 'artist';
+
+    protected $primaryKey = 'uuid';
 
     /**
      * The attributes that are mass assignable.
@@ -72,7 +76,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function userAccessTokens()
     {
-        return $this->hasMany(UserAccessToken::class, 'user_id', 'id');
+        return $this->hasMany(UserAccessToken::class, 'user_uuid', 'uuid');
     }
     
     public function location()
@@ -82,7 +86,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function userExternalAccounts()
     {
-        return $this->hasMany(UserExternalAccount::class, 'user_id', 'id');
+        return $this->hasMany(UserExternalAccount::class, 'user_uuid', 'uuid');
     }
 
     public function mapCircles()
@@ -92,7 +96,9 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function followedArtists()
     {
-        return $this->belongsToMany(Artist::class, DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS)->withTimestamps();
+        return $this->belongsToMany(Artist::class, DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS)
+            ->using(UserFollowsArtist::class)
+            ->withTimestamps();
     }
 
     public function eventsPromoted()

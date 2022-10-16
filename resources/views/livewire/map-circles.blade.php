@@ -23,7 +23,7 @@
                 </dd>
                 <dt>Circle ID</dt>
                 <dd>
-                    <input type="text" wire:model.lazy="circle_id" id="circle_id" class="w-full disabled:opacity-50" disabled>
+                    <input type="text" wire:model.lazy="circle_uuid" id="circle_uuid" class="w-full disabled:opacity-50" disabled>
                 </dd>
                 <dt>Latitude</dt>
                 <dd>
@@ -46,8 +46,8 @@
             <div>
                 <livewire:artist-map-circles-select 
                     wire:model.lazy="artists"
-                    circle_id="{{ $circle_id }}"
-                    key="{{ $circle_id }}" 
+                    circle_uuid="{{ $circle_uuid }}"
+                    key="{{ $circle_uuid }}" 
                     budget="{{ $selectedCircleBudget }}"
                 />
             </div>

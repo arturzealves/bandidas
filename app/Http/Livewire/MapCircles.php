@@ -12,7 +12,7 @@ use Livewire\Component;
 class MapCircles extends Component
 {
     public $name = 'default name';
-    public $circle_id;
+    public $circle_uuid;
     public $latitude;
     public $longitude;
     public $radius;
@@ -33,14 +33,14 @@ class MapCircles extends Component
         'mount' => 'mount',
     ];
 
-    public function mount($id = null) {
-        if (null === $id) {
+    public function mount($uuid = null) {
+        if (null === $uuid) {
             return;
         }
 
-        $circle = MapCircle::find($id);
+        $circle = MapCircle::find($uuid);
         $this->name = $circle->name;
-        $this->circle_id = $circle->id;
+        $this->circle_uuid = $circle->uuid;
         $this->latitude = $circle->latitude;
         $this->longitude = $circle->longitude;
         $this->radius = $circle->radius;
@@ -48,12 +48,12 @@ class MapCircles extends Component
         // $this->isCircleSelected = true;
 
         $this->selectedCircleBudget = optional($circle->artists()->first())->budget;
-        $this->dispatchBrowserEvent('mounted', ['id' => $this->circle_id]);
+        $this->dispatchBrowserEvent('mounted', ['uuid' => $this->circle_uuid]);
     }
 
-    public function destroy($id)
+    public function destroy($uuid)
     {
-        $object = MapCircle::find($id);
+        $object = MapCircle::find($uuid);
         if (!empty($object)) {
             $object->delete();
         }
@@ -62,7 +62,7 @@ class MapCircles extends Component
     public function render()
     {
         $user = Auth::user();
-        $circleLocations = MapCircle::where('user_id', $user->id)->get();
+        $circleLocations = MapCircle::where('user_uuid', $user->uuid)->get();
 
         $locationsInsideCircles = collect();
         foreach ($circleLocations as $circle) {
@@ -91,27 +91,27 @@ class MapCircles extends Component
 
         $circle = MapCircle::create([
             'name' => $this->name,
-            'user_id' => Auth::user()->id,
+            'user_uuid' => Auth::user()->uuid,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
             'radius' => $this->radius,
         ]);
 
-        $this->circle_id = $circle->id;
+        $this->circle_uuid = $circle->uuid;
 
         MapCircleCreated::dispatch($circle);
-        $this->dispatchBrowserEvent('submitted', ['id' => $this->circle_id]);
+        $this->dispatchBrowserEvent('submitted', ['uuid' => $this->circle_uuid]);
     }
 
     public function update()
     {
         $circle = MapCircle::updateOrCreate(
             [
-                'id' => $this->circle_id,
+                'uuid' => $this->circle_uuid,
             ],
             [
                 'name' => $this->name,
-                'user_id' => Auth::user()->id,
+                'user_uuid' => Auth::user()->uuid,
                 'latitude' => $this->latitude,
                 'longitude' => $this->longitude,
                 'radius' => $this->radius,

@@ -87,17 +87,17 @@ return new class extends Migration
 
         if (!Schema::hasTable(DatabaseConstants::TABLE_EVENT_ARTISTS)) {
             Schema::create(DatabaseConstants::TABLE_EVENT_ARTISTS, function (Blueprint $table) {
-                $table->primary(['event_uuid', 'artist_id']);
+                $table->primary(['event_uuid', 'artist_uuid']);
                 $table->uuid('event_uuid');
-                $table->unsignedBigInteger('artist_id');
+                $table->uuid('artist_uuid');
 
                 $table->foreign('event_uuid')
                     ->references('uuid')
                     ->on(DatabaseConstants::TABLE_EVENTS)
                     ->onDelete('cascade');
 
-                $table->foreign('artist_id')
-                    ->references('id')
+                $table->foreign('artist_uuid')
+                    ->references('uuid')
                     ->on(DatabaseConstants::TABLE_ARTISTS)
                     ->onDelete('cascade');
             });
@@ -115,7 +115,7 @@ return new class extends Migration
                     ->onDelete('cascade');
 
                 $table->foreign('promoter_uuid')
-                    ->references('id')
+                    ->references('uuid')
                     ->on(DatabaseConstants::TABLE_USERS)
                     ->onDelete('cascade');
             });

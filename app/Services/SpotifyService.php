@@ -80,8 +80,8 @@ class SpotifyService
      */
     public function getUserFollowedArtists(User $user): array
     {
-        $userAccessToken = $this->userAccessTokenRepository->getOneByUserIdAndTokenableId(
-            $user->id,
+        $userAccessToken = $this->userAccessTokenRepository->getOneByUserUuidAndTokenableId(
+            $user->uuid,
             UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN
         );
 
@@ -100,7 +100,7 @@ class SpotifyService
 
             $key = sprintf(
                 'spotify_user_%s_following_%s',
-                $user->id,
+                $user->uuid,
                 hash('sha256', json_encode($options))
             );
 

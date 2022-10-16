@@ -8,6 +8,6 @@ class EventArtist extends Pivot
 {
     protected $fillable = [
         'event_uuid',
-        'artist_id',
+        'artist_uuid',
     ];
 }

@@ -14,15 +14,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create(DatabaseConstants::TABLE_FAILED_JOBS, function (Blueprint $table) {
-            $table->id();
-            $table->string('uuid')->unique();
-            $table->text('connection');
-            $table->text('queue');
-            $table->longText('payload');
-            $table->longText('exception');
-            $table->timestamp('failed_at')->useCurrent();
-        });
+        if (!Schema::hasTable(DatabaseConstants::TABLE_FAILED_JOBS)) {
+            Schema::create(DatabaseConstants::TABLE_FAILED_JOBS, function (Blueprint $table) {
+                $table->id();
+                $table->string('uuid')->unique();
+                $table->text('connection');
+                $table->text('queue');
+                $table->longText('payload');
+                $table->longText('exception');
+                $table->timestamp('failed_at')->useCurrent();
+            });
+        }
     }
 
     /**

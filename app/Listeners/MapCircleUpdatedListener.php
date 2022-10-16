@@ -37,7 +37,7 @@ class MapCircleUpdatedListener
             $distance = $this->locationService->getDistanceBetweenLocationAndCircle($marker, $event->circle);
 
             if ($distance < $event->circle->radius) {
-                $markersToSync[$marker->id] = ['distance' => $distance];
+                $markersToSync[$marker->uuid] = ['distance' => $distance];
             }
         }
 

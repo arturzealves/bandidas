@@ -14,11 +14,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create(DatabaseConstants::TABLE_PASSWORD_RESETS, function (Blueprint $table) {
-            $table->string('email')->index();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
-        });
+        if (!Schema::hasTable(DatabaseConstants::TABLE_PASSWORD_RESETS)) {
+            Schema::create(DatabaseConstants::TABLE_PASSWORD_RESETS, function (Blueprint $table) {
+                $table->string('email')->index();
+                $table->string('token');
+                $table->timestamp('created_at')->nullable();
+            });
+        }
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasUuid;
 use Database\Mappers\DatabaseConstants;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 class Artist extends Model
 {
     use HasFactory;
+    use HasUuid;
+
+    protected $primaryKey = 'uuid';
 
     protected $fillable = [
         'name',
@@ -21,17 +25,21 @@ class Artist extends Model
 
     public function genres()
     {
-        return $this->belongsToMany(Genre::class);
+        return $this->belongsToMany(Genre::class)->using(ArtistGenre::class);
     }
 
     public function mapCircles()
     {
-        return $this->belongsToMany(MapCircle::class)->withTimestamps();
+        return $this->belongsToMany(MapCircle::class)
+            ->using(ArtistMapCircle::class)
+            ->withTimestamps();
     }
 
     public function followers()
     {
-        return $this->belongsToMany(User::class, DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS)->withTimestamps();
+        return $this->belongsToMany(User::class, DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS)
+            ->using(UserFollowsArtist::class)
+            ->withTimestamps();
     }
 
     public function events()
