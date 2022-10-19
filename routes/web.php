@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArtistController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SpotifyController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Controllers\VerifyEmailController;
@@ -22,6 +23,7 @@ use Laravel\Fortify\Http\Controllers\VerifyEmailController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/test', [TestController::class, 'test']);
 
 // Routes for authenticated and verified users
 Route::middleware([
