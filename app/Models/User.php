@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Gamify\Gamify;
 use App\Models\Traits\HasUuid;
-use App\Models\Traits\MustVerifyEmailWithUuid;
 use Database\Mappers\DatabaseConstants;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,7 +22,6 @@ class User extends Authenticatable implements MustVerifyEmail
     use TwoFactorAuthenticatable;
     use Gamify;
     use HasUuid;
-    use MustVerifyEmailWithUuid;
 
     const TYPE_USER = 'user';
     const TYPE_PROMOTER = 'promoter';
