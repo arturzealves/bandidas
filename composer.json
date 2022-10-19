@@ -17,7 +17,8 @@
         "livewire/livewire": "^2.5",
         "pusher/pusher-php-server": "^7.0",
         "qcod/laravel-gamify": "^1.0",
-        "socialiteproviders/spotify": "^4.1"
+        "socialiteproviders/spotify": "^4.1",
+        "weidner/goutte": "^2.2"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",
