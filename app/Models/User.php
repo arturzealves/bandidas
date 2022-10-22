@@ -27,8 +27,6 @@ class User extends Authenticatable implements MustVerifyEmail
     const TYPE_PROMOTER = 'promoter';
     const TYPE_ARTIST = 'artist';
 
-    protected $primaryKey = 'uuid';
-
     /**
      * The attributes that are mass assignable.
      *
@@ -74,7 +72,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function userAccessTokens()
     {
-        return $this->hasMany(UserAccessToken::class, 'user_uuid', 'uuid');
+        return $this->hasMany(UserAccessToken::class, 'user_id', 'id');
     }
     
     public function location()
@@ -84,7 +82,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function userExternalAccounts()
     {
-        return $this->hasMany(UserExternalAccount::class, 'user_uuid', 'uuid');
+        return $this->hasMany(UserExternalAccount::class, 'user_id', 'id');
     }
 
     public function mapCircles()

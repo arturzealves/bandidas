@@ -48,13 +48,3 @@ Route::middleware([
 Route::get('/auth/spotify/redirect/{action}', [SpotifyController::class, 'redirect'])->name('spotify.redirect');
 Route::get('/auth/spotify/callback', [SpotifyController::class, 'callback'])->name('spotify.callback');
 
-Route::group(['middleware' => config('fortify.middleware', ['web'])], function () {
-    $verificationLimiter = config('fortify.limiters.verification', '6,1');
-    
-    // Email Verification...
-    if (Features::enabled(Features::emailVerification())) {
-        Route::get('/email/verify/{uuid}/{hash}', [VerifyEmailController::class, '__invoke'])
-            ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard'), 'signed', 'throttle:'.$verificationLimiter])
-            ->name('verification.verify');
-    }
-});

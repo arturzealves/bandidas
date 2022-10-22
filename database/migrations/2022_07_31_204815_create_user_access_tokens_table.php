@@ -17,7 +17,7 @@ return new class extends Migration
         if (!Schema::hasTable(DatabaseConstants::TABLE_USER_ACCESS_TOKENS)) {
             Schema::create(DatabaseConstants::TABLE_USER_ACCESS_TOKENS, function (Blueprint $table) {
                 $table->uuid();
-                $table->uuid('user_uuid');
+                $table->uuid('user_id');
                 $table->morphs('tokenable');
                 $table->string('name');
                 $table->string('token', 512)->unique();
@@ -27,7 +27,7 @@ return new class extends Migration
                 $table->timestamp('last_used_at')->nullable();
                 $table->timestamps();
 
-                $table->foreign('user_uuid')->references('uuid')->on(DatabaseConstants::TABLE_USERS)->onDelete('cascade');
+                $table->foreign('user_id')->references('id')->on(DatabaseConstants::TABLE_USERS)->onDelete('cascade');
             });
         }
     }

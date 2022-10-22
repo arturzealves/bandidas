@@ -18,7 +18,7 @@ class MapCircleFactory extends Factory
     public function definition()
     {
         return [
-            'user_uuid' => User::factory(),
+            'user_id' => User::factory(),
             'name' => fake()->word(),
             'latitude' => fake()->randomFloat(6, -90, 90),
             'longitude' => fake()->randomFloat(6, -180, 180),

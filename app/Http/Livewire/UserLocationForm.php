@@ -25,7 +25,7 @@ class UserLocationForm extends Component
         $this->validate();
 
         UserLocation::updateOrCreate([
-            'user_uuid' => Auth::user()->uuid,
+            'user_id' => Auth::user()->id,
         ],
         [
             'latitude' => $this->latitude,
