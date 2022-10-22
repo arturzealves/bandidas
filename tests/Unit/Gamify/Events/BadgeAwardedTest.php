@@ -23,6 +23,7 @@ class BadgeAwardedTest extends TestCase
 
         $this->badgeId = 123;
         $this->user = User::factory()->create();
+        // dd($this->user);
         $this->event = new BadgeAwarded($this->user, $this->badgeId);
     }
     

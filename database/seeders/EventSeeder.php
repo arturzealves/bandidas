@@ -28,7 +28,7 @@ class EventSeeder extends Seeder
             MapMarker::factory()->create([
                 'latitude' => $event->latitude,
                 'longitude' => $event->longitude,
-                'user_uuid' => $event->promoters->first()->uuid,
+                'user_id' => $event->promoters->first()->id,
             ]);
         }
     }

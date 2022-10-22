@@ -14,7 +14,7 @@ class MapCircle extends Model
     protected $primaryKey = 'uuid';
 
     protected $fillable = [
-        'user_uuid',
+        'user_id',
         'name',
         'latitude',
         'longitude',
@@ -41,6 +41,6 @@ class MapCircle extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'uuid', 'user_uuid');
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

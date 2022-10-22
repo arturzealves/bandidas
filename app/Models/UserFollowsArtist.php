@@ -12,7 +12,7 @@ class UserFollowsArtist extends Pivot
     protected $primaryKey = 'uuid';
 
     protected $fillable = [
-        'user_uuid',
+        'user_id',
         'artist_uuid',
     ];
 }

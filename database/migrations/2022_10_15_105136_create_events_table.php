@@ -115,7 +115,7 @@ return new class extends Migration
                     ->onDelete('cascade');
 
                 $table->foreign('promoter_uuid')
-                    ->references('uuid')
+                    ->references('id')
                     ->on(DatabaseConstants::TABLE_USERS)
                     ->onDelete('cascade');
             });

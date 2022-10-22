@@ -21,7 +21,7 @@ class MapMarkers extends Component
     public function render()
     {
         $user = Auth::user();
-        $locations = MapMarker::where('user_uuid', $user->uuid)->get();
+        $locations = MapMarker::where('user_id', $user->id)->get();
 
         return view('livewire.map-markers')
             ->with([
@@ -39,7 +39,7 @@ class MapMarkers extends Component
         $user = Auth::user();
 
         $marker = MapMarker::create([
-            'user_uuid' => $user->uuid,
+            'user_id' => $user->id,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
         ]);

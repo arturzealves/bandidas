@@ -25,7 +25,7 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'uuid' => $this->faker->uuid(),
+            'id' => $this->faker->uuid(),
             'name' => $this->faker->name(),
             'username' => $this->faker->bothify('??????'),
             'email' => $this->faker->unique()->safeEmail(),
@@ -63,7 +63,7 @@ class UserFactory extends Factory
         return $this->has(
             Team::factory()
                 ->state(function (array $attributes, User $user) {
-                    return ['name' => $user->name.'\'s Team', 'user_uuid' => $user->uuid, 'personal_team' => true];
+                    return ['name' => $user->name.'\'s Team', 'user_id' => $user->id, 'personal_team' => true];
                 }),
             'ownedTeams'
         );

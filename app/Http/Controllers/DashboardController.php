@@ -27,7 +27,7 @@ class DashboardController extends Controller
             ];
         }
 
-        $cookie = Cookie::make('userUuid', $user->uuid, 10, null, null, false, false);
+        $cookie = Cookie::make('userId', $user->id, 10, null, null, false, false);
         Cookie::queue($cookie);
 
         return view(sprintf('dashboard/%s', $user->user_type))

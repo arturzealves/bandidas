@@ -16,13 +16,13 @@ class UserExternalAccount extends Model
     protected $primaryKey = 'uuid';
 
     protected $fillable = [
-        'user_uuid',
+        'user_id',
         'external_id',
         'provider_name',
     ];
 
     public function user()
     {
-        return $this->hasOne(User::class, 'uuid', 'user_uuid');
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

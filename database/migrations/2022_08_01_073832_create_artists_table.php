@@ -61,11 +61,11 @@ return new class extends Migration
         if (!Schema::hasTable(DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS)) {
             Schema::create(DatabaseConstants::TABLE_USER_FOLLOWS_ARTISTS, function (Blueprint $table) {
                 $table->uuid()->primary();
-                $table->uuid('user_uuid');
+                $table->uuid('user_id');
                 $table->uuid('artist_uuid');
                 $table->timestamps();
 
-                $table->foreign('user_uuid')->references('uuid')->on(DatabaseConstants::TABLE_USERS)->onDelete('cascade');
+                $table->foreign('user_id')->references('id')->on(DatabaseConstants::TABLE_USERS)->onDelete('cascade');
                 $table->foreign('artist_uuid')->references('uuid')->on(DatabaseConstants::TABLE_ARTISTS)->onDelete('cascade');
             });
         }
