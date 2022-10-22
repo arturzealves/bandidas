@@ -18,6 +18,8 @@
         "pusher/pusher-php-server": "^7.0",
         "qcod/laravel-gamify": "^1.0",
         "socialiteproviders/spotify": "^4.1",
+        "spatie/crawler": "^7.1",
+        "spekulatius/spatie-crawler-toolkit-for-laravel": "^0.5.0",
         "weidner/goutte": "^2.2"
     },
     "require-dev": {
