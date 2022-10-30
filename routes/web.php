@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArtistController;
+use App\Http\Controllers\HomepageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SpotifyController;
 use App\Http\Controllers\UserController;
@@ -19,9 +20,7 @@ use Laravel\Fortify\Http\Controllers\VerifyEmailController;
 */
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomepageController::class, 'index'])->name('homepage');
 
 // Routes for authenticated and verified users
 Route::middleware([

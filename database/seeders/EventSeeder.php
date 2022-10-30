@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Event;
 use App\Models\MapMarker;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -21,7 +22,7 @@ class EventSeeder extends Seeder
             ->hasSessions(2)
             ->hasPrices(2)
             ->hasArtists(2)
-            ->hasPromoters(1)
+            ->hasPromoters(1, ['user_type' => User::TYPE_PROMOTER])
             ->create();
         
         foreach ($events as $event) {
