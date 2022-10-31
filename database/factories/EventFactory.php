@@ -25,7 +25,11 @@ class EventFactory extends Factory
             // 'type' => fake()->randomElement([
             //     Event::TYPE_MUSIC,
             // ]),
-            'images' => json_encode([]),
+            'images' => json_encode([
+                'square64' => fake()->imageUrl(64, 64, 'artist', true),
+                'square128' => fake()->imageUrl(128, 128, 'artist', true),
+                'square256' => fake()->imageUrl(256, 256, 'artist', true),
+            ]),
             'description' => fake()->paragraph(),
             'latitude' => fake()->randomFloat(6, -90, 90),
             'longitude' => fake()->randomFloat(6, -180, 180),
