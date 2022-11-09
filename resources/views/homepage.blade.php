@@ -26,16 +26,18 @@
             <div class="mt-3 mb-10 bg-white dark:bg-gray-500 overflow-hidden shadow">
                 <div class="flex flex-row overflow-x-scroll">
                     @foreach ($events as $event)
-                    <div class="text-center m-5 w-256 flex-none">
-                        <img class="mx-auto" src="{{ $event->images['square256'] }}" />
-                        <p class="text-sm">{{ Carbon\Carbon::parse($event->start)->format('d-m-Y H:i') }}</p>
-                        <ul class="text-lg">
-                            @foreach ($event->artist_name as $artist)
-                            <li>{{ $artist }}</li>
-                            @endforeach
-                        </ul>
-                        <p class="text-sm">{{ $event->name }}</p>
-                    </div>
+                        <a class="text-center m-5 w-256 flex-none" href="{{ route('events.show', ['event' => $event]) }}">
+                            <div>
+                                <img class="mx-auto" src="{{ $event->images['square256'] }}" />
+                                <p class="text-sm">{{ Carbon\Carbon::parse($event->start)->format('d-m-Y H:i') }}</p>
+                                <ul class="text-lg">
+                                    @foreach ($event->artist_name as $artist)
+                                    <li>{{ $artist }}</li>
+                                    @endforeach
+                                </ul>
+                                <p class="text-sm">{{ $event->name }}</p>
+                            </div>
+                        </a>
                     @endforeach
                 </div>
             </div>

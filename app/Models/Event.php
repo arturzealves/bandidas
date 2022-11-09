@@ -28,7 +28,7 @@ class Event extends Model
 
     public function address()
     {
-        return $this->hasOne(Address::class);
+        return $this->hasOne(Address::class, 'uuid', 'address_uuid');
     }
 
     public function sessions()
@@ -48,6 +48,11 @@ class Event extends Model
 
     public function promoters()
     {
-        return $this->belongsToMany(User::class, DatabaseConstants::TABLE_EVENT_PROMOTERS, 'event_uuid', 'promoter_uuid');
+        return $this->belongsToMany(
+            User::class,
+            DatabaseConstants::TABLE_EVENT_PROMOTERS,
+            'event_uuid',
+            'promoter_uuid'
+        );
     }
 }
