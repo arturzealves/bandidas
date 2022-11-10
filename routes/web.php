@@ -23,6 +23,7 @@ use Laravel\Fortify\Http\Controllers\VerifyEmailController;
 
 Route::get('/', [HomepageController::class, 'index'])->name('homepage');
 Route::resource('events', EventController::class)->only(['show']);
+Route::resource('artists', ArtistController::class)->only(['show']);
 
 // Routes for authenticated and verified users
 Route::middleware([
@@ -31,7 +32,7 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@dashboard')->name('dashboard');
-    Route::resource('artists', ArtistController::class)->only(['index', 'show']);
+    Route::resource('artists', ArtistController::class)->only(['index']);
     Route::resource('users', UserController::class)->only(['show'])->scoped(['user' => 'username']);
 });
 
