@@ -26,7 +26,9 @@
             <div class="mt-3 mb-10 bg-white dark:bg-gray-500 overflow-hidden shadow">
                 <div class="flex flex-row overflow-x-scroll">
                     @foreach ($events as $event)
-                        <a class="text-center m-5 w-256 flex-none" href="{{ route('events.show', ['event' => $event]) }}">
+                        <a class="text-center m-5 w-256 flex-none"
+                            href="{{ route('events.show', ['event' => $event]) }}"
+                        >
                             <div>
                                 <img class="mx-auto" src="{{ $event->images['square256'] }}" />
                                 <p class="text-sm">{{ Carbon\Carbon::parse($event->start)->format('d-m-Y H:i') }}</p>
@@ -36,6 +38,26 @@
                                     @endforeach
                                 </ul>
                                 <p class="text-sm">{{ $event->name }}</p>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="flex items-top justify-center bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0">
+        <div class="max-w-screen-2xl mx-auto sm:px-6 lg:px-8">
+            <h1 class="text-xl mt-7">Featured Artists</h1>
+            <div class="mt-3 mb-10 bg-white dark:bg-gray-500 overflow-hidden shadow">
+                <div class="flex flex-row overflow-x-scroll">
+                    @foreach ($artists as $artist)
+                        <a class="text-center m-5 w-256 flex-none"
+                            href="{{ route('artists.show', ['artist' => $artist]) }}"
+                        >
+                            <div>
+                                <img class="mx-auto max-h-64" src="{{ $artist->mediumImage->url }}" />
+                                <p class="text-lg">{{ $artist->name }}</p>
                             </div>
                         </a>
                     @endforeach

@@ -116,7 +116,13 @@
                         <td>
                             <ul>
                                 @foreach ($event->promoters as $promoter)
-                                    <li>{{ $promoter->name }}</li>
+                                    <li>
+                                        <a class="text-blue-600"
+                                            href="{{ route('promoters.show', ['promoter' => $promoter]) }}"
+                                        >
+                                            {{ $promoter->name }}
+                                        </a>
+                                    </li>
                                 @endforeach
                             </ul>
                         </td>

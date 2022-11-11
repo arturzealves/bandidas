@@ -99,7 +99,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function eventsPromoted()
     {
-        return $this->belongsToMany(Event::class, DatabaseConstants::TABLE_EVENT_PROMOTERS);
+        return $this->belongsToMany(
+            Event::class,
+            DatabaseConstants::TABLE_EVENT_PROMOTERS,
+            'promoter_uuid',
+            'event_uuid'
+        );
     }
 
     public function isPromoter()
