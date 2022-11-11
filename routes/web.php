@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\PromoterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SpotifyController;
 use App\Http\Controllers\UserController;
@@ -24,6 +25,7 @@ use Laravel\Fortify\Http\Controllers\VerifyEmailController;
 Route::get('/', [HomepageController::class, 'index'])->name('homepage');
 Route::resource('events', EventController::class)->only(['show']);
 Route::resource('artists', ArtistController::class)->only(['show']);
+Route::resource('promoters', PromoterController::class)->only(['show']);
 
 // Routes for authenticated and verified users
 Route::middleware([
