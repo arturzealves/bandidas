@@ -53,7 +53,7 @@
                 <div class="flex flex-row overflow-x-scroll">
                     @foreach ($artists as $artist)
                         <a class="text-center m-5 w-256 flex-none"
-                            href="{{ route('artists.show', ['artist' => $artist]) }}"
+                            href="{{ route('artists.show', ['artist' => $artist->artist_uuid]) }}"
                         >
                             <div>
                                 <img class="mx-auto max-h-64" src="{{ $artist->mediumImage->url }}" />
