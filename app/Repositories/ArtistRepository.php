@@ -12,11 +12,11 @@ class ArtistRepository
         return Artist::join('spotify_artists', 'spotify_artists.artist_uuid', '=', 'artists.uuid')
             ->get()
             ->map(function ($artist) {
-                if (!$artist->images) {
+                $imagesArray = json_decode($artist->images);
+                if (empty($imagesArray)) {
                     return $artist;
                 }
 
-                $imagesArray = json_decode($artist->images);
                 $artist->largeImage = $imagesArray[0];
                 $artist->mediumImage = $imagesArray[1];
                 $artist->smallImage = $imagesArray[2];
@@ -33,11 +33,11 @@ class ArtistRepository
             ->inRandomOrder()
             ->get()
             ->map(function ($artist) {
-                if (!$artist->images) {
+                $imagesArray = json_decode($artist->images);
+                if (empty($imagesArray)) {
                     return $artist;
                 }
 
-                $imagesArray = json_decode($artist->images);
                 $artist->largeImage = $imagesArray[0];
                 $artist->mediumImage = $imagesArray[1];
                 $artist->smallImage = $imagesArray[2];

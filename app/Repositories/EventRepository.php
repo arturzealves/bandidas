@@ -24,7 +24,8 @@ class EventRepository
             ->where('event_sessions.start', '>=', Carbon::now())
             ->groupBy('events.uuid')
             ->orderBy(DB::raw('MIN(event_sessions.start)'))
-            ->paginate($total)
+            ->limit($total)
+            ->get()
             ->map(function ($event) {
                 $event->images = json_decode($event->images, true);
                 $event->artist_name = collect(json_decode($event->artist_name))->unique();
