@@ -71,11 +71,11 @@ class SpotifyController extends Controller
                 ImportSpotifyUserFollowedArtists::dispatch($service, $user);
                 return redirect()->to('/artists');
             }
-        } catch (\Exception $e) {
+        } catch (UserNotFoundException $e) {
             report($e);
             
             return redirect('/register')->withErrors(['msg' => $e->getMessage()]);
-        } catch (UserNotFoundException $e) {
+        } catch (\Exception $e) {
             report($e);
             
             return redirect('/register')->withErrors(['msg' => $e->getMessage()]);

@@ -34,8 +34,8 @@ class ProfileInformationTest extends TestCase
 
         Livewire::test(UpdateProfileInformationForm::class)
                 ->set('state', [
-                    'name' => 'Test Name', 
-                    'username' => 'Test UserName', 
+                    'name' => 'Test Name',
+                    'username' => 'Test UserName',
                     'email' => 'test@example.com'
                 ])
                 ->call('updateProfileInformation');
@@ -43,5 +43,27 @@ class ProfileInformationTest extends TestCase
         $this->assertEquals('Test Name', $user->fresh()->name);
         $this->assertEquals('Test UserName', $user->fresh()->username);
         $this->assertEquals('test@example.com', $user->fresh()->email);
+    }
+
+    public function test_profile_information_can_be_updated_using_force_fill()
+    {
+        // This test needs to be skipped on Github Actions testing environment until there is no support for mailhog
+        if (App::environment('testing') && env('APP_REAL_ENV') == 'github') {
+            return $this->markTestSkipped('No support for mailhog yet.');
+        }
+
+        $this->actingAs($user = User::factory()->create());
+
+        Livewire::test(UpdateProfileInformationForm::class)
+                ->set('state', [
+                    'name' => 'Test Name',
+                    'username' => 'Test UserName',
+                    'email' => $user->email
+                ])
+                ->call('updateProfileInformation');
+
+        $this->assertEquals('Test Name', $user->fresh()->name);
+        $this->assertEquals('Test UserName', $user->fresh()->username);
+        $this->assertEquals($user->email, $user->fresh()->email);
     }
 }

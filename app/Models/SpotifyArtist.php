@@ -27,7 +27,7 @@ class SpotifyArtist extends Model
 
     public function artist()
     {
-        return $this->hasOne(Artist::class);
+        return $this->belongsTo(Artist::class);
     }
 
     public function getBiggerImage()

@@ -7,6 +7,7 @@ use App\Http\Livewire\Spotify\SpotifyRegisterForm;
 use App\Jobs\ImportSpotifyUserFollowedArtists;
 use App\Models\User;
 use App\Models\UserExternalAccount;
+use App\Providers\RouteServiceProvider;
 use App\Services\SpotifyService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -91,7 +92,7 @@ class SpotifyIntegrationTest extends TestCase
             ->get('/auth/spotify/callback?code=testCode&state=testState');
 
         $response->assertStatus(302);
-        $response->assertRedirect('/dashboard');
+        $response->assertRedirect(RouteServiceProvider::HOME);
         $this->assertDatabaseCount('user_access_tokens', 1);
         $this->assertDatabaseCount('user_external_accounts', 1);
     }
@@ -158,7 +159,7 @@ class SpotifyIntegrationTest extends TestCase
         $this->assertDatabaseCount('user_access_tokens', 1);
         $this->assertDatabaseCount('user_external_accounts', 1);
         $response->assertStatus(302);
-        $response->assertRedirect('/dashboard');
+        $response->assertRedirect(RouteServiceProvider::HOME);
     }
 
     private function mockInitialSetup($user = null)
