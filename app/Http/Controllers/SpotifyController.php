@@ -71,11 +71,11 @@ class SpotifyController extends Controller
                 ImportSpotifyUserFollowedArtists::dispatch($service, $user);
                 return redirect()->to('/artists');
             }
-        } catch (\Exception $e) {
+        } catch (UserNotFoundException $e) {
             report($e);
             
             return redirect('/register')->withErrors(['msg' => $e->getMessage()]);
-        } catch (UserNotFoundException $e) {
+        } catch (\Exception $e) {
             report($e);
             
             return redirect('/register')->withErrors(['msg' => $e->getMessage()]);
@@ -106,7 +106,7 @@ class SpotifyController extends Controller
     {
         UserExternalAccount::firstOrCreate([
             'external_id' => $spotifyUser->id,
-            'user_uuid' => $user->uuid,
+            'user_id' => $user->id,
             'provider_name' => UserExternalAccount::PROVIDER_SPOTIFY,
         ]);
     }
@@ -117,7 +117,7 @@ class SpotifyController extends Controller
         ContractsUser $spotifyUser
     ) {
         $userAccessTokenRepository->updateOrCreate(
-            $user->uuid,
+            $user->id,
             UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN,
             UserAccessToken::TOKENABLE_TYPE_SPOTIFY_ACCESS_TOKEN,
             UserAccessToken::NAME_SPOTIFY_ACCESS_TOKEN,

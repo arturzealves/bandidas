@@ -30,7 +30,7 @@ class CreateNewUser implements CreatesNewUsers
         ])->validate();
 
         return User::create([
-            'uuid' => (string) Str::uuid(),
+            'id' => (string) Str::uuid(),
             'name' => $input['name'],
             'username' => $input['username'],
             'email' => $input['email'],

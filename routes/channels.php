@@ -14,5 +14,5 @@ use Illuminate\Support\Facades\Broadcast;
 */
 
 Broadcast::channel('user.reputation.{id}', function ($user, $id) {
-    return (int) $user->uuid === (int) $id;
+    return (int) $user->id === (int) $id;
 });

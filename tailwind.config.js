@@ -8,6 +8,9 @@ module.exports = {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
     ],
+    darkMode: 'class',
+
+    plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
 
     theme: {
         extend: {
@@ -16,6 +19,4 @@ module.exports = {
             },
         },
     },
-
-    plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
 };

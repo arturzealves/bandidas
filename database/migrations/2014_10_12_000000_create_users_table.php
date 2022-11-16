@@ -17,7 +17,7 @@ return new class extends Migration
     {
         if (!Schema::hasTable(DatabaseConstants::TABLE_USERS)) {
             Schema::create(DatabaseConstants::TABLE_USERS, function (Blueprint $table) {
-                $table->uuid()->primary();
+                $table->uuid('id')->primary();
                 $table->string('name');
                 $table->string('username')->unique();
                 $table->string('email')->unique();

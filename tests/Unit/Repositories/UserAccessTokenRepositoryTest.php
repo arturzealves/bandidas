@@ -22,13 +22,13 @@ class UserAccessTokenRepositoryTest extends TestCase
         $this->repository = new UserAccessTokenRepository();
     }
 
-    public function testGetOneByUserUuidAndTokenableId()
+    public function testGetOneByUserIdAndTokenableId()
     {
         $userAccessToken = UserAccessToken::factory()->create();
         $wrongUserAccessToken = UserAccessToken::factory()->create();
 
-        $result = $this->repository->getOneByUserUuidAndTokenableId(
-            $userAccessToken->user->uuid, 
+        $result = $this->repository->getOneByUserIdAndTokenableId(
+            $userAccessToken->user->id, 
             $userAccessToken->tokenable_id
         );
 
@@ -45,7 +45,7 @@ class UserAccessTokenRepositoryTest extends TestCase
         $user = User::factory()->create();
         
         $this->repository->updateOrCreate(
-            $user->uuid,
+            $user->id,
             UserAccessToken::TOKENABLE_ID_SPOTIFY_ACCESS_TOKEN,
             UserAccessToken::TOKENABLE_TYPE_SPOTIFY_ACCESS_TOKEN,
             UserAccessToken::NAME_SPOTIFY_ACCESS_TOKEN,

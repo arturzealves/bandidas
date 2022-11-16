@@ -19,8 +19,8 @@ class EventSessionFactory extends Factory
     {
         return [
             'event_uuid' => Event::factory(),
-            'start' => fake()->dateTime(),
-            'end' => fake()->dateTime(),
+            'start' => fake()->dateTimeBetween('-1 week', '+1 year'),
+            'end' => fake()->dateTimeBetween('-1 week', '+1 year'),
         ];
     }
 }

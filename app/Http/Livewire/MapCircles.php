@@ -62,7 +62,7 @@ class MapCircles extends Component
     public function render()
     {
         $user = Auth::user();
-        $circleLocations = MapCircle::where('user_uuid', $user->uuid)->get();
+        $circleLocations = MapCircle::where('user_id', $user->id)->get();
 
         $locationsInsideCircles = collect();
         foreach ($circleLocations as $circle) {
@@ -91,7 +91,7 @@ class MapCircles extends Component
 
         $circle = MapCircle::create([
             'name' => $this->name,
-            'user_uuid' => Auth::user()->uuid,
+            'user_id' => Auth::user()->id,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
             'radius' => $this->radius,
@@ -111,7 +111,7 @@ class MapCircles extends Component
             ],
             [
                 'name' => $this->name,
-                'user_uuid' => Auth::user()->uuid,
+                'user_id' => Auth::user()->id,
                 'latitude' => $this->latitude,
                 'longitude' => $this->longitude,
                 'radius' => $this->radius,

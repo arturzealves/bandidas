@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\ArtistController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\PromoterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SpotifyController;
 use App\Http\Controllers\TestController;
@@ -19,11 +22,12 @@ use Laravel\Fortify\Http\Controllers\VerifyEmailController;
 |
 */
 
-
-Route::get('/', function () {
-    return view('welcome');
-});
 Route::get('/test', [TestController::class, 'test']);
+
+Route::get('/', [HomepageController::class, 'index'])->name('homepage');
+Route::resource('events', EventController::class)->only(['show']);
+Route::resource('artists', ArtistController::class)->only(['show']);
+Route::resource('promoters', PromoterController::class)->only(['show']);
 
 // Routes for authenticated and verified users
 Route::middleware([
@@ -32,7 +36,7 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@dashboard')->name('dashboard');
-    Route::resource('artists', ArtistController::class)->only(['index', 'show']);
+    Route::resource('artists', ArtistController::class)->only(['index']);
     Route::resource('users', UserController::class)->only(['show'])->scoped(['user' => 'username']);
 });
 
@@ -49,14 +53,3 @@ Route::middleware([
 // Public routes
 Route::get('/auth/spotify/redirect/{action}', [SpotifyController::class, 'redirect'])->name('spotify.redirect');
 Route::get('/auth/spotify/callback', [SpotifyController::class, 'callback'])->name('spotify.callback');
-
-Route::group(['middleware' => config('fortify.middleware', ['web'])], function () {
-    $verificationLimiter = config('fortify.limiters.verification', '6,1');
-    
-    // Email Verification...
-    if (Features::enabled(Features::emailVerification())) {
-        Route::get('/email/verify/{uuid}/{hash}', [VerifyEmailController::class, '__invoke'])
-            ->middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard'), 'signed', 'throttle:'.$verificationLimiter])
-            ->name('verification.verify');
-    }
-});

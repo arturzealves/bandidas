@@ -14,7 +14,7 @@ class UserLocation extends Model
     protected $primaryKey = 'uuid';
 
     protected $fillable = [
-        'user_uuid',
+        'user_id',
         'latitude',
         'longitude',
     ];

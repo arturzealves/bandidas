@@ -3,32 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Artist;
+use App\Repositories\ArtistRepository;
 use Illuminate\Http\Request;
 
 class ArtistController extends Controller
 {
-    public function index()
+    public function index(ArtistRepository $artistRepository)
     {
-        $artists = Artist::with('spotify')
-            ->get()
-            ->map(function($artist) {
-                if (!$artist->spotify) {
-                    return $artist;
-                }
-                $artist->smallImage = $artist->spotify->getSmallerImage();
-
-                return $artist;
-            });
-
         return view('artists.index')
             ->with([
-                'artists' => $artists,
-            ]);
+                'artists' => $artistRepository->getAllSpotifyArtistsWithImages(),
+            ])
+        ;
     }
 
     public function show(Artist $artist)
     {
         if ($artist->spotify) {
+            $artist->largeImage = $artist->spotify->getBiggerImage();
             $artist->mediumImage = $artist->spotify->getMediumImage();
             $artist->spotify->url = json_decode($artist->spotify->external_urls)->spotify;
         }
