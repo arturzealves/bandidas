@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "03ebedc9a8cc2365e63b35601becc5b9",
+    "content-hash": "dca3f607db5418a06791b3c02ee39a15",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -535,6 +535,61 @@
             "time": "2022-06-18T20:57:19+00:00"
         },
         {
+            "name": "fabpot/goutte",
+            "version": "v4.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FriendsOfPHP/Goutte.git",
+                "reference": "f51940fbe0db060bc4fc0b3f1d19bc4ff3054b17"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FriendsOfPHP/Goutte/zipball/f51940fbe0db060bc4fc0b3f1d19bc4ff3054b17",
+                "reference": "f51940fbe0db060bc4fc0b3f1d19bc4ff3054b17",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.3",
+                "symfony/browser-kit": "^4.4|^5.0|^6.0",
+                "symfony/css-selector": "^4.4|^5.0|^6.0",
+                "symfony/dom-crawler": "^4.4|^5.0|^6.0",
+                "symfony/http-client": "^4.4|^5.0|^6.0",
+                "symfony/mime": "^4.4|^5.0|^6.0"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "^5.0|^6.0"
+            },
+            "type": "application",
+            "autoload": {
+                "psr-4": {
+                    "Goutte\\": "Goutte"
+                },
+                "exclude-from-classmap": [
+                    "Goutte/Tests"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "A simple PHP Web Scraper",
+            "homepage": "https://github.com/FriendsOfPHP/Goutte",
+            "keywords": [
+                "scraper"
+            ],
+            "support": {
+                "issues": "https://github.com/FriendsOfPHP/Goutte/issues",
+                "source": "https://github.com/FriendsOfPHP/Goutte/tree/v4.0.2"
+            },
+            "time": "2021-12-17T17:15:01+00:00"
+        },
+        {
             "name": "fruitcake/php-cors",
             "version": "v1.2.0",
             "source": {
@@ -1039,6 +1094,90 @@
             ],
             "description": "A library that can provide of a list of classes in a given namespace",
             "time": "2022-09-26T22:42:59+00:00"
+        },
+        {
+            "name": "intervention/image",
+            "version": "2.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Intervention/image.git",
+                "reference": "04be355f8d6734c826045d02a1079ad658322dad"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/04be355f8d6734c826045d02a1079ad658322dad",
+                "reference": "04be355f8d6734c826045d02a1079ad658322dad",
+                "shasum": ""
+            },
+            "require": {
+                "ext-fileinfo": "*",
+                "guzzlehttp/psr7": "~1.1 || ^2.0",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9.2",
+                "phpunit/phpunit": "^4.8 || ^5.7 || ^7.5.15"
+            },
+            "suggest": {
+                "ext-gd": "to use GD library based image processing.",
+                "ext-imagick": "to use Imagick based image processing.",
+                "intervention/imagecache": "Caching extension for the Intervention Image library"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.4-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Intervention\\Image\\ImageServiceProvider"
+                    ],
+                    "aliases": {
+                        "Image": "Intervention\\Image\\Facades\\Image"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Intervention\\Image\\": "src/Intervention/Image"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Oliver Vogel",
+                    "email": "oliver@intervention.io",
+                    "homepage": "https://intervention.io/"
+                }
+            ],
+            "description": "Image handling and manipulation library with support for Laravel integration",
+            "homepage": "http://image.intervention.io/",
+            "keywords": [
+                "gd",
+                "image",
+                "imagick",
+                "laravel",
+                "thumbnail",
+                "watermark"
+            ],
+            "support": {
+                "issues": "https://github.com/Intervention/image/issues",
+                "source": "https://github.com/Intervention/image/tree/2.7.2"
+            },
+            "funding": [
+                {
+                    "url": "https://paypal.me/interventionio",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/Intervention",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-05-21T17:30:32+00:00"
         },
         {
             "name": "jaybizzle/crawler-detect",
@@ -2086,6 +2225,71 @@
             "time": "2022-10-21T18:57:47+00:00"
         },
         {
+            "name": "league/glide",
+            "version": "2.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/glide.git",
+                "reference": "bff5b0fe2fd26b2fde2d6958715fde313887d79d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/glide/zipball/bff5b0fe2fd26b2fde2d6958715fde313887d79d",
+                "reference": "bff5b0fe2fd26b2fde2d6958715fde313887d79d",
+                "shasum": ""
+            },
+            "require": {
+                "intervention/image": "^2.7",
+                "league/flysystem": "^2.0|^3.0",
+                "php": "^7.2|^8.0",
+                "psr/http-message": "^1.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.3.3",
+                "phpunit/php-token-stream": "^3.1|^4.0",
+                "phpunit/phpunit": "^8.5|^9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "League\\Glide\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Reinink",
+                    "email": "jonathan@reinink.ca",
+                    "homepage": "http://reinink.ca"
+                },
+                {
+                    "name": "Titouan Galopin",
+                    "email": "galopintitouan@gmail.com",
+                    "homepage": "https://titouangalopin.com"
+                }
+            ],
+            "description": "Wonderfully easy on-demand image manipulation library with an HTTP based API.",
+            "homepage": "http://glide.thephpleague.com",
+            "keywords": [
+                "ImageMagick",
+                "editing",
+                "gd",
+                "image",
+                "imagick",
+                "league",
+                "manipulation",
+                "processing"
+            ],
+            "support": {
+                "issues": "https://github.com/thephpleague/glide/issues",
+                "source": "https://github.com/thephpleague/glide/tree/2.2.2"
+            },
+            "time": "2022-02-21T07:40:55+00:00"
+        },
+        {
             "name": "league/mime-type-detection",
             "version": "1.11.0",
             "source": {
@@ -2289,6 +2493,75 @@
                 }
             ],
             "time": "2022-08-08T13:52:53+00:00"
+        },
+        {
+            "name": "masterminds/html5",
+            "version": "2.7.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Masterminds/html5-php.git",
+                "reference": "897eb517a343a2281f11bc5556d6548db7d93947"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/897eb517a343a2281f11bc5556d6548db7d93947",
+                "reference": "897eb517a343a2281f11bc5556d6548db7d93947",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-dom": "*",
+                "ext-libxml": "*",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35 || ^5.7.21 || ^6 || ^7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Masterminds\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Butcher",
+                    "email": "technosophos@gmail.com"
+                },
+                {
+                    "name": "Matt Farina",
+                    "email": "matt@mattfarina.com"
+                },
+                {
+                    "name": "Asmir Mustafic",
+                    "email": "goetas@gmail.com"
+                }
+            ],
+            "description": "An HTML5 parser and serializer.",
+            "homepage": "http://masterminds.github.io/html5-php",
+            "keywords": [
+                "HTML5",
+                "dom",
+                "html",
+                "parser",
+                "querypath",
+                "serializer",
+                "xml"
+            ],
+            "support": {
+                "issues": "https://github.com/Masterminds/html5-php/issues",
+                "source": "https://github.com/Masterminds/html5-php/tree/2.7.6"
+            },
+            "time": "2022-08-18T16:18:26+00:00"
         },
         {
             "name": "mobiledetect/mobiledetectlib",
@@ -2696,6 +2969,52 @@
                 "source": "https://github.com/nette/utils/tree/v3.2.8"
             },
             "time": "2022-09-12T23:36:20+00:00"
+        },
+        {
+            "name": "nicmart/tree",
+            "version": "0.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nicmart/Tree.git",
+                "reference": "c55ba47c64a3cb7454c22e6d630729fc2aab23ff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nicmart/Tree/zipball/c55ba47c64a3cb7454c22e6d630729fc2aab23ff",
+                "reference": "c55ba47c64a3cb7454c22e6d630729fc2aab23ff",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1 || ^8.0"
+            },
+            "require-dev": {
+                "ergebnis/composer-normalize": "^2.8.0",
+                "ergebnis/license": "^1.0.0",
+                "ergebnis/php-cs-fixer-config": "^2.2.1",
+                "phpunit/phpunit": "^7.5.20"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Tree\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolò Martini",
+                    "email": "nicmartnic@gmail.com"
+                }
+            ],
+            "description": "A basic but flexible php tree data structure and a fluent tree builder implementation.",
+            "support": {
+                "issues": "https://github.com/nicmart/Tree/issues",
+                "source": "https://github.com/nicmart/Tree/tree/0.3.1"
+            },
+            "time": "2020-11-27T09:02:17+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -4071,6 +4390,517 @@
             "time": "2020-12-01T23:10:59+00:00"
         },
         {
+            "name": "spatie/browsershot",
+            "version": "3.57.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/browsershot.git",
+                "reference": "7125719979b7de1257bbf699ff1d3bff3125b228"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/browsershot/zipball/7125719979b7de1257bbf699ff1d3bff3125b228",
+                "reference": "7125719979b7de1257bbf699ff1d3bff3125b228",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.4|^8.0",
+                "spatie/image": "^1.5.3|^2.0",
+                "spatie/temporary-directory": "^1.1|^2.0",
+                "symfony/process": "^4.2|^5.0|^6.0"
+            },
+            "require-dev": {
+                "pestphp/pest": "^1.20",
+                "spatie/phpunit-snapshot-assertions": "^4.2.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Browsershot\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://github.com/freekmurze",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Convert a webpage to an image or pdf using headless Chrome",
+            "homepage": "https://github.com/spatie/browsershot",
+            "keywords": [
+                "chrome",
+                "convert",
+                "headless",
+                "image",
+                "pdf",
+                "puppeteer",
+                "screenshot",
+                "webpage"
+            ],
+            "support": {
+                "source": "https://github.com/spatie/browsershot/tree/3.57.2"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-08-19T16:43:07+00:00"
+        },
+        {
+            "name": "spatie/crawler",
+            "version": "7.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/crawler.git",
+                "reference": "aafde8073204e237958ae24cc81c67a7fd4d849b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/crawler/zipball/aafde8073204e237958ae24cc81c67a7fd4d849b",
+                "reference": "aafde8073204e237958ae24cc81c67a7fd4d849b",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.3",
+                "guzzlehttp/psr7": "^2.0",
+                "illuminate/collections": "^8.38|^9.0",
+                "nicmart/tree": "^0.3.0",
+                "php": "^8.0",
+                "spatie/browsershot": "^3.45",
+                "spatie/robots-txt": "^2.0",
+                "symfony/dom-crawler": "^5.2|^6.0"
+            },
+            "require-dev": {
+                "pestphp/pest": "^1.21",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Crawler\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be"
+                }
+            ],
+            "description": "Crawl all internal links found on a website",
+            "homepage": "https://github.com/spatie/crawler",
+            "keywords": [
+                "crawler",
+                "link",
+                "spatie",
+                "website"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/crawler/issues",
+                "source": "https://github.com/spatie/crawler/tree/7.1.2"
+            },
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-05-30T08:30:32+00:00"
+        },
+        {
+            "name": "spatie/image",
+            "version": "2.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/image.git",
+                "reference": "c2dc137c52d17bf12aff94ad051370c0f106b322"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/image/zipball/c2dc137c52d17bf12aff94ad051370c0f106b322",
+                "reference": "c2dc137c52d17bf12aff94ad051370c0f106b322",
+                "shasum": ""
+            },
+            "require": {
+                "ext-exif": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "league/glide": "^2.2.2",
+                "php": "^8.0",
+                "spatie/image-optimizer": "^1.1",
+                "spatie/temporary-directory": "^1.0|^2.0",
+                "symfony/process": "^3.0|^4.0|^5.0|^6.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5",
+                "symfony/var-dumper": "^4.0|^5.0|^6.0",
+                "vimeo/psalm": "^4.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Image\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Manipulate images with an expressive API",
+            "homepage": "https://github.com/spatie/image",
+            "keywords": [
+                "image",
+                "spatie"
+            ],
+            "support": {
+                "source": "https://github.com/spatie/image/tree/2.2.4"
+            },
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-08-09T10:18:57+00:00"
+        },
+        {
+            "name": "spatie/image-optimizer",
+            "version": "1.6.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/image-optimizer.git",
+                "reference": "6db75529cbf8fa84117046a9d513f277aead90a0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/image-optimizer/zipball/6db75529cbf8fa84117046a9d513f277aead90a0",
+                "reference": "6db75529cbf8fa84117046a9d513f277aead90a0",
+                "shasum": ""
+            },
+            "require": {
+                "ext-fileinfo": "*",
+                "php": "^7.3|^8.0",
+                "psr/log": "^1.0 | ^2.0 | ^3.0",
+                "symfony/process": "^4.2|^5.0|^6.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.5.21|^9.4.4",
+                "symfony/var-dumper": "^4.2|^5.0|^6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\ImageOptimizer\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Easily optimize images using PHP",
+            "homepage": "https://github.com/spatie/image-optimizer",
+            "keywords": [
+                "image-optimizer",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/image-optimizer/issues",
+                "source": "https://github.com/spatie/image-optimizer/tree/1.6.2"
+            },
+            "time": "2021-12-21T10:08:05+00:00"
+        },
+        {
+            "name": "spatie/robots-txt",
+            "version": "2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/robots-txt.git",
+                "reference": "f40a12b89f98dd18f3665673d04757298f5fbbf9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/robots-txt/zipball/f40a12b89f98dd18f3665673d04757298f5fbbf9",
+                "reference": "f40a12b89f98dd18f3665673d04757298f5fbbf9",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "larapack/dd": "^1.0",
+                "phpunit/phpunit": "^8.0 || ^9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Robots\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brent Roose",
+                    "email": "brent@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Determine if a page may be crawled from robots.txt and robots meta tags",
+            "homepage": "https://github.com/spatie/robots-txt",
+            "keywords": [
+                "robots-txt",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/robots-txt/issues",
+                "source": "https://github.com/spatie/robots-txt/tree/2.0.2"
+            },
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-05-18T15:14:21+00:00"
+        },
+        {
+            "name": "spatie/temporary-directory",
+            "version": "2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/temporary-directory.git",
+                "reference": "e2818d871783d520b319c2d38dc37c10ecdcde20"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/temporary-directory/zipball/e2818d871783d520b319c2d38dc37c10ecdcde20",
+                "reference": "e2818d871783d520b319c2d38dc37c10ecdcde20",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\TemporaryDirectory\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alex Vanderbist",
+                    "email": "alex@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Easily create, use and destroy temporary directories",
+            "homepage": "https://github.com/spatie/temporary-directory",
+            "keywords": [
+                "php",
+                "spatie",
+                "temporary-directory"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/temporary-directory/issues",
+                "source": "https://github.com/spatie/temporary-directory/tree/2.1.1"
+            },
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-08-23T07:15:15+00:00"
+        },
+        {
+            "name": "spekulatius/spatie-crawler-toolkit-for-laravel",
+            "version": "0.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spekulatius/spatie-crawler-toolkit-for-laravel.git",
+                "reference": "383639b65708eb594fa07c26188ed06dffd5face"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spekulatius/spatie-crawler-toolkit-for-laravel/zipball/383639b65708eb594fa07c26188ed06dffd5face",
+                "reference": "383639b65708eb594fa07c26188ed06dffd5face",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^8.0|^9.0",
+                "php": "^7.2|^8.0",
+                "spatie/crawler": "^7.0"
+            },
+            "require-dev": {
+                "symfony/thanks": "^1.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spekulatius\\SpatieCrawlerToolkit\\ToolkitServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spekulatius\\SpatieCrawlerToolkit\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Peter Thaleikis",
+                    "homepage": "https://releasecandidate.dev"
+                }
+            ],
+            "description": "Handy classes for Spatie's crawler when using it with Laravel.",
+            "support": {
+                "issues": "https://github.com/spekulatius/spatie-crawler-toolkit-for-laravel/issues",
+                "source": "https://github.com/spekulatius/spatie-crawler-toolkit-for-laravel/tree/0.5.0"
+            },
+            "funding": [
+                {
+                    "url": "https://phpscraper.de/misc/sponsors.html",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/spekulatius",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-09-28T09:01:34+00:00"
+        },
+        {
+            "name": "symfony/browser-kit",
+            "version": "v6.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/browser-kit.git",
+                "reference": "2e3b6a4406c2af963c634d7bd0457402b67dcc56"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/2e3b6a4406c2af963c634d7bd0457402b67dcc56",
+                "reference": "2e3b6a4406c2af963c634d7bd0457402b67dcc56",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "symfony/dom-crawler": "^5.4|^6.0"
+            },
+            "require-dev": {
+                "symfony/css-selector": "^5.4|^6.0",
+                "symfony/http-client": "^5.4|^6.0",
+                "symfony/mime": "^5.4|^6.0",
+                "symfony/process": "^5.4|^6.0"
+            },
+            "suggest": {
+                "symfony/process": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\BrowserKit\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Simulates the behavior of a web browser, allowing you to make requests, click on links and submit forms programmatically",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/browser-kit/tree/v6.1.3"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-07-27T15:50:51+00:00"
+        },
+        {
             "name": "symfony/console",
             "version": "v6.1.6",
             "source": {
@@ -4297,6 +5127,76 @@
                 }
             ],
             "time": "2022-02-25T11:15:52+00:00"
+        },
+        {
+            "name": "symfony/dom-crawler",
+            "version": "v6.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/dom-crawler.git",
+                "reference": "8cb4c6e6c8d30c26f70529ed5e50d79a09576c0c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/8cb4c6e6c8d30c26f70529ed5e50d79a09576c0c",
+                "reference": "8cb4c6e6c8d30c26f70529ed5e50d79a09576c0c",
+                "shasum": ""
+            },
+            "require": {
+                "masterminds/html5": "^2.6",
+                "php": ">=8.1",
+                "symfony/polyfill-ctype": "~1.8",
+                "symfony/polyfill-mbstring": "~1.0"
+            },
+            "require-dev": {
+                "symfony/css-selector": "^5.4|^6.0"
+            },
+            "suggest": {
+                "symfony/css-selector": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\DomCrawler\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Eases DOM navigation for HTML and XML documents",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/dom-crawler/tree/v6.1.4"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-08-04T19:19:00+00:00"
         },
         {
             "name": "symfony/error-handler",
@@ -4594,6 +5494,171 @@
                 }
             ],
             "time": "2022-07-29T07:42:06+00:00"
+        },
+        {
+            "name": "symfony/http-client",
+            "version": "v6.1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/http-client.git",
+                "reference": "c8c887f4813370550147afd27d9eb8a8523e53b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/c8c887f4813370550147afd27d9eb8a8523e53b2",
+                "reference": "c8c887f4813370550147afd27d9eb8a8523e53b2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "psr/log": "^1|^2|^3",
+                "symfony/http-client-contracts": "^3",
+                "symfony/service-contracts": "^1.0|^2|^3"
+            },
+            "provide": {
+                "php-http/async-client-implementation": "*",
+                "php-http/client-implementation": "*",
+                "psr/http-client-implementation": "1.0",
+                "symfony/http-client-implementation": "3.0"
+            },
+            "require-dev": {
+                "amphp/amp": "^2.5",
+                "amphp/http-client": "^4.2.1",
+                "amphp/http-tunnel": "^1.0",
+                "amphp/socket": "^1.1",
+                "guzzlehttp/promises": "^1.4",
+                "nyholm/psr7": "^1.0",
+                "php-http/httplug": "^1.0|^2.0",
+                "psr/http-client": "^1.0",
+                "symfony/dependency-injection": "^5.4|^6.0",
+                "symfony/http-kernel": "^5.4|^6.0",
+                "symfony/process": "^5.4|^6.0",
+                "symfony/stopwatch": "^5.4|^6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\HttpClient\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides powerful methods to fetch HTTP resources synchronously or asynchronously",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/http-client/tree/v6.1.6"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-10-12T05:10:31+00:00"
+        },
+        {
+            "name": "symfony/http-client-contracts",
+            "version": "v3.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/http-client-contracts.git",
+                "reference": "fd038f08c623ab5d22b26e9ba35afe8c79071800"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/http-client-contracts/zipball/fd038f08c623ab5d22b26e9ba35afe8c79071800",
+                "reference": "fd038f08c623ab5d22b26e9ba35afe8c79071800",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "suggest": {
+                "symfony/http-client-implementation": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "3.1-dev"
+                },
+                "thanks": {
+                    "name": "symfony/contracts",
+                    "url": "https://github.com/symfony/contracts"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Contracts\\HttpClient\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Test/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Generic abstractions related to HTTP clients",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "abstractions",
+                "contracts",
+                "decoupling",
+                "interfaces",
+                "interoperability",
+                "standards"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/http-client-contracts/tree/v3.1.1"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-04-22T07:30:54+00:00"
         },
         {
             "name": "symfony/http-foundation",
@@ -6599,6 +7664,71 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "weidner/goutte",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dweidner/laravel-goutte.git",
+                "reference": "85826c3c79457bc26f4839f5deca2b1fe3e07ab7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dweidner/laravel-goutte/zipball/85826c3c79457bc26f4839f5deca2b1fe3e07ab7",
+                "reference": "85826c3c79457bc26f4839f5deca2b1fe3e07ab7",
+                "shasum": ""
+            },
+            "require": {
+                "fabpot/goutte": "^4.0",
+                "illuminate/support": "^8|^9",
+                "php": ">=7.3"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Weidner\\Goutte\\GoutteServiceProvider"
+                    ],
+                    "aliases": {
+                        "Goutte": "Weidner\\Goutte\\GoutteFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Weidner\\Goutte\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniel Weidner",
+                    "email": "hallo@danielweidner.de",
+                    "homepage": "https://danielweidner.de"
+                }
+            ],
+            "description": "Laravel Facade for Goutte, a simple PHP Web Scraper",
+            "homepage": "https://github.com/dweidner/laravel-goutte",
+            "keywords": [
+                "goutte",
+                "laravel",
+                "weidner"
+            ],
+            "support": {
+                "issues": "https://github.com/dweidner/laravel-goutte/issues",
+                "source": "https://github.com/dweidner/laravel-goutte/tree/2.2.0"
+            },
+            "time": "2022-05-25T14:08:10+00:00"
         }
     ],
     "packages-dev": [

@@ -6,6 +6,7 @@ use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\PromoterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SpotifyController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Controllers\VerifyEmailController;
@@ -21,6 +22,7 @@ use Laravel\Fortify\Http\Controllers\VerifyEmailController;
 |
 */
 
+Route::get('/test', [TestController::class, 'test']);
 
 Route::get('/', [HomepageController::class, 'index'])->name('homepage');
 Route::resource('events', EventController::class)->only(['show']);
@@ -51,4 +53,3 @@ Route::middleware([
 // Public routes
 Route::get('/auth/spotify/redirect/{action}', [SpotifyController::class, 'redirect'])->name('spotify.redirect');
 Route::get('/auth/spotify/callback', [SpotifyController::class, 'callback'])->name('spotify.callback');
-
